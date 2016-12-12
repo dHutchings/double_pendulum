@@ -907,8 +907,8 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <attribute name="VALUE" x="9.271" y="9.144" size="1.27" layer="25" font="vector" rot="R180"/>
 <attribute name="NAME" x="3.175" y="8.89" size="1.27" layer="25" font="vector" ratio="10" rot="R180"/>
 </element>
-<element name="S2" library="pie" package="TACTILE-PTH" value="" x="5.08" y="12.446">
-<attribute name="PIE-INT-REF-NUM" value="pth_pushbutton" x="5.08" y="12.446" size="1.778" layer="27" display="off"/>
+<element name="S2" library="pie" package="TACTILE-PTH" value="" x="4.826" y="12.7">
+<attribute name="PIE-INT-REF-NUM" value="pth_pushbutton" x="4.826" y="12.7" size="1.778" layer="27" display="off"/>
 </element>
 <element name="C1" library="SparkFun-Capacitors" package="CPOL-RADIAL-1000UF-63V" value="10mF" x="96.012" y="20.066" smashed="yes">
 <attribute name="VALUE" x="87.376" y="13.716" size="0.8128" layer="27" font="vector"/>
@@ -919,7 +919,7 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <attribute name="PIE-INT-REF-NUM" value="BULK-STOCK" x="77.978" y="21.59" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="74.803" y="24.13" size="1.27" layer="27" font="vector" rot="R270"/>
 </element>
-<element name="U$8" library="pie" package="STAND-OFF-TIGHT" value="" x="19.304" y="12.446"/>
+<element name="U$8" library="pie" package="STAND-OFF-TIGHT" value="" x="19.05" y="12.7"/>
 <element name="U$12" library="pie" package="STAND-OFF-TIGHT" value="" x="70.358" y="12.7"/>
 </elements>
 <signals>
@@ -1166,8 +1166,8 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <wire x1="16.51" y1="5.334" x2="16.002" y2="5.334" width="0.254" layer="1"/>
 <wire x1="16.002" y1="5.334" x2="11.684" y2="9.652" width="0.254" layer="1"/>
 <wire x1="11.684" y1="9.652" x2="8.8646" y2="9.652" width="0.254" layer="1"/>
-<wire x1="8.8646" y1="9.652" x2="8.3312" y2="10.1854" width="0.254" layer="1"/>
-<wire x1="8.3312" y1="10.1854" x2="1.8288" y2="10.1854" width="0.254" layer="1"/>
+<wire x1="8.8646" y1="9.652" x2="8.0772" y2="10.4394" width="0.254" layer="1"/>
+<wire x1="8.0772" y1="10.4394" x2="1.5748" y2="10.4394" width="0.254" layer="1"/>
 </signal>
 <signal name="VBAT">
 <contactref element="ST1" pad="P$2"/>
