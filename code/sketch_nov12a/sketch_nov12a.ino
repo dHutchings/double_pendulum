@@ -3,7 +3,7 @@
 
 
 int sense = A10;
-int coil_drive = 9;  //remember that it's inverted due to PMOS.  LOW to drive, HIGH to not drive.
+int coil_drive = 8;  //remember that it's inverted due to PMOS.  LOW to drive, HIGH to not drive.
 
 int sensorValue;
 
@@ -11,7 +11,7 @@ int normal_value = 530; //nominal "normal".. ie, no siginal value.
 int threshold = 5; //counts over "normal" value.
 
 
-unsigned long push_time = 13; //push for 20ms past the start of the peak.
+unsigned long push_time = 20; //push for 20ms past the start of the peak.
 
 bool push; //if i'm pushing!
 
@@ -29,7 +29,6 @@ void setup() {
   pinMode(coil_drive,OUTPUT); //only make it an ouput when i'm pushing.
   digitalWrite(coil_drive,HIGH); //set it off for the time being.
   delay(20); //let it take effect.
-
   
 }
 
@@ -50,12 +49,14 @@ void loop() {
     
     //digitalWrite(led,HIGH);
     digitalWrite(coil_drive,LOW);
+    digitalWrite(coil_drive+1,LOW);
     //last_light = millis();
     
 
     delay(push_time);
 
     digitalWrite(coil_drive,HIGH);
+    digitalWrite(coil_drive+1,HIGH);
 
     delay(2*push_time); //allow a reset.  seems to be that the RC curve takes this long to die down.
  
@@ -73,7 +74,8 @@ void loop() {
 void push_ms(int tim) //blocking push for a certian time.
 {
     digitalWrite(coil_drive,LOW);
+    digitalWrite(coil_drive+1,LOW);
     delay(tim);
     digitalWrite(coil_drive,HIGH);
-
+    digitalWrite(coil_drive+1,HIGH);
 }
