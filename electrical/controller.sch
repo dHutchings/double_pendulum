@@ -4677,6 +4677,8 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 </library>
 </libraries>
 <attributes>
+<attribute name="AUTHOR" value="Douglas Hutchings"/>
+<attribute name="REVISION" value="A"/>
 </attributes>
 <variantdefs>
 </variantdefs>
