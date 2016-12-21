@@ -109,9 +109,9 @@ void setup()
 {
   Wire.begin();
 
-  Serial.begin(9600);
 
-  set_voltage_eeprom(V2,1.1);
+  set_voltage_eeprom(V2,0);
+  set_voltage_eeprom(V1,0);
 
 
 }
@@ -120,16 +120,6 @@ void loop()
 {
 
   
-  set_voltage(V1, 0.5);
-  delay(100);
-  set_voltage(V1, 2.0);
-  delay(100);
-  set_voltage(V1, 3.0);
-  delay(100);
-  set_voltage(V1, 4.0);
-  delay(100);
-  set_voltage(V1, 5.0);
-  delay(100);
  
 }
 
