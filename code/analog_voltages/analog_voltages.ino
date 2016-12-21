@@ -26,8 +26,8 @@ http://brainwagon.org/2011/02/24/arduino-mcp4725-breakout-board/
 
 //This is the I2C Address of the MCP4725, by default (A0 pulled to GND).
 //Please note that this breakout is for the MCP4725A0. 
-//#define MCP4725_ADDR 0x60   
-#define MCP4725_ADDR 0x61
+#define V2 0x60   
+#define V1 0x61
 //For devices with A0 pulled HIGH, use 0x61
 
 //Sinewave Tables were generated using this calculator:
@@ -109,14 +109,72 @@ void setup()
 {
   Wire.begin();
 
+  Serial.begin(9600);
+
+  set_voltage_eeprom(V2,1.1);
+
+
 }
 //---------------------------------------------------
 void loop()
 {
-  Wire.beginTransmission(MCP4725_ADDR);
-  Wire.write(64);                     // cmd to update the DAC
-  Wire.write(sintab2[lookup] >> 4);        // the 8 most significant bits...
-  Wire.write((sintab2[lookup] & 15) << 4); // the 4 least significant bits...
-  Wire.endTransmission();
-  lookup = (lookup + 1) & 511;
+
+  
+  set_voltage(V1, 0.5);
+  delay(100);
+  set_voltage(V1, 2.0);
+  delay(100);
+  set_voltage(V1, 3.0);
+  delay(100);
+  set_voltage(V1, 4.0);
+  delay(100);
+  set_voltage(V1, 5.0);
+  delay(100);
+ 
 }
+
+void set_voltage(int MCP4725_ADDR, float val)
+{
+  //first, need to figure out the 12-bit number that corrisponds to the float value..
+  //Datasheet: v_out = (v_ref * dn) / 4096.
+  //Solve for dn, v_ref = 5;
+  //dn = CEIL(v_out / v_ref * 4096) - 1 .
+  float target = constrain(val,0.0,5.0); //constrain the target value to be between 0 and 5v (5V = power to DAC & max output)
+  
+  int value = int(target / 5.0 * 4096); //int truncates the float.
+  
+  value = constrain(value,0,4095); //and then subtract 1 if neccessary b/c of the 5V limit.
+
+  
+  Wire.beginTransmission(MCP4725_ADDR);
+  Wire.write(64);  // we're explicity NOT in fast mode here.    Using Fig 6-2 of datasheet
+
+  Wire.write(value >> 4); //8 most significant bits
+  Wire.write( (value & 15) << 4); //4 LSB.
+  Wire.endTransmission();
+}
+
+void set_voltage_eeprom(int MCP4725_ADDR, float val)
+{
+  //first, need to figure out the 12-bit number that corrisponds to the float value..
+  //Datasheet: v_out = (v_ref * dn) / 4096.
+  //Solve for dn, v_ref = 5;
+  //dn = CEIL(v_out / v_ref * 4096) - 1 .
+  float target = constrain(val,0.0,5.0); //constrain the target value to be between 0 and 5v (5V = power to DAC & max output)
+  
+  int value = int(target / 5.0 * 4096); //int truncates the float.
+  
+  value = constrain(value,0,4095); //and then subtract 1 if neccessary b/c of the 5V limit.
+
+  Serial.println(value);
+  
+  Wire.beginTransmission(MCP4725_ADDR);
+  Wire.write(96); //Set c1 and C0 high, see fig 6-2
+
+  Wire.write(value >> 4); //8 most significant bits
+  Wire.write( (value & 15) << 4); //4 LSB.
+  Wire.endTransmission();
+
+}
+
+
