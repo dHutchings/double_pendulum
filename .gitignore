@@ -18,3 +18,5 @@ eagle.epf
 **/*.[b,s,l]#*
 *.pro
 *.job
+
+electrical/datasheets
