@@ -22,11 +22,14 @@ void setup() {
   delay(100);
 
   dac_setup();
+  setup_ui();
 
   start();
   
   pinMode(interrupt_in,INPUT);
   attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
+
+  
 
 }
 
@@ -37,7 +40,7 @@ void loop() {
     
     // Enter power down state with ADC and BOD module disabled.
     // Wake up when wake up pin is low.
-    //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_ON); 
+    //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_ON);
     //digitalWrite(is_awake,HIGH);
     // Disable external pin interrupt on wake up pin.
     //detachInterrupt(digitalPinToInterrupt(interrupt_in));
