@@ -51,7 +51,7 @@ void push()
   {
     delayMicroseconds(1000); //allow to cross zero.  Hack since i'm using falling interrupts.
     digitalWrite(mosfet,LOW);
-    delayMicroseconds(push_time_us);
+    delay_many_microseconds(push_time_us);
     digitalWrite(mosfet,HIGH);
 
     prev_interrupts = 0;
@@ -76,6 +76,27 @@ void start() //don't use for time being.
     
   }
 
+  
+}
+
+void delay_many_microseconds(unsigned long tim) //allow ability to delay more than 16.3k uS.
+{
+  unsigned long time_left = tim;
+
+  while(time_left > 0)
+  {
+    if(time_left > 16000)
+    {
+      delayMicroseconds(16000);
+      time_left = time_left - 16000;
+    }
+    else
+    {
+      delayMicroseconds(int(time_left));
+      time_left = 0;
+    }
+    
+  }
   
 }
 
