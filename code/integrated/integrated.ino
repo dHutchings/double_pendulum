@@ -4,10 +4,11 @@
 int mosfet = 9;  //pin 9
 int interrupt_in = 7;  //pin 3
 
-volatile unsigned long push_time_us = 12*1000;
+volatile unsigned long push_time_us = 16*1000;
 
 volatile int prev_interrupts;  //remember that I need to reject the first interrupt because the coil's inductance could trigger a self-perpetuating cycle
- 
+
+
 
 void setup() {
   // put your setup code here, to run once:
@@ -22,6 +23,7 @@ void setup() {
 
   dac_setup();
 
+  start();
   
   pinMode(interrupt_in,INPUT);
   attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
@@ -64,15 +66,15 @@ void push()
 
 }
 
-void start() //don't use for time being.
+void start()
 {
   for(int i = 0; i<10; i++)
   {
+    delay(400);
     digitalWrite(mosfet,LOW);
     delay(300);
     digitalWrite(mosfet,HIGH);
-    delay(400);
-
+    
     
   }
 
