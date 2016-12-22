@@ -3,6 +3,7 @@
 #define V2 0x60   
 #define V1 0x61
 
+
 void dac_setup()
 {
   Wire.begin();
@@ -13,6 +14,20 @@ void dac_setup()
 
 
 
+}
+
+void dac_setup_permanent()
+{
+  Wire.begin();
+  
+  set_voltage_eeprom(V1,2.0);
+  set_voltage_eeprom(V2,1.9);
+  
+}
+
+void dac_setup_lite()
+{
+  
 }
 
 void set_voltage(int MCP4725_ADDR, float val)
