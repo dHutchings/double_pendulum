@@ -22,9 +22,8 @@ void setup() {
 
   delay(100);
 
-  //dac_setup_permanent();
-  dac_setup_lite();
-  
+  dac_setup();
+    
   setup_ui();
 
   start();
