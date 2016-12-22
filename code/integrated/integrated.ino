@@ -27,9 +27,8 @@ void setup() {
   setup_ui();
 
   start_pendulum();
-  
-  pinMode(interrupt_in,INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
+
+  setup_sensing();
 
   
 

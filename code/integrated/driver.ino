@@ -11,6 +11,14 @@ void setup_driver()
 
 }
 
+void  setup_sensing()
+{
+  
+  pinMode(interrupt_in,INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
+
+}
+
 void push()
 {
   if(prev_interrupts > 0)
