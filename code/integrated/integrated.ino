@@ -1,16 +1,20 @@
-
-
-
 #include <LowPower.h>
 
 
+//PinDefs.
+int interrupt_in = 3;  //pin 3, which can trigger an interrupt for waking up from power down.
+int SCL_line = 6;
+int SDA_line = 2;//clock is pin 6, data is pin 2.  Change pin2 to some unused Dio to free up another button
+int faster = 0;  //pin 0
+int slower = 1;  //pin 1
 int mosfet = 9;  //pin 9
 
-int interrupt_in = 3;  //pin 3, which can trigger an interrupt for waking up from power down.
 
-volatile unsigned long push_time_us = 16*1000;
 
-volatile int prev_interrupts;  //remember that I need to reject the first interrupt because the coil's inductance could trigger a self-perpetuating cycle
+
+
+volatile unsigned long push_time_us = 16*1000;  //push time.  It needs to be here, since multiple code segments deal with it.
+
 
 
 
@@ -18,17 +22,11 @@ void setup() {
   // put your setup code here, to run once:
 
 
-  prev_interrupts = 0;
-
-  pinMode(mosfet,OUTPUT);
-  digitalWrite(mosfet,HIGH); //using pmos.  HIGH is off.
-
-  delay(100);
-
+  setup_driver();
   setup_dac();
   setup_ui();
 
-  start();
+  start_pendulum();
   
   pinMode(interrupt_in,INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
@@ -49,39 +47,6 @@ void loop() {
   
 }
 
-void push()
-{
-  if(prev_interrupts > 0)
-  {
-    delayMicroseconds(1000); //allow to cross zero.  Hack since i'm using falling interrupts.
-    digitalWrite(mosfet,LOW);
-    delay_many_microseconds(push_time_us);
-    digitalWrite(mosfet,HIGH);
-
-    prev_interrupts = 0;
-  }
-  else
-  {
-    prev_interrupts ++;
-    
-  }
-
-}
-
-void start()
-{
-  for(int i = 0; i<10; i++)
-  {
-    delay(400);
-    digitalWrite(mosfet,LOW);
-    delay(300);
-    digitalWrite(mosfet,HIGH);
-    
-    
-  }
-
-  
-}
 
 void delay_many_microseconds(unsigned long tim) //allow ability to delay more than 16.3k uS.
 {

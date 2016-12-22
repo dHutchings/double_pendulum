@@ -1,9 +1,8 @@
 #include <SlowSoftI2CMaster.h>  //software implimentation of i2c with only c code, no assembler instructions
 #include <SlowSoftWire.h> //wire-like wrapper for the above library.
 
-//clock is pin 6, data is pin 2.
 //order is data,clock.
-SlowSoftWire Wire = SlowSoftWire(2, 6);
+SlowSoftWire Wire = SlowSoftWire(SDA_line, SCL_line);
 
 #define V2 0x60   
 #define V1 0x61

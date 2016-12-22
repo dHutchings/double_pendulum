@@ -1,7 +1,4 @@
 
-int faster = 0;  //pin 0
-int slower = 1;  //pin 1
-
 void setup_ui()
 {
   pinMode(faster,INPUT_PULLUP);
