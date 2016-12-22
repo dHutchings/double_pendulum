@@ -2,7 +2,8 @@
 
 
 int mosfet = 9;  //pin 9
-int interrupt_in = 7;  //pin 3
+
+int interrupt_in = 3;  //pin 3, which can trigger an interrupt for waking up from power down.
 
 volatile unsigned long push_time_us = 16*1000;
 
@@ -21,12 +22,14 @@ void setup() {
 
   delay(100);
 
-  dac_setup();
+  //dac_setup_permanent();
+  dac_setup_lite();
+  
   setup_ui();
 
   start();
   
-  pinMode(interrupt_in,INPUT);
+  pinMode(interrupt_in,INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
 
   
@@ -35,18 +38,12 @@ void setup() {
 
 void loop() {
     // Allow wake up pin to trigger interrupt on low.
-    //digitalWrite(is_awake,HIGH);
-    //attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
+    attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
     
-    // Enter power down state with ADC and BOD module disabled.
-    // Wake up when wake up pin is low.
-    //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_ON);
-    //digitalWrite(is_awake,HIGH);
-    // Disable external pin interrupt on wake up pin.
-    //detachInterrupt(digitalPinToInterrupt(interrupt_in));
-    
-    // Do something here
-    // Example: Read sensor, data logging, data transmission.
+    LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //118 uA.  but only on pins 2&3.  0&1 draw ~.5mA.
+
+    detachInterrupt(digitalPinToInterrupt(interrupt_in));
+
   
 }
 

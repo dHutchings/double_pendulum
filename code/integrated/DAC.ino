@@ -3,6 +3,8 @@
 #define V2 0x60   
 #define V1 0x61
 
+//Clock pin is now pin #5
+//data is still #2
 
 void dac_setup()
 {
@@ -27,7 +29,7 @@ void dac_setup_permanent()
 
 void dac_setup_lite()
 {
-  
+  //don't need to do anything.  Hooray!
 }
 
 void set_voltage(int MCP4725_ADDR, float val)
