@@ -10,7 +10,7 @@ SlowSoftWire Wire = SlowSoftWire(2, 6);
 
 
 
-void dac_setup()
+void setup_dac()
 {
   Wire.begin();
 

@@ -1,3 +1,6 @@
+
+
+
 #include <LowPower.h>
 
 
@@ -22,8 +25,7 @@ void setup() {
 
   delay(100);
 
-  dac_setup();
-    
+  setup_dac();
   setup_ui();
 
   start();
@@ -36,12 +38,13 @@ void setup() {
 }
 
 void loop() {
+
     // Allow wake up pin to trigger interrupt on low.
     attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
     
     LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //118 uA.  but only on pins 2&3.  0&1 draw ~.5mA.
 
-    detachInterrupt(digitalPinToInterrupt(interrupt_in));
+    //detachInterrupt(digitalPinToInterrupt(interrupt_in));
 
   
 }
