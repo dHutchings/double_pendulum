@@ -23,7 +23,16 @@ void push()
 {
   if(prev_interrupts > 0)
   {
-    delayMicroseconds(1000); //allow to cross zero.  Hack since i'm using falling interrupts.
+    //need to impliment more inteligent re-cross detection.  We're going to set the threshold of V2 to 2V, busy-wait for a transition, set it back, and then push.
+    //set_voltage(V2,2.0);
+    //while(digitalRead(interrupt_in) == LOW)
+    //{
+    //  delayMicroseconds(1);
+    //}
+    //set_voltage(V2,1.9); //reset to original voltage threshold.
+
+    delayMicroseconds(1); //allow to cross zero.
+    //left in for future-proofing, but i may not need this.  uC requires significant time to wake from powerOff state, and I can change timing by also affecting the voltage threshold value.
     digitalWrite(mosfet,LOW);
     delay_many_microseconds(push_time_us);
     digitalWrite(mosfet,HIGH);
