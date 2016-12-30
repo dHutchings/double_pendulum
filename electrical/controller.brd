@@ -151,7 +151,7 @@
 <text x="39.878" y="13.208" size="1.27" layer="26" font="vector" rot="MR0">Douglas Hutchings
 Double Pendulum Driver
 Rev B</text>
-<wire x1="0" y1="25.654" x2="101.6" y2="25.654" width="0" layer="20"/>
+<wire x1="0" y1="25.4" x2="101.6" y2="25.4" width="0" layer="20"/>
 <text x="83.82" y="16.764" size="0.8128" layer="25" font="vector">BAT - / +</text>
 <text x="85.09" y="18.796" size="0.8128" layer="26" font="vector" rot="MR180">BAT + / -</text>
 </plain>
