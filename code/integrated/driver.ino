@@ -34,7 +34,7 @@ void push()
     delayMicroseconds(1); //allow to cross zero.
     //left in for future-proofing, but i may not need this.  uC requires significant time to wake from powerOff state, and I can change timing by also affecting the voltage threshold value.
     digitalWrite(mosfet,LOW);
-    delay_many_microseconds(push_time_us);
+    delay_many_microseconds(push_time_us + random(-random_time,random_time));
     digitalWrite(mosfet,HIGH);
 
     prev_interrupts = 0;
