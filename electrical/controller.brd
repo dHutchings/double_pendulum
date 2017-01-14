@@ -1001,7 +1001,7 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <element name="S_PWR" library="custom_parts" package="E-SWITCH-SPDT" value="SPDT_TOGGLE_SWITCH" x="72.898" y="21.336" smashed="yes" rot="R180"/>
 <element name="U$8" library="pie" package="STAND-OFF-TIGHT" value="" x="19.05" y="12.7"/>
 <element name="U$12" library="pie" package="STAND-OFF-TIGHT" value="" x="69.85" y="12.7"/>
-<element name="JP5" library="pinhead" package="1X06" value="" x="57.15" y="2.032"/>
+<element name="JP3" library="pinhead" package="1X06" value="" x="57.15" y="2.032"/>
 <element name="Q1" library="transistor-fet" package="TO220" value="IRLIB9343PBF-ND " x="86.614" y="5.588" smashed="yes" rot="R270">
 <attribute name="NAME" x="82.042" y="0.381" size="1.778" layer="25" ratio="10"/>
 </element>
@@ -1085,7 +1085,7 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <wire x1="46.736" y1="6.35" x2="47.752" y2="7.366" width="0.254" layer="1"/>
 <wire x1="47.752" y1="7.366" x2="47.752" y2="8.5399" width="0.254" layer="1"/>
 <wire x1="47.752" y1="8.5399" x2="47.686" y2="8.6059" width="0.254" layer="1"/>
-<contactref element="JP5" pad="1"/>
+<contactref element="JP3" pad="1"/>
 <contactref element="USB1" pad="P$6"/>
 <contactref element="USB1" pad="P$7"/>
 <contactref element="USB1" pad="P$10"/>
@@ -1173,7 +1173,7 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <signal name="COIL">
 <contactref element="ST2" pad="P$2"/>
 <contactref element="R1" pad="1"/>
-<contactref element="JP5" pad="6"/>
+<contactref element="JP3" pad="6"/>
 <contactref element="Q1" pad="2"/>
 <wire x1="80.264" y1="5.588" x2="76.174" y2="5.588" width="0.8128" layer="1"/>
 <wire x1="76.174" y1="5.588" x2="74.648" y2="4.062" width="0.8128" layer="1"/>
@@ -1194,7 +1194,7 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <contactref element="U5" pad="6"/>
 <contactref element="U5" pad="1"/>
 <contactref element="R4" pad="1"/>
-<contactref element="JP5" pad="5"/>
+<contactref element="JP3" pad="5"/>
 <wire x1="62.318" y1="4.826" x2="62.318" y2="3.39" width="0.254" layer="1"/>
 <wire x1="62.318" y1="3.39" x2="60.96" y2="2.032" width="0.254" layer="1"/>
 <wire x1="58.42" y1="6.604" x2="58.42" y2="4.572" width="0.254" layer="1"/>
@@ -1205,7 +1205,7 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <signal name="V2">
 <contactref element="U5" pad="5"/>
 <contactref element="U4" pad="1"/>
-<contactref element="JP5" pad="3"/>
+<contactref element="JP3" pad="3"/>
 <wire x1="50.8" y1="14.224" x2="50.7039" y2="14.224" width="0.254" layer="1"/>
 <wire x1="50.7039" y1="14.224" x2="47.686" y2="11.2061" width="0.254" layer="1"/>
 <wire x1="55.88" y1="2.032" x2="55.88" y2="6.096" width="0.254" layer="16"/>
@@ -1235,7 +1235,7 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <signal name="V1">
 <contactref element="R2" pad="1"/>
 <contactref element="U3" pad="1"/>
-<contactref element="JP5" pad="4"/>
+<contactref element="JP3" pad="4"/>
 <wire x1="60.618" y1="9.906" x2="59.69" y2="9.906" width="0.254" layer="1"/>
 <wire x1="59.69" y1="9.906" x2="59.182" y2="10.414" width="0.254" layer="1"/>
 <wire x1="59.182" y1="10.414" x2="57.658" y2="10.414" width="0.254" layer="1"/>
@@ -1248,7 +1248,7 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 </signal>
 <signal name="INT">
 <contactref element="U5" pad="7"/>
-<contactref element="JP5" pad="2"/>
+<contactref element="JP3" pad="2"/>
 <contactref element="UC1" pad="3"/>
 <wire x1="53.34" y1="2.032" x2="53.34" y2="6.604" width="0.254" layer="16"/>
 <wire x1="53.34" y1="6.604" x2="50.8" y2="9.144" width="0.254" layer="16"/>
