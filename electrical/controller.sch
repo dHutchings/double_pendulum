@@ -277,8 +277,8 @@ A collection of parts and footprints made for the PiE Robotics Competition.&lt;b
 <wire x1="0" y1="7.5" x2="0" y2="0" width="0.127" layer="21"/>
 <wire x1="0.6" y1="0" x2="0.6" y2="7.5" width="0.127" layer="21"/>
 <wire x1="10.6" y1="7.5" x2="10.6" y2="0" width="0.127" layer="21"/>
-<pad name="P$1" x="3.1" y="3.3" drill="1" diameter="2.1844"/>
-<pad name="P$2" x="8.1" y="3.3" drill="1" diameter="2.1844"/>
+<pad name="P$1" x="3.1" y="3.3" drill="1.3" diameter="2.1844"/>
+<pad name="P$2" x="8.1" y="3.3" drill="1.3" diameter="2.1844"/>
 <wire x1="0.6" y1="0" x2="0.6" y2="-1.9" width="0.127" layer="51"/>
 <wire x1="0.6" y1="-1.9" x2="3.2" y2="-1.9" width="0.127" layer="51"/>
 <wire x1="3.2" y1="-1.9" x2="5.3" y2="-1.9" width="0.127" layer="51"/>
@@ -2093,8 +2093,8 @@ Source: http://www.vishay.com .. dcrcw.pdf</description>
 <description>Standard US Chip 0805 Footprint</description>
 <wire x1="-0.3" y1="0.6" x2="0.3" y2="0.6" width="0.1524" layer="21"/>
 <wire x1="-0.3" y1="-0.6" x2="0.3" y2="-0.6" width="0.1524" layer="21"/>
-<smd name="1" x="-1.1" y="0" dx="1.2" dy="1.2" layer="1"/>
-<smd name="2" x="1.1" y="0" dx="1.2" dy="1.2" layer="1"/>
+<smd name="1" x="-0.9" y="0" dx="0.8" dy="1.2" layer="1"/>
+<smd name="2" x="0.9" y="0" dx="0.8" dy="1.2" layer="1"/>
 <text x="-1.27" y="1.27" size="1.27" layer="25" font="vector" ratio="10">&gt;NAME</text>
 <text x="-1.27" y="-2.54" size="1.27" layer="27" font="vector">&gt;VALUE</text>
 <rectangle x1="-1.905" y1="-0.762" x2="1.905" y2="0.762" layer="39"/>
@@ -5003,7 +5003,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 </libraries>
 <attributes>
 <attribute name="AUTHOR" value="Douglas Hutchings"/>
-<attribute name="REVISION" value="A"/>
+<attribute name="REVISION" value="C"/>
 </attributes>
 <variantdefs>
 </variantdefs>
@@ -5043,8 +5043,6 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="SUPPLY10" library="pie" deviceset="GND" device=""/>
 <part name="C5" library="pie" deviceset="CAP" device="0805" value="10uF"/>
 <part name="C4" library="pie" deviceset="CAP" device="0603-CAP" value=".1uF"/>
-<part name="JP1" library="pie" deviceset="M02" device="PTH"/>
-<part name="SUPPLY11" library="pie" deviceset="GND" device=""/>
 <part name="U$9" library="pie" deviceset="5V" device=""/>
 <part name="R5" library="pie" deviceset="R-US_" device="R0603" value="10K"/>
 <part name="R6" library="pie" deviceset="R-US_" device="R0603" value="10K"/>
@@ -5094,7 +5092,6 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <wire x1="129.54" y1="114.3" x2="195.58" y2="114.3" width="0.4064" layer="94"/>
 <wire x1="195.58" y1="114.3" x2="195.58" y2="185.42" width="0.4064" layer="94"/>
 <text x="205.74" y="177.8" size="5.08" layer="97">Debugging</text>
-<text x="200.66" y="172.72" size="1.778" layer="97">Ground Connector</text>
 <text x="132.08" y="106.68" size="5.08" layer="97">Coil Driver</text>
 <wire x1="195.58" y1="114.3" x2="248.92" y2="114.3" width="0.4064" layer="94"/>
 <text x="203.2" y="104.14" size="5.08" layer="97">User Input</text>
@@ -5150,8 +5147,6 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <attribute name="NAME" x="151.13" y="127" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="146.05" y="127" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="JP1" gate="G$1" x="203.2" y="165.1"/>
-<instance part="SUPPLY11" gate="GND" x="218.44" y="160.02"/>
 <instance part="U$9" gate="G$1" x="213.36" y="147.32" rot="R270"/>
 <instance part="R5" gate="G$1" x="86.36" y="17.78" smashed="yes" rot="R180">
 <attribute name="NAME" x="83.82" y="25.4" size="1.778" layer="95" rot="R180"/>
@@ -5274,16 +5269,6 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <wire x1="142.24" y1="129.54" x2="139.7" y2="129.54" width="0.1524" layer="91"/>
 <wire x1="139.7" y1="129.54" x2="139.7" y2="134.62" width="0.1524" layer="91"/>
 <junction x="139.7" y="134.62"/>
-</segment>
-<segment>
-<pinref part="JP1" gate="G$1" pin="2"/>
-<wire x1="210.82" y1="165.1" x2="213.36" y2="165.1" width="0.1524" layer="91"/>
-<wire x1="213.36" y1="165.1" x2="213.36" y2="162.56" width="0.1524" layer="91"/>
-<pinref part="SUPPLY11" gate="GND" pin="GND"/>
-<wire x1="213.36" y1="162.56" x2="218.44" y2="162.56" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="G$1" pin="1"/>
-<wire x1="213.36" y1="162.56" x2="210.82" y2="162.56" width="0.1524" layer="91"/>
-<junction x="213.36" y="162.56"/>
 </segment>
 <segment>
 <pinref part="S4" gate="S" pin="2"/>
