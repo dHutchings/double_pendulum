@@ -4,7 +4,6 @@
 "C3";"10uF";"0805";"Capacitor";"CAPACITOR-GENERIC"
 "C4";".1uF";"0603-CAP";"Capacitor";"CAPACITOR-GENERIC"
 "C5";"10uF";"0805";"Capacitor";"CAPACITOR-GENERIC"
-"JP1";"";"1X02";"2-pin 0.1-inch header and MTA connector";"BULK-STOCK"
 "JP2";"";"1X02";"2-pin 0.1-inch header and MTA connector";"BULK-STOCK"
 "JP3";"";"1X06";"PIN HEADER";""
 "Q1";"IRLIB9343PBF-ND ";"TO220";"P-Channel Enhancement MOSFET (HEXFET); -100V; -12A; 0,3Ohm";""
