@@ -1,5 +1,8 @@
 volatile int prev_interrupts;  //remember that I need to reject the first interrupt because the coil's inductance could trigger a self-perpetuating cycle
 
+volatile int prev_pushes; //how many times have I pushed since I last chose a random number?
+volatile long random_time; //random value
+
 void setup_driver()
 {
 
@@ -31,13 +34,25 @@ void push()
     //}
     //set_voltage(V2,1.9); //reset to original voltage threshold.
 
-    delayMicroseconds(1); //allow to cross zero.
-    //left in for future-proofing, but i may not need this.  uC requires significant time to wake from powerOff state, and I can change timing by also affecting the voltage threshold value.
-    digitalWrite(mosfet,LOW);
-    delay_many_microseconds(push_time_us + random(-random_time,random_time));
-    digitalWrite(mosfet,HIGH);
 
-    prev_interrupts = 0;
+    if(random(0,100) > chance_no_push)  //sometimes, don't push.
+    {
+      delayMicroseconds(1); //allow to cross zero.
+      //left in for future-proofing, but i may not need this.  uC requires significant time to wake from powerOff state, and I can change timing by also affecting the voltage threshold value.
+      digitalWrite(mosfet,LOW);
+      delay_many_microseconds(push_time_us + random_time);
+      digitalWrite(mosfet,HIGH);
+  
+      prev_interrupts = 0;
+      prev_pushes ++;
+      
+      if(prev_pushes > max_pushes)
+      {
+        prev_pushes = 0;
+        random_time = random(-random_time_max,random_time_max);
+        
+      }
+    }
   }
   else
   {

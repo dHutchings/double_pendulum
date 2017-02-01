@@ -8,7 +8,7 @@ SlowSoftWire Wire = SlowSoftWire(SDA_line, SCL_line);
 #define V1 0x61
 
 float voltage_add = 2.0;
-float voltage_threshold = 1.55;
+float voltage_threshold = 1.65;
 
 void setup_dac()
 {
