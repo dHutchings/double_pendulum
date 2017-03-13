@@ -7,8 +7,8 @@ SlowSoftWire Wire = SlowSoftWire(SDA_line, SCL_line);
 #define V2 0x60
 #define V1 0x61
 
-float voltage_add = 2.0;
-float voltage_threshold = 1.65;
+float voltage_add = 2.0;  //Shift the voltage curve measured from the coil of wire up by 2 volts
+float voltage_threshold = 1.65;  //Set the threshold to generate an trigger for the interrupt in to 1.65 volts.  Therefore, the voltage cuve must be -.35V to change the comparator's output.
 
 void setup_dac()
 {
@@ -17,10 +17,9 @@ void setup_dac()
   set_voltage(V1, voltage_add);
   set_voltage(V2, voltage_threshold);
 
-
 }
 
-void dac_setup_permanent()
+void dac_setup_permanent() //not used by code.  However, added so that future development can avoid having to put communcation lines between arduino & DACs on a regular basis.  Tested to work.
 {
   Wire.begin();
 

@@ -7,6 +7,8 @@ void setup_ui()
   pinMode(slower,INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(slower),slow_down,LOW);
 
+  pinMode(start,INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(start),start_sequence,LOW);
   
 }
 
@@ -41,5 +43,22 @@ void slow_down()
     delay_many_microseconds(100000);
 
     
+}
+
+void start_sequence()
+{
+  while(digitalRead(start) == LOW)
+  {
+    delayMicroseconds(1000); //keep waiting for unpress.  
+  }
+
+
+  //then 100ms more to avoid debounce.
+  delay_many_microseconds(100000);
+  detachInterrupt(digitalPinToInterrupt(interrupt_in));
+
+  start_pendulum();
+  
+  attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
 }
 

@@ -22,6 +22,7 @@ void  setup_sensing()
 
 }
 
+
 void push()
 {
   if(prev_interrupts > 0)
@@ -66,9 +67,9 @@ void start_pendulum()
 {
   for(int i = 0; i<10; i++)
   {
-    delay(400);
+    delay_many_microseconds(400000);
     digitalWrite(mosfet,LOW);
-    delay(300);
+    delay_many_microseconds(300000);
     digitalWrite(mosfet,HIGH);
     
     

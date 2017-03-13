@@ -3,33 +3,29 @@
 
 //PinDefs.
 int interrupt_in = 3;  //pin 3, which can trigger an interrupt for waking up from power down.
-int SCL_line = 6;
-int SDA_line = 2;//clock is pin 6, data is pin 2.  Change pin2 to some unused Dio to free up another button
-int faster = 0;  //pin 0
-int slower = 1;  //pin 1
-int mosfet = 9;  //pin 9
+int SCL_line = 7;
+int SDA_line = 6;//clock is pin 7, data is pin 6.
+int faster = 2;  //pin 2, Switch S3 (left)
+int slower = 1;  //pin 1, Switch S1 (right)
+int start = 0;  //pin 0, Switch S2 (middle)
+int mosfet = 10;  //pin 10
 
 
 
+//a series of constants that affect push time & randomness
 
-
-volatile long push_time_us = 11*1000;  //push time.  It needs to be here, since multiple code segments deal with it.
-
-volatile long random_time_max = 4000; //allow for +/- 2000uS push time randomness... used to prevent long-term cyclic oscilations.
+volatile long push_time_us = 10*1000;  //push time.  It needs to be here, since multiple code segments deal with it.
+volatile long random_time_max = 4000; //allow for +/- 4000uS push time randomness... used to prevent long-term cyclic oscilations.
 volatile int max_pushes = 3; //number of times the pendulum will push untill is chooses a new random push time
-
 volatile int chance_no_push = 5; //5% chance of not pushing this time, b/c randomness. 
 
 void setup() {
-  // put your setup code here, to run once:
 
 
   setup_driver();
   setup_dac();
   setup_ui();
-
   start_pendulum();
-
   setup_sensing();
 
   
@@ -42,8 +38,8 @@ void loop() {
     attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
     
     LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //118 uA.  but only on pins 2&3.  0&1 draw ~.5mA.
+    //remember that I've powered down timers here.  THerefore, timer0 (used for delay) may not work, avoid using delay().  use delayMicroseconds() instead.
 
-    //detachInterrupt(digitalPinToInterrupt(interrupt_in));
 
   
 }
