@@ -11,4 +11,3 @@
 6. Scott Shackelton
 7. Prof. Oliver O'Reily
 8. Prof. Chris Dames
-9. Kathy Barrett
