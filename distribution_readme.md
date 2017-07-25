@@ -8,9 +8,7 @@
 3. Prof. Alice Agogino
 4. Dr. George Anwar
 5. UC Berkeley MechE Machine Shop
-
-More Recipients for the extra pendulums:
-Scott Shackelton
-Oliver O'Reily
-Kathy Barrett
-Chris Dames
+6. Scott Shackelton
+7. Prof. Oliver O'Reily
+8. Prof. Chris Dames
+9. Kathy Barrett
