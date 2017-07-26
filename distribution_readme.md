@@ -4,10 +4,11 @@
 
 0. Douglas Hutchings  (Final prototype, brass is not polished)
 1. Prof. Ronald Fearing
-2. Katherina Law
+2. Katherina Law (X) 
 3. Prof. Alice Agogino
-4. Dr. George Anwar
-5. UC Berkeley MechE Machine Shop
+4. Dr. George Anwar (X)
+5. UC Berkeley MechE Machine Shop (Scheduled)
 6. Scott Shackelton
 7. Prof. Oliver O'Reily
 8. Prof. Chris Dames
+9. Prof. Ruzena Bajcsy
