@@ -2,6 +2,12 @@
 
 A battery-powered low power double pendulum.  Useful for looking cool.  It's a good gift.
 
-[Video] (https://www.youtube.com/watch?v=9qNsIy8OKPE) (video is currently of a prototype)
+[Video of Final](https://youtu.be/Yj28coDq9EA)
 
-[BOM] (https://docs.google.com/spreadsheets/d/1zQ9JefeK5bJ6EfoIBReY1vUxNtvPFnJwqca2jpHTiHs/edit#gid=1877369656)
+[Video of Rev 3 Prototype](https://youtu.be/eYqc_CuFVBs)
+
+[Video of Rev 2 Prototype](https://youtu.be/RyoI87ninAo)
+
+[Video of Rev 1 Prototype](https://www.youtube.com/watch?v=9qNsIy8OKPE)
+
+[BOM](https://docs.google.com/spreadsheets/d/1zQ9JefeK5bJ6EfoIBReY1vUxNtvPFnJwqca2jpHTiHs/edit#gid=1877369656)
