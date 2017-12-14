@@ -10,5 +10,5 @@
 5. Jeremey Kramer (X)
 6. Prof. Ruzena Bajcsy (X)
 7. UC Berkeley MechE Machine Shop (X)
-8. Prof. Alice Agogino (X)
+8. Dr. Eric Nelson ()
 9. Sold to Dr. Anwar (X)
