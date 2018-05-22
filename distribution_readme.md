@@ -10,5 +10,9 @@
 5. Jeremey Kramer (X)
 6. Prof. Ruzena Bajcsy (X)
 7. UC Berkeley MechE Machine Shop (X)
-8. Dr. Eric Nelson ()
+8. Dr. Eric Nelson (X)
 9. Sold to Dr. Anwar (X)
+10. Martin Kwitek (X)
+11. Dr. Frank Ling ()
+12. Carl Page ()
+13. David Araujo
