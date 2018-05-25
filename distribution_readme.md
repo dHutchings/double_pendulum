@@ -13,6 +13,6 @@
 8. Dr. Eric Nelson (X)
 9. Sold to Dr. Anwar (X)
 10. Martin Kwitek (X)
-11. Dr. Frank Ling ()
-12. Carl Page ()
-13. David Araujo
+11. Dr. Frank Ling (X)
+12. Carl Page (X)
+13. David Araujo ()
