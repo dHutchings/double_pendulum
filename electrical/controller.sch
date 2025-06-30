@@ -7996,7 +7996,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 - We therefore use a software bit-banging approach for i2c.
 
 Used to be 6 SDA, 7 SCL, now we'll use 6 &amp; 8 to leave all interrupts free.</text>
-<text x="172.72" y="129.54" size="1.778" layer="91">addr: 0x64</text>
+<text x="172.72" y="129.54" size="1.778" layer="91">addr: 0x60</text>
 <text x="17.78" y="149.86" size="1.778" layer="91">5.1K resistors per the spec.
 Allows uC to sense USB C's power capabilities.</text>
 <text x="17.78" y="15.24" size="1.778" layer="91">PNP NJT</text>
