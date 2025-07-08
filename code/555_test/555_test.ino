@@ -1,10 +1,16 @@
 int mosfet = 10;  //pin 10... for turning the MOSFET on / pushing the magnet.
 int auto_restart = 7; //pin 7... hooked up to the 555 timer.
 
+int pulse_duration_ms = 200; //the time, in ms, that the pulse will be low / active / 'pushing'
+
+int duration_between_pulses = 200; //this will incriment, from 200 up to 10,000, in 200 steps.
+
+
 bool mos_state = false;
 
 long last_changed_mos = 0;
 long last_printed = 0;
+long last_pulse_low_at = 0;
 
 
 void setup() {
@@ -23,12 +29,25 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  if( millis() - last_changed_mos > 2500)
+  if(! mos_state & (millis() - last_pulse_low_at > pulse_duration_ms))
   {
-    mos_state = !mos_state;
+    mos_state = true;
     digitalWrite(mosfet,mos_state);
     last_changed_mos = millis();
+    duration_between_pulses += 200; //the next pulse will be less often than the curent one.
+    if(duration_between_pulses > 10000)
+    {
+      duration_between_pulses = 200;
+    }
+  }
+  
+  // put your main code here, to run repeatedly:
+  if(mos_state & ( millis() - last_changed_mos > duration_between_pulses))
+  {
+    mos_state = false;
+    digitalWrite(mosfet,mos_state);
+    last_changed_mos = millis();
+    last_pulse_low_at = millis();
   }
 
   if(millis() - last_printed > 20) 
@@ -38,7 +57,9 @@ void loop() {
     Serial.print("MOS:");
     Serial.print(int(mos_state));
     Serial.print(",555:");
-    Serial.println(digitalRead(auto_restart));
+    Serial.print(digitalRead(auto_restart));
+    Serial.print(",Dur:");
+    Serial.println(float(duration_between_pulses)/float(1000));
     last_printed = millis();
   }
   
