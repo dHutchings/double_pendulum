@@ -1280,7 +1280,7 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <attribute name="POPULARITY" value="1" x="54.102" y="9.144" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="55.88" y="12.827" size="0.508" layer="27" font="vector" ratio="18" rot="R180"/>
 </element>
-<element name="R2" library="pie" package="R0603" value="10K" x="60.96" y="8.636" smashed="yes">
+<element name="R2" library="pie" package="R0603" value="3.3k" x="60.96" y="8.636" smashed="yes">
 <attribute name="DESCRIPTION" value="RESISTOR, American symbol" x="107.95" y="-44.704" size="1.778" layer="27" display="off"/>
 <attribute name="DISTRIBUTOR" value="DigiKey" x="107.95" y="-44.704" size="1.778" layer="27" display="off"/>
 <attribute name="DISTRIBUTOR_PART_NUMBER" value="" x="107.95" y="-44.704" size="1.778" layer="27" display="off"/>
@@ -1310,7 +1310,7 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <attribute name="NOTES" value="Cut Tape" x="3.81" y="57.912" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="PACKAGE" value="R0603" x="3.81" y="57.912" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
-<element name="R1" library="pie" package="R0603" value="10K" x="60.96" y="10.668" smashed="yes" rot="R180">
+<element name="R1" library="pie" package="R0603" value="16.6k" x="60.96" y="10.668" smashed="yes" rot="R180">
 <attribute name="DESCRIPTION" value="RESISTOR, American symbol" x="44.45" y="70.358" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="DISTRIBUTOR" value="DigiKey" x="44.45" y="70.358" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="DISTRIBUTOR_PART_NUMBER" value="" x="44.45" y="70.358" size="1.778" layer="27" rot="R180" display="off"/>
@@ -1937,20 +1937,6 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <wire x1="36.836" y1="13.589" x2="38.901" y2="13.589" width="0.254" layer="1"/>
 <wire x1="38.901" y1="13.589" x2="39.028" y2="13.462" width="0.254" layer="1"/>
 </signal>
-<signal name="AUTO_RESTART">
-<contactref element="IC1" pad="3"/>
-<contactref element="UC1" pad="7"/>
-<contactref element="R10" pad="2"/>
-<wire x1="36.322" y1="8.04" x2="36.322" y2="5.334" width="0.254" layer="1"/>
-<wire x1="36.322" y1="5.334" x2="36.576" y2="5.08" width="0.254" layer="1"/>
-<via x="29.8167" y="14.224" extent="1-16" drill="0.381"/>
-<wire x1="31.236" y1="14.859" x2="30.601" y2="14.224" width="0.254" layer="1"/>
-<wire x1="30.601" y1="14.224" x2="29.8167" y2="14.224" width="0.254" layer="1"/>
-<wire x1="29.8167" y1="14.224" x2="36.576" y2="7.4647" width="0.254" layer="16"/>
-<wire x1="36.576" y1="7.4647" x2="36.576" y2="5.08" width="0.254" layer="16"/>
-<contactref element="J5" pad="2"/>
-<wire x1="36.576" y1="5.08" x2="36.576" y2="2.032" width="0.254" layer="1"/>
-</signal>
 <signal name="N$7">
 <contactref element="IC1" pad="7"/>
 <contactref element="IC1" pad="6"/>
@@ -1970,23 +1956,6 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <wire x1="30.226" y1="16.31513125" x2="30.226" y2="15.84386875" width="0.254" layer="1"/>
 <wire x1="30.57586875" y1="15.494" x2="36.074" y2="15.494" width="0.254" layer="1"/>
 <wire x1="25.654" y1="15.152" x2="23.622" y2="15.152" width="0.254" layer="1"/>
-</signal>
-<signal name="!DRIVE">
-<contactref element="UC1" pad="16"/>
-<contactref element="IC1" pad="2"/>
-<contactref element="Q3" pad="1"/>
-<wire x1="31.236" y1="16.129" x2="31.744" y2="16.129" width="0.254" layer="1"/>
-<wire x1="34.157" y1="18.542" x2="31.744" y2="16.129" width="0.254" layer="1"/>
-<wire x1="37.338" y1="18.542" x2="39.116" y2="20.32" width="0.254" layer="1"/>
-<wire x1="34.157" y1="18.542" x2="37.338" y2="18.542" width="0.254" layer="1"/>
-<wire x1="29.62586875" y1="17.714" x2="27.956" y2="17.714" width="0.254" layer="1"/>
-<wire x1="27.194" y1="16.952" x2="27.956" y2="17.714" width="0.254" layer="1"/>
-<wire x1="29.62586875" y1="17.714" x2="30.52026875" y2="16.8196" width="0.254" layer="1"/>
-<wire x1="30.52026875" y1="16.8196" x2="30.5454" y2="16.8196" width="0.254" layer="1"/>
-<wire x1="30.5454" y1="16.8196" x2="31.236" y2="16.129" width="0.254" layer="1"/>
-<contactref element="J3" pad="1"/>
-<wire x1="34.036" y1="23.368" x2="36.068" y2="23.368" width="0.254" layer="1"/>
-<wire x1="36.068" y1="23.368" x2="39.116" y2="20.32" width="0.254" layer="1"/>
 </signal>
 <signal name="VIN">
 <contactref element="S_PWR" pad="P2"/>
@@ -2085,10 +2054,8 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <wire x1="43.6372" y1="1.6764" x2="41.9608" y2="3.3528" width="0.254" layer="16"/>
 <wire x1="49.1076625" y1="1.6764" x2="51.2920625" y2="3.8608" width="0.254" layer="16"/>
 <via x="74.041" y="4.191" extent="1-16" drill="0.381"/>
-<wire x1="72.076" y1="5.401" x2="72.076" y2="5.207" width="0.254" layer="1"/>
 <wire x1="43.6372" y1="1.6764" x2="49.1076625" y2="1.6764" width="0.254" layer="16"/>
 <wire x1="72.076" y1="3.937" x2="72.076" y2="5.207" width="0.254" layer="1"/>
-<wire x1="72.076" y1="5.401" x2="72.136" y2="5.461" width="0.254" layer="1"/>
 <wire x1="51.2920625" y1="3.8608" x2="64.2112" y2="3.8608" width="0.254" layer="16"/>
 <wire x1="66.04" y1="2.032" x2="72.644" y2="2.032" width="0.254" layer="16"/>
 <wire x1="74.041" y1="3.429" x2="74.041" y2="4.191" width="0.254" layer="16"/>
@@ -2099,6 +2066,37 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <contactref element="J5" pad="4"/>
 <wire x1="28.956" y1="5.08" x2="28.956" y2="4.572" width="0.254" layer="1"/>
 <wire x1="31.496" y1="2.032" x2="28.956" y2="4.572" width="0.254" layer="1"/>
+</signal>
+<signal name="TIMER_RST">
+<contactref element="UC1" pad="16"/>
+<contactref element="IC1" pad="2"/>
+<contactref element="Q3" pad="1"/>
+<wire x1="31.236" y1="16.129" x2="31.744" y2="16.129" width="0.254" layer="1"/>
+<wire x1="34.157" y1="18.542" x2="31.744" y2="16.129" width="0.254" layer="1"/>
+<wire x1="34.157" y1="18.542" x2="37.338" y2="18.542" width="0.254" layer="1"/>
+<wire x1="29.62586875" y1="17.714" x2="27.956" y2="17.714" width="0.254" layer="1"/>
+<wire x1="27.194" y1="16.952" x2="27.956" y2="17.714" width="0.254" layer="1"/>
+<wire x1="29.62586875" y1="17.714" x2="30.52026875" y2="16.8196" width="0.254" layer="1"/>
+<wire x1="30.52026875" y1="16.8196" x2="30.5454" y2="16.8196" width="0.254" layer="1"/>
+<wire x1="30.5454" y1="16.8196" x2="31.236" y2="16.129" width="0.254" layer="1"/>
+<contactref element="J3" pad="1"/>
+<wire x1="34.036" y1="23.368" x2="36.068" y2="23.368" width="0.254" layer="1"/>
+<wire x1="36.068" y1="23.368" x2="39.116" y2="20.32" width="0.254" layer="1"/>
+<wire x1="37.338" y1="18.542" x2="39.116" y2="20.32" width="0.254" layer="1"/>
+</signal>
+<signal name="TIMER_RESTART">
+<contactref element="IC1" pad="3"/>
+<contactref element="R10" pad="2"/>
+<contactref element="UC1" pad="7"/>
+<wire x1="36.322" y1="5.334" x2="36.576" y2="5.08" width="0.254" layer="1"/>
+<via x="29.8167" y="14.224" extent="1-16" drill="0.381"/>
+<wire x1="29.8167" y1="14.224" x2="30.601" y2="14.224" width="0.254" layer="1"/>
+<wire x1="29.8167" y1="14.224" x2="36.576" y2="7.4647" width="0.254" layer="16"/>
+<wire x1="36.576" y1="7.4647" x2="36.576" y2="5.08" width="0.254" layer="16"/>
+<contactref element="J5" pad="2"/>
+<wire x1="36.576" y1="5.08" x2="36.576" y2="2.032" width="0.254" layer="1"/>
+<wire x1="30.601" y1="14.224" x2="31.236" y2="14.859" width="0.254" layer="1"/>
+<wire x1="36.322" y1="8.04" x2="36.322" y2="5.334" width="0.254" layer="1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
