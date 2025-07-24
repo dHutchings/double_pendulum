@@ -3909,7 +3909,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <pad name="P$2" x="8.1" y="3.3" drill="1.3" diameter="2.1844"/>
 <rectangle x1="0" y1="0" x2="11.2" y2="7.5" layer="39"/>
 </package>
-<package name="USB-C-16P-2LAYER-PADS" urn="urn:adsk.eagle:footprint:49053407/1" library_version="141" library_locally_modified="yes">
+<package name="USB-C-16P-2LAYER-PADS" urn="urn:adsk.eagle:footprint:49053407/3" library_version="141" library_locally_modified="yes">
 <smd name="B6" x="0.75" y="-0.34" dx="0.3" dy="1" layer="1"/>
 <smd name="A7" x="0.25" y="-0.34" dx="0.3" dy="1" layer="1"/>
 <smd name="GND2" x="3.225" y="-0.34" dx="0.6" dy="1" layer="1"/>
@@ -3933,10 +3933,26 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <wire x1="-4.32" y1="-7.7" x2="4.32" y2="-7.7" width="0.1524" layer="51" curve="-21.282614"/>
 <wire x1="-4.32" y1="-2.2" x2="-4.32" y2="-4" width="0.2032" layer="21"/>
 <wire x1="4.32" y1="-2.2" x2="4.32" y2="-4" width="0.2032" layer="21"/>
-<wire x1="-4.318" y1="-0.365" x2="-4.318" y2="-1.465" width="0.6" layer="46"/>
-<wire x1="4.318" y1="-0.365" x2="4.318" y2="-1.465" width="0.6" layer="46"/>
-<wire x1="-4.318" y1="-4.78" x2="-4.318" y2="-5.4" width="0.6" layer="46"/>
-<wire x1="4.318" y1="-4.78" x2="4.318" y2="-5.4" width="0.6" layer="46"/>
+<wire x1="-4.618" y1="-0.365" x2="-4.018" y2="-0.365" width="0" layer="46" curve="-180"/>
+<wire x1="-4.018" y1="-1.465" x2="-4.618" y2="-1.465" width="0" layer="46" curve="-180"/>
+<wire x1="-4.618" y1="-0.365" x2="-4.618" y2="-1.465" width="0" layer="46"/>
+<wire x1="4.018" y1="-0.365" x2="4.618" y2="-0.365" width="0" layer="46" curve="-180"/>
+<wire x1="4.618" y1="-1.465" x2="4.018" y2="-1.465" width="0" layer="46" curve="-180"/>
+<wire x1="4.018" y1="-0.365" x2="4.018" y2="-1.465" width="0" layer="46"/>
+<wire x1="4.618" y1="-0.365" x2="4.618" y2="-1.465" width="0" layer="46"/>
+<wire x1="4.018" y1="-4.78" x2="4.618" y2="-4.78" width="0" layer="46" curve="-180"/>
+<wire x1="4.618" y1="-5.4" x2="4.018" y2="-5.4" width="0" layer="46" curve="-180"/>
+<wire x1="4.018" y1="-4.78" x2="4.018" y2="-5.4" width="0" layer="46"/>
+<wire x1="4.618" y1="-4.78" x2="4.618" y2="-5.4" width="0" layer="46"/>
+<wire x1="-4.618" y1="-4.78" x2="-4.018" y2="-4.78" width="0" layer="46" curve="-180"/>
+<wire x1="-4.018" y1="-5.4" x2="-4.618" y2="-5.4" width="0" layer="46" curve="-180"/>
+<wire x1="-4.618" y1="-4.78" x2="-4.618" y2="-5.4" width="0" layer="46"/>
+<wire x1="-4.018" y1="-4.78" x2="-4.018" y2="-5.4" width="0" layer="46"/>
+<wire x1="-4.318" y1="-0.365" x2="-4.318" y2="-1.465" width="0.6" layer="51"/>
+<wire x1="-4.018" y1="-0.365" x2="-4.018" y2="-1.465" width="0" layer="46"/>
+<wire x1="4.318" y1="-0.365" x2="4.318" y2="-1.465" width="0.6" layer="51"/>
+<wire x1="-4.318" y1="-4.78" x2="-4.318" y2="-5.4" width="0.6" layer="51"/>
+<wire x1="4.318" y1="-4.78" x2="4.318" y2="-5.4" width="0.6" layer="51"/>
 <polygon width="0.01" layer="31">
 <vertex x="-4.82" y="-1.52"/>
 <vertex x="-4.82" y="-0.32" curve="-90"/>
@@ -4065,6 +4081,38 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <vertex x="3.818" y="-4.795" curve="-90"/>
 <vertex x="4.318" y="-4.295" curve="-90"/>
 </polygon>
+<polygon width="0.01" layer="30">
+<vertex x="-4.92" y="-1.52"/>
+<vertex x="-4.92" y="-0.32" curve="-90"/>
+<vertex x="-4.32" y="0.235" curve="-90"/>
+<vertex x="-3.72" y="-0.32"/>
+<vertex x="-3.72" y="-1.52" curve="-90"/>
+<vertex x="-4.32" y="-2.065" curve="-90"/>
+</polygon>
+<polygon width="0.01" layer="30">
+<vertex x="-4.92" y="-5.4"/>
+<vertex x="-4.92" y="-4.8" curve="-90"/>
+<vertex x="-4.32" y="-4.195" curve="-90"/>
+<vertex x="-3.72" y="-4.8"/>
+<vertex x="-3.72" y="-5.4" curve="-90"/>
+<vertex x="-4.32" y="-5.995" curve="-90"/>
+</polygon>
+<polygon width="0.01" layer="30">
+<vertex x="3.72" y="-1.52"/>
+<vertex x="3.72" y="-0.32" curve="-90"/>
+<vertex x="4.32" y="0.235" curve="-90"/>
+<vertex x="4.92" y="-0.32"/>
+<vertex x="4.92" y="-1.52" curve="-90"/>
+<vertex x="4.32" y="-2.065" curve="-90"/>
+</polygon>
+<polygon width="0.01" layer="30">
+<vertex x="3.72" y="-5.4"/>
+<vertex x="3.72" y="-4.8" curve="-90"/>
+<vertex x="4.32" y="-4.195" curve="-90"/>
+<vertex x="4.92" y="-4.8"/>
+<vertex x="4.92" y="-5.4" curve="-90"/>
+<vertex x="4.32" y="-5.995" curve="-90"/>
+</polygon>
 <rectangle x1="3.025" y1="-0.595" x2="3.425" y2="-0.095" layer="51"/>
 <rectangle x1="2.25" y1="-0.595" x2="2.65" y2="-0.095" layer="51"/>
 <rectangle x1="1.65" y1="-0.6" x2="1.85" y2="-0.1" layer="51"/>
@@ -4083,6 +4131,10 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <pad name="SHLD1" x="-4.318" y="-0.915" drill="0.6" diameter="0.8" shape="long" rot="R90" stop="no"/>
 <text x="0" y="-2.54" size="0.762" layer="25" align="center">&gt;Name</text>
 <text x="0" y="-3.81" size="0.762" layer="27" align="center">&gt;Value</text>
+<text x="0" y="1.27" size="0.6096" layer="51" align="bottom-center">Slots in Eagle are Weird and are MFG-Specific:
+For JLCPCB, the zero-width arcs and slots on the milling layer.
+For Osh-park, the line with width 0.6 (currently on TDOCU) needs to be on milling instead.
+TLDR: Have to edit the part for the specific manufacturer.</text>
 </package>
 <package name="E-SWITCH-SPDT" urn="urn:adsk.eagle:footprint:49052300/1" library_version="144">
 <description>E-switch SPDT</description>
@@ -4947,7 +4999,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <rectangle x1="-4.572" y1="-2.413" x2="4.572" y2="1.778" layer="39"/>
 <rectangle x1="-3.81" y1="-1.27" x2="3.81" y2="1.27" layer="51"/>
 </package>
-<package name="ARDUINO_PRO_MICRO_2D" urn="urn:adsk.eagle:footprint:49177696/1" locally_modified="yes" library_version="152" library_locally_modified="yes">
+<package name="ARDUINO_PRO_MICRO_2D" urn="urn:adsk.eagle:footprint:49177696/2" library_version="154">
 <wire x1="0" y1="0" x2="0" y2="33.528" width="0.127" layer="25"/>
 <wire x1="0" y1="33.528" x2="5.334" y2="33.528" width="0.127" layer="25"/>
 <wire x1="5.334" y1="33.528" x2="13.462" y2="33.528" width="0.127" layer="25"/>
@@ -4985,41 +5037,6 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <pad name="10" x="17.018" y="1.778" drill="1" diameter="1.9812"/>
 <text x="5.588" y="32.258" size="1.016" layer="25" font="vector">Micro USB</text>
 <text x="9.398" y="8.128" size="1.27" layer="21" font="vector" rot="R90" align="center">&gt;NAME</text>
-</package>
-<package name="STAND-OFF-#4" urn="urn:adsk.eagle:footprint:10805714/1" library_version="151">
-<description>&lt;b&gt;Stand Off&lt;/b&gt;&lt;p&gt;
-This is the mechanical footprint for a #4 phillips button head screw. Use the keepout ring to avoid running the screw head into surrounding components. SKU : PRT-00447</description>
-<wire x1="0" y1="1.8542" x2="0" y2="-1.8542" width="0.2032" layer="41" curve="-180"/>
-<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="41" curve="-180"/>
-<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="42" curve="180"/>
-<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="42" curve="-180"/>
-<hole x="0" y="0" drill="3.302"/>
-<circle x="0" y="0" radius="2.78821875" width="0.127" layer="39"/>
-</package>
-<package name="STAND-OFF-TIGHT-#4" urn="urn:adsk.eagle:footprint:10805715/1" library_version="151">
-<description>&lt;b&gt;Stand Off&lt;/b&gt;&lt;p&gt;
-This is the mechanical footprint for a #4 phillips button head screw. Use the keepout ring to avoid running the screw head into surrounding components. SKU : PRT-00447</description>
-<wire x1="0" y1="1.8542" x2="0" y2="-1.8542" width="0.2032" layer="41" curve="-180"/>
-<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="41" curve="-180"/>
-<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="42" curve="180"/>
-<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="42" curve="-180"/>
-<hole x="0" y="0" drill="3.302"/>
-<circle x="0" y="0" radius="2.85396875" width="0.127" layer="39"/>
-</package>
-<package name="0402-CAP" urn="urn:adsk.eagle:footprint:10805706/1" library_version="151">
-<description>&lt;b&gt;CAPACITOR&lt;/b&gt;&lt;p&gt;
-chip</description>
-<wire x1="-0.245" y1="0.224" x2="0.245" y2="0.224" width="0.1524" layer="51"/>
-<wire x1="0.245" y1="-0.224" x2="-0.245" y2="-0.224" width="0.1524" layer="51"/>
-<wire x1="0" y1="0.0305" x2="0" y2="-0.0305" width="0.4064" layer="21"/>
-<smd name="1" x="-0.65" y="0" dx="0.7" dy="0.9" layer="1"/>
-<smd name="2" x="0.65" y="0" dx="0.7" dy="0.9" layer="1"/>
-<text x="-1.27" y="0.762" size="0.508" layer="25" font="vector" ratio="10">&gt;NAME</text>
-<text x="-1.27" y="-1.27" size="0.508" layer="27" font="vector">&gt;VALUE</text>
-<rectangle x1="-0.554" y1="-0.3048" x2="-0.254" y2="0.2951" layer="51"/>
-<rectangle x1="0.2588" y1="-0.3048" x2="0.5588" y2="0.2951" layer="51"/>
-<rectangle x1="-0.1999" y1="-0.3" x2="0.1999" y2="0.3" layer="35"/>
-<rectangle x1="-1.651" y1="-0.635" x2="1.651" y2="0.635" layer="39"/>
 </package>
 <package name="ARDUINO_PRO_MICRO" urn="urn:adsk.eagle:footprint:49061029/2" library_version="146" library_locally_modified="yes">
 <wire x1="0" y1="0" x2="0" y2="33.528" width="0.127" layer="25"/>
@@ -5060,79 +5077,7 @@ chip</description>
 <text x="5.588" y="32.258" size="1.016" layer="25" font="vector">Micro USB</text>
 <text x="9.398" y="8.128" size="1.27" layer="21" font="vector" rot="R90" align="center">&gt;NAME</text>
 </package>
-<package name="TO252" urn="urn:adsk.eagle:footprint:10805608/1" library_version="151">
-<description>&lt;b&gt;SMALL OUTLINE TRANSISTOR&lt;/b&gt;&lt;p&gt;
-TS-003</description>
-<wire x1="3.2766" y1="3.8354" x2="3.277" y2="-2.159" width="0.2032" layer="21"/>
-<wire x1="3.277" y1="-2.159" x2="-3.277" y2="-2.159" width="0.2032" layer="21"/>
-<wire x1="-3.277" y1="-2.159" x2="-3.2766" y2="3.8354" width="0.2032" layer="21"/>
-<wire x1="-3.277" y1="3.835" x2="3.2774" y2="3.8346" width="0.2032" layer="51"/>
-<wire x1="-2.5654" y1="3.937" x2="-2.5654" y2="4.6482" width="0.2032" layer="51"/>
-<wire x1="-2.5654" y1="4.6482" x2="-2.1082" y2="5.1054" width="0.2032" layer="51"/>
-<wire x1="-2.1082" y1="5.1054" x2="2.1082" y2="5.1054" width="0.2032" layer="51"/>
-<wire x1="2.1082" y1="5.1054" x2="2.5654" y2="4.6482" width="0.2032" layer="51"/>
-<wire x1="2.5654" y1="4.6482" x2="2.5654" y2="3.937" width="0.2032" layer="51"/>
-<wire x1="2.5654" y1="3.937" x2="-2.5654" y2="3.937" width="0.2032" layer="51"/>
-<smd name="3" x="0" y="2.5" dx="5.4" dy="6.2" layer="1"/>
-<smd name="1" x="-2.28" y="-4.8" dx="1" dy="1.6" layer="1"/>
-<smd name="2" x="2.28" y="-4.8" dx="1" dy="1.6" layer="1"/>
-<text x="-3.81" y="-5.715" size="1.27" layer="25" font="vector" ratio="10" rot="R90">&gt;NAME</text>
-<text x="5.08" y="-5.715" size="1.27" layer="27" font="vector" rot="R90">&gt;VALUE</text>
-<rectangle x1="-2.7178" y1="-5.1562" x2="-1.8542" y2="-2.2606" layer="51"/>
-<rectangle x1="1.8542" y1="-5.1562" x2="2.7178" y2="-2.2606" layer="51"/>
-<rectangle x1="-0.4318" y1="-3.0226" x2="0.4318" y2="-2.2606" layer="21"/>
-<rectangle x1="-3.683" y1="-5.715" x2="3.683" y2="5.715" layer="39"/>
-<polygon width="0.1998" layer="51">
-<vertex x="-2.5654" y="3.937"/>
-<vertex x="-2.5654" y="4.6482"/>
-<vertex x="-2.1082" y="5.1054"/>
-<vertex x="2.1082" y="5.1054"/>
-<vertex x="2.5654" y="4.6482"/>
-<vertex x="2.5654" y="3.937"/>
-</polygon>
-</package>
-<package name="SOT669" urn="urn:adsk.eagle:footprint:10805610/1" library_version="151">
-<description>&lt;b&gt;SOT 669 (LFPAK)&lt;/b&gt;&lt;p&gt;
-Source: http://www.nxp.com/acrobat_download/datasheets/PH7030L_4.pdf</description>
-<wire x1="-2.4" y1="1.95" x2="2.4" y2="1.95" width="0.2032" layer="51"/>
-<wire x1="2.4" y1="1.95" x2="2.4" y2="-1.95" width="0.2032" layer="51"/>
-<wire x1="2.4" y1="-1.95" x2="-2.4" y2="-1.95" width="0.2032" layer="51"/>
-<wire x1="-2.4" y1="-1.95" x2="-2.4" y2="1.95" width="0.2032" layer="51"/>
-<wire x1="-2.527" y1="-1.95" x2="-2.527" y2="-1.4028" width="0.2032" layer="21"/>
-<wire x1="2.527" y1="-1.4028" x2="2.527" y2="-1.95" width="0.2032" layer="21"/>
-<circle x="-1.625" y="0" radius="0.325" width="0.2032" layer="51"/>
-<smd name="1" x="-1.905" y="-2.65" dx="0.7" dy="1.4" layer="1"/>
-<smd name="2" x="-0.635" y="-2.65" dx="0.7" dy="1.4" layer="1"/>
-<smd name="3" x="0.635" y="-2.65" dx="0.7" dy="1.4" layer="1"/>
-<smd name="4" x="1.905" y="-2.65" dx="0.7" dy="1.4" layer="1"/>
-<smd name="MB" x="0" y="1.35" dx="5" dy="5" layer="1" cream="no"/>
-<text x="-3.175" y="-3.175" size="1.27" layer="25" font="vector" ratio="10" rot="R90">&gt;NAME</text>
-<text x="4.445" y="-3.175" size="1.27" layer="27" font="vector" rot="R90">&gt;VALUE</text>
-<rectangle x1="-2.155" y1="-3.1" x2="-1.655" y2="-2.05" layer="51"/>
-<rectangle x1="-2.205" y1="-2.8" x2="-1.605" y2="-2.175" layer="51"/>
-<rectangle x1="-0.885" y1="-3.1" x2="-0.385" y2="-2.05" layer="51"/>
-<rectangle x1="-0.935" y1="-2.8" x2="-0.335" y2="-2.175" layer="51"/>
-<rectangle x1="0.385" y1="-3.1" x2="0.885" y2="-2.05" layer="51"/>
-<rectangle x1="0.335" y1="-2.8" x2="0.935" y2="-2.175" layer="51"/>
-<rectangle x1="1.655" y1="-3.1" x2="2.155" y2="-2.05" layer="51"/>
-<rectangle x1="1.605" y1="-2.8" x2="2.205" y2="-2.175" layer="51"/>
-<rectangle x1="-2.413" y1="2.05" x2="2.425" y2="3.302" layer="31"/>
-<rectangle x1="-1.905" y1="-1.025" x2="1.905" y2="2.075" layer="31"/>
-<rectangle x1="-2.921" y1="-3.429" x2="2.921" y2="3.937" layer="39"/>
-<polygon width="0.2032" layer="51">
-<vertex x="-2.1" y="2.15"/>
-<vertex x="-2.1" y="2.8" curve="-90"/>
-<vertex x="-1.9" y="3"/>
-<vertex x="1.9" y="3" curve="-90"/>
-<vertex x="2.1" y="2.8"/>
-<vertex x="2.1" y="2.15"/>
-<vertex x="1.2" y="2.15"/>
-<vertex x="1.2" y="2.3"/>
-<vertex x="-1.2" y="2.3"/>
-<vertex x="-1.2" y="2.15"/>
-</polygon>
-</package>
-<package name="2012-ARV" urn="urn:adsk.eagle:footprint:49198276/1" locally_modified="yes" library_version="152" library_locally_modified="yes">
+<package name="2012-ARV" urn="urn:adsk.eagle:footprint:49198276/2" library_version="154">
 <description>4X2012(0805) resistor array</description>
 <smd name="1" x="-1.99" y="-1.7" dx="1.1" dy="1.4" layer="1"/>
 <smd name="2" x="-0.635" y="-1.7" dx="0.9" dy="1.4" layer="1"/>
@@ -5153,7 +5098,106 @@ Source: http://www.nxp.com/acrobat_download/datasheets/PH7030L_4.pdf</descriptio
 <text x="-3.048" y="0" size="0.508" layer="25" font="vector" ratio="18" rot="R90" align="bottom-center">&gt;NAME</text>
 <text x="3.048" y="0" size="0.508" layer="27" font="vector" ratio="18" rot="R90" align="top-center">&gt;VALUE</text>
 </package>
-<package name="1206_RA" urn="urn:adsk.eagle:footprint:49177698/1" locally_modified="yes" library_version="152" library_locally_modified="yes">
+<package name="SO08" urn="urn:adsk.eagle:footprint:49204897/1" library_version="7">
+<description>&lt;b&gt;Small Outline Package 8&lt;/b&gt;&lt;br&gt;
+NS Package M08A</description>
+<wire x1="2.4" y1="1.9" x2="2.4" y2="-1.4" width="0.2032" layer="51"/>
+<wire x1="2.4" y1="-1.4" x2="2.4" y2="-1.9" width="0.2032" layer="51"/>
+<wire x1="2.4" y1="-1.9" x2="-2.4" y2="-1.9" width="0.2032" layer="51"/>
+<wire x1="-2.4" y1="-1.9" x2="-2.4" y2="-1.4" width="0.2032" layer="51"/>
+<wire x1="-2.4" y1="-1.4" x2="-2.4" y2="1.9" width="0.2032" layer="51"/>
+<wire x1="-2.4" y1="1.9" x2="2.4" y2="1.9" width="0.2032" layer="51"/>
+<wire x1="2.4" y1="-1.4" x2="-2.4" y2="-1.4" width="0.2032" layer="51"/>
+<wire x1="-2.4" y1="-1.9" x2="-2.4" y2="1.9" width="0.2032" layer="21"/>
+<wire x1="2.4" y1="1.9" x2="2.4" y2="-1.9" width="0.2032" layer="21"/>
+<smd name="2" x="-0.635" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="7" x="-0.635" y="2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="1" x="-1.905" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="3" x="0.635" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="4" x="1.905" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="8" x="-1.905" y="2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="6" x="0.635" y="2.6" dx="0.6" dy="2.2" layer="1"/>
+<smd name="5" x="1.905" y="2.6" dx="0.6" dy="2.2" layer="1"/>
+<text x="-2.667" y="0" size="0.762" layer="25" font="vector" ratio="18" rot="R90" align="bottom-center">&gt;NAME</text>
+<text x="2.667" y="0" size="0.762" layer="27" font="vector" ratio="18" rot="R90" align="top-center">&gt;VALUE</text>
+<rectangle x1="-2.15" y1="-3.1" x2="-1.66" y2="-2" layer="51"/>
+<rectangle x1="-0.88" y1="-3.1" x2="-0.39" y2="-2" layer="51"/>
+<rectangle x1="0.39" y1="-3.1" x2="0.88" y2="-2" layer="51"/>
+<rectangle x1="1.66" y1="-3.1" x2="2.15" y2="-2" layer="51"/>
+<rectangle x1="1.66" y1="2" x2="2.15" y2="3.1" layer="51"/>
+<rectangle x1="0.39" y1="2" x2="0.88" y2="3.1" layer="51"/>
+<rectangle x1="-0.88" y1="2" x2="-0.39" y2="3.1" layer="51"/>
+<rectangle x1="-2.15" y1="2" x2="-1.66" y2="3.1" layer="51"/>
+<circle x="-3.048" y="-2.667" radius="0.381" width="0" layer="21"/>
+</package>
+<package name="DIL08" urn="urn:adsk.eagle:footprint:16129/1" library_version="7">
+<description>&lt;b&gt;Dual In Line Package&lt;/b&gt;</description>
+<wire x1="5.08" y1="2.921" x2="-5.08" y2="2.921" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="-2.921" x2="5.08" y2="-2.921" width="0.1524" layer="21"/>
+<wire x1="5.08" y1="2.921" x2="5.08" y2="-2.921" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="2.921" x2="-5.08" y2="1.016" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="-2.921" x2="-5.08" y2="-1.016" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="1.016" x2="-5.08" y2="-1.016" width="0.1524" layer="21" curve="-180"/>
+<pad name="1" x="-3.81" y="-3.81" drill="0.8128" diameter="1.27" rot="R90"/>
+<pad name="2" x="-1.27" y="-3.81" drill="0.8128" diameter="1.27" rot="R90"/>
+<pad name="7" x="-1.27" y="3.81" drill="0.8128" diameter="1.27" rot="R90"/>
+<pad name="8" x="-3.81" y="3.81" drill="0.8128" diameter="1.27" rot="R90"/>
+<pad name="3" x="1.27" y="-3.81" drill="0.8128" diameter="1.27" rot="R90"/>
+<pad name="4" x="3.81" y="-3.81" drill="0.8128" diameter="1.27" rot="R90"/>
+<pad name="6" x="1.27" y="3.81" drill="0.8128" diameter="1.27" rot="R90"/>
+<pad name="5" x="3.81" y="3.81" drill="0.8128" diameter="1.27" rot="R90"/>
+<text x="-5.334" y="-2.921" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<text x="-3.556" y="-0.635" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+</package>
+<package name="TSSOP8" urn="urn:adsk.eagle:footprint:20626/1" library_version="7">
+<description>&lt;b&gt;Thin Shrink Small Outline Package&lt;/b&gt;&lt;p&gt;
+package type ST</description>
+<wire x1="1.4" y1="-2.15" x2="1.4" y2="2.15" width="0.2032" layer="21"/>
+<wire x1="1.4" y1="2.15" x2="-1.4" y2="2.15" width="0.2032" layer="21"/>
+<wire x1="-1.4" y1="2.15" x2="-1.4" y2="-2.15" width="0.2032" layer="21"/>
+<wire x1="-1.4" y1="-2.15" x2="1.4" y2="-2.15" width="0.2032" layer="21"/>
+<circle x="-0.65" y="-1.625" radius="0.325" width="0" layer="21"/>
+<smd name="1" x="-0.975" y="-2.925" dx="0.35" dy="1.2" layer="1"/>
+<smd name="2" x="-0.325" y="-2.925" dx="0.35" dy="1.2" layer="1"/>
+<smd name="3" x="0.325" y="-2.925" dx="0.35" dy="1.2" layer="1"/>
+<smd name="4" x="0.975" y="-2.925" dx="0.35" dy="1.2" layer="1"/>
+<smd name="5" x="0.975" y="2.925" dx="0.35" dy="1.2" layer="1"/>
+<smd name="6" x="0.325" y="2.925" dx="0.35" dy="1.2" layer="1"/>
+<smd name="7" x="-0.325" y="2.925" dx="0.35" dy="1.2" layer="1"/>
+<smd name="8" x="-0.975" y="2.925" dx="0.35" dy="1.2" layer="1"/>
+<text x="-1.625" y="-2.925" size="1.27" layer="25" rot="R90">&gt;NAME</text>
+<text x="2.925" y="-3.25" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
+<rectangle x1="-1.1" y1="-3.2" x2="-0.85" y2="-2.2" layer="51"/>
+<rectangle x1="-0.45" y1="-3.2" x2="-0.2" y2="-2.2" layer="51"/>
+<rectangle x1="0.2" y1="-3.2" x2="0.45" y2="-2.2" layer="51"/>
+<rectangle x1="0.85" y1="-3.2" x2="1.1" y2="-2.2" layer="51"/>
+<rectangle x1="0.85" y1="2.2" x2="1.1" y2="3.2" layer="51"/>
+<rectangle x1="0.2" y1="2.2" x2="0.45" y2="3.2" layer="51"/>
+<rectangle x1="-0.45" y1="2.2" x2="-0.2" y2="3.2" layer="51"/>
+<rectangle x1="-1.1" y1="2.2" x2="-0.85" y2="3.2" layer="51"/>
+</package>
+<package name="2012_ARV" urn="urn:adsk.eagle:footprint:49198278/1" library_version="153" library_locally_modified="yes">
+<description>4X2012(0805) resistor array</description>
+<smd name="1" x="-1.99" y="-1.7" dx="1.1" dy="1.4" layer="1"/>
+<smd name="2" x="-0.635" y="-1.7" dx="0.9" dy="1.4" layer="1"/>
+<smd name="3" x="0.635" y="-1.7" dx="0.9" dy="1.4" layer="1"/>
+<smd name="4" x="1.99" y="-1.7" dx="1.1" dy="1.4" layer="1"/>
+<smd name="8" x="-1.99" y="1.7" dx="1.1" dy="1.4" layer="1"/>
+<smd name="7" x="-0.635" y="1.7" dx="0.9" dy="1.4" layer="1"/>
+<smd name="6" x="0.635" y="1.7" dx="0.9" dy="1.4" layer="1"/>
+<smd name="5" x="1.99" y="1.7" dx="1.1" dy="1.4" layer="1"/>
+<wire x1="2.754" y1="-1.6" x2="2.754" y2="1.6" width="0.2032" layer="21"/>
+<wire x1="-2.754" y1="1.6" x2="-2.754" y2="-1.6" width="0.2032" layer="21"/>
+<wire x1="-2.54" y1="1.6" x2="2.54" y2="1.6" width="0.0508" layer="39"/>
+<wire x1="2.54" y1="1.6" x2="2.54" y2="-1.6" width="0.0508" layer="39"/>
+<wire x1="2.54" y1="-1.6" x2="-2.54" y2="-1.6" width="0.0508" layer="39"/>
+<wire x1="-2.54" y1="-1.6" x2="-2.54" y2="1.6" width="0.0508" layer="39"/>
+<wire x1="0" y1="1.6" x2="0" y2="-1.6" width="0.127" layer="51"/>
+<wire x1="0.2" y1="1.6" x2="0.2" y2="1.1" width="0.127" layer="51"/>
+<text x="-3.048" y="0" size="0.508" layer="25" font="vector" ratio="18" rot="R90" align="bottom-center">&gt;NAME</text>
+<text x="3.048" y="0" size="0.508" layer="27" font="vector" ratio="18" rot="R90" align="top-center">&gt;VALUE</text>
+</package>
+<package name="1206_RA" urn="urn:adsk.eagle:footprint:49177698/2" library_version="154">
 <description>&lt;h3&gt;4 Resistor Array&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Total Size: 3.2mm x 1.6mm (1206)&lt;/li&gt;
@@ -5216,83 +5260,112 @@ Modified from original sparkfun footprint (smaller large footprints) for DRC</de
 <text x="-1.651" y="1.27" size="0.508" layer="25" font="vector" ratio="20">&gt;NAME</text>
 <text x="-1.651" y="-1.778" size="0.508" layer="27" font="vector" ratio="20">&gt;VALUE</text>
 </package>
-<package name="SO08" urn="urn:adsk.eagle:footprint:16130/1" locally_modified="yes" library_version="7">
-<description>&lt;b&gt;Small Outline Package 8&lt;/b&gt;&lt;br&gt;
-NS Package M08A</description>
-<wire x1="2.4" y1="1.9" x2="2.4" y2="-1.4" width="0.2032" layer="51"/>
-<wire x1="2.4" y1="-1.4" x2="2.4" y2="-1.9" width="0.2032" layer="51"/>
-<wire x1="2.4" y1="-1.9" x2="-2.4" y2="-1.9" width="0.2032" layer="51"/>
-<wire x1="-2.4" y1="-1.9" x2="-2.4" y2="-1.4" width="0.2032" layer="51"/>
-<wire x1="-2.4" y1="-1.4" x2="-2.4" y2="1.9" width="0.2032" layer="51"/>
-<wire x1="-2.4" y1="1.9" x2="2.4" y2="1.9" width="0.2032" layer="51"/>
-<wire x1="2.4" y1="-1.4" x2="-2.4" y2="-1.4" width="0.2032" layer="51"/>
-<smd name="2" x="-0.635" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
-<smd name="7" x="-0.635" y="2.6" dx="0.6" dy="2.2" layer="1"/>
-<smd name="1" x="-1.905" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
-<smd name="3" x="0.635" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
-<smd name="4" x="1.905" y="-2.6" dx="0.6" dy="2.2" layer="1"/>
-<smd name="8" x="-1.905" y="2.6" dx="0.6" dy="2.2" layer="1"/>
-<smd name="6" x="0.635" y="2.6" dx="0.6" dy="2.2" layer="1"/>
-<smd name="5" x="1.905" y="2.6" dx="0.6" dy="2.2" layer="1"/>
-<text x="-2.667" y="0" size="0.762" layer="25" font="vector" ratio="18" rot="R90" align="bottom-center">&gt;NAME</text>
-<text x="2.667" y="0" size="0.762" layer="27" font="vector" ratio="18" rot="R90" align="top-center">&gt;VALUE</text>
-<rectangle x1="-2.15" y1="-3.1" x2="-1.66" y2="-2" layer="51"/>
-<rectangle x1="-0.88" y1="-3.1" x2="-0.39" y2="-2" layer="51"/>
-<rectangle x1="0.39" y1="-3.1" x2="0.88" y2="-2" layer="51"/>
-<rectangle x1="1.66" y1="-3.1" x2="2.15" y2="-2" layer="51"/>
-<rectangle x1="1.66" y1="2" x2="2.15" y2="3.1" layer="51"/>
-<rectangle x1="0.39" y1="2" x2="0.88" y2="3.1" layer="51"/>
-<rectangle x1="-0.88" y1="2" x2="-0.39" y2="3.1" layer="51"/>
-<rectangle x1="-2.15" y1="2" x2="-1.66" y2="3.1" layer="51"/>
-<wire x1="-2.4" y1="-1.9" x2="-2.4" y2="1.9" width="0.2032" layer="21"/>
-<wire x1="2.4" y1="1.9" x2="2.4" y2="-1.9" width="0.2032" layer="21"/>
-<circle x="-3.048" y="-2.667" radius="0.381" width="0" layer="21"/>
+<package name="STAND-OFF-#4" urn="urn:adsk.eagle:footprint:10805714/1" library_version="155">
+<description>&lt;b&gt;Stand Off&lt;/b&gt;&lt;p&gt;
+This is the mechanical footprint for a #4 phillips button head screw. Use the keepout ring to avoid running the screw head into surrounding components. SKU : PRT-00447</description>
+<wire x1="0" y1="1.8542" x2="0" y2="-1.8542" width="0.2032" layer="41" curve="-180"/>
+<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="41" curve="-180"/>
+<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="42" curve="180"/>
+<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="42" curve="-180"/>
+<hole x="0" y="0" drill="3.302"/>
+<circle x="0" y="0" radius="2.78821875" width="0.127" layer="39"/>
 </package>
-<package name="DIL08" urn="urn:adsk.eagle:footprint:16129/1" library_version="7">
-<description>&lt;b&gt;Dual In Line Package&lt;/b&gt;</description>
-<wire x1="5.08" y1="2.921" x2="-5.08" y2="2.921" width="0.1524" layer="21"/>
-<wire x1="-5.08" y1="-2.921" x2="5.08" y2="-2.921" width="0.1524" layer="21"/>
-<wire x1="5.08" y1="2.921" x2="5.08" y2="-2.921" width="0.1524" layer="21"/>
-<wire x1="-5.08" y1="2.921" x2="-5.08" y2="1.016" width="0.1524" layer="21"/>
-<wire x1="-5.08" y1="-2.921" x2="-5.08" y2="-1.016" width="0.1524" layer="21"/>
-<wire x1="-5.08" y1="1.016" x2="-5.08" y2="-1.016" width="0.1524" layer="21" curve="-180"/>
-<pad name="1" x="-3.81" y="-3.81" drill="0.8128" diameter="1.27" rot="R90"/>
-<pad name="2" x="-1.27" y="-3.81" drill="0.8128" diameter="1.27" rot="R90"/>
-<pad name="7" x="-1.27" y="3.81" drill="0.8128" diameter="1.27" rot="R90"/>
-<pad name="8" x="-3.81" y="3.81" drill="0.8128" diameter="1.27" rot="R90"/>
-<pad name="3" x="1.27" y="-3.81" drill="0.8128" diameter="1.27" rot="R90"/>
-<pad name="4" x="3.81" y="-3.81" drill="0.8128" diameter="1.27" rot="R90"/>
-<pad name="6" x="1.27" y="3.81" drill="0.8128" diameter="1.27" rot="R90"/>
-<pad name="5" x="3.81" y="3.81" drill="0.8128" diameter="1.27" rot="R90"/>
-<text x="-5.334" y="-2.921" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
-<text x="-3.556" y="-0.635" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+<package name="STAND-OFF-TIGHT-#4" urn="urn:adsk.eagle:footprint:10805715/1" library_version="155">
+<description>&lt;b&gt;Stand Off&lt;/b&gt;&lt;p&gt;
+This is the mechanical footprint for a #4 phillips button head screw. Use the keepout ring to avoid running the screw head into surrounding components. SKU : PRT-00447</description>
+<wire x1="0" y1="1.8542" x2="0" y2="-1.8542" width="0.2032" layer="41" curve="-180"/>
+<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="41" curve="-180"/>
+<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="42" curve="180"/>
+<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="42" curve="-180"/>
+<hole x="0" y="0" drill="3.302"/>
+<circle x="0" y="0" radius="2.85396875" width="0.127" layer="39"/>
 </package>
-<package name="TSSOP8" urn="urn:adsk.eagle:footprint:20626/1" library_version="7">
-<description>&lt;b&gt;Thin Shrink Small Outline Package&lt;/b&gt;&lt;p&gt;
-package type ST</description>
-<wire x1="1.4" y1="-2.15" x2="1.4" y2="2.15" width="0.2032" layer="21"/>
-<wire x1="1.4" y1="2.15" x2="-1.4" y2="2.15" width="0.2032" layer="21"/>
-<wire x1="-1.4" y1="2.15" x2="-1.4" y2="-2.15" width="0.2032" layer="21"/>
-<wire x1="-1.4" y1="-2.15" x2="1.4" y2="-2.15" width="0.2032" layer="21"/>
-<circle x="-0.65" y="-1.625" radius="0.325" width="0" layer="21"/>
-<smd name="1" x="-0.975" y="-2.925" dx="0.35" dy="1.2" layer="1"/>
-<smd name="2" x="-0.325" y="-2.925" dx="0.35" dy="1.2" layer="1"/>
-<smd name="3" x="0.325" y="-2.925" dx="0.35" dy="1.2" layer="1"/>
-<smd name="4" x="0.975" y="-2.925" dx="0.35" dy="1.2" layer="1"/>
-<smd name="5" x="0.975" y="2.925" dx="0.35" dy="1.2" layer="1"/>
-<smd name="6" x="0.325" y="2.925" dx="0.35" dy="1.2" layer="1"/>
-<smd name="7" x="-0.325" y="2.925" dx="0.35" dy="1.2" layer="1"/>
-<smd name="8" x="-0.975" y="2.925" dx="0.35" dy="1.2" layer="1"/>
-<text x="-1.625" y="-2.925" size="1.27" layer="25" rot="R90">&gt;NAME</text>
-<text x="2.925" y="-3.25" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
-<rectangle x1="-1.1" y1="-3.2" x2="-0.85" y2="-2.2" layer="51"/>
-<rectangle x1="-0.45" y1="-3.2" x2="-0.2" y2="-2.2" layer="51"/>
-<rectangle x1="0.2" y1="-3.2" x2="0.45" y2="-2.2" layer="51"/>
-<rectangle x1="0.85" y1="-3.2" x2="1.1" y2="-2.2" layer="51"/>
-<rectangle x1="0.85" y1="2.2" x2="1.1" y2="3.2" layer="51"/>
-<rectangle x1="0.2" y1="2.2" x2="0.45" y2="3.2" layer="51"/>
-<rectangle x1="-0.45" y1="2.2" x2="-0.2" y2="3.2" layer="51"/>
-<rectangle x1="-1.1" y1="2.2" x2="-0.85" y2="3.2" layer="51"/>
+<package name="0402-CAP" urn="urn:adsk.eagle:footprint:10805706/1" library_version="155">
+<description>&lt;b&gt;CAPACITOR&lt;/b&gt;&lt;p&gt;
+chip</description>
+<wire x1="-0.245" y1="0.224" x2="0.245" y2="0.224" width="0.1524" layer="51"/>
+<wire x1="0.245" y1="-0.224" x2="-0.245" y2="-0.224" width="0.1524" layer="51"/>
+<wire x1="0" y1="0.0305" x2="0" y2="-0.0305" width="0.4064" layer="21"/>
+<smd name="1" x="-0.65" y="0" dx="0.7" dy="0.9" layer="1"/>
+<smd name="2" x="0.65" y="0" dx="0.7" dy="0.9" layer="1"/>
+<text x="-1.27" y="0.762" size="0.508" layer="25" font="vector" ratio="10">&gt;NAME</text>
+<text x="-1.27" y="-1.27" size="0.508" layer="27" font="vector">&gt;VALUE</text>
+<rectangle x1="-0.554" y1="-0.3048" x2="-0.254" y2="0.2951" layer="51"/>
+<rectangle x1="0.2588" y1="-0.3048" x2="0.5588" y2="0.2951" layer="51"/>
+<rectangle x1="-0.1999" y1="-0.3" x2="0.1999" y2="0.3" layer="35"/>
+<rectangle x1="-1.651" y1="-0.635" x2="1.651" y2="0.635" layer="39"/>
+</package>
+<package name="TO252" urn="urn:adsk.eagle:footprint:10805608/1" library_version="155">
+<description>&lt;b&gt;SMALL OUTLINE TRANSISTOR&lt;/b&gt;&lt;p&gt;
+TS-003</description>
+<wire x1="3.2766" y1="3.8354" x2="3.277" y2="-2.159" width="0.2032" layer="21"/>
+<wire x1="3.277" y1="-2.159" x2="-3.277" y2="-2.159" width="0.2032" layer="21"/>
+<wire x1="-3.277" y1="-2.159" x2="-3.2766" y2="3.8354" width="0.2032" layer="21"/>
+<wire x1="-3.277" y1="3.835" x2="3.2774" y2="3.8346" width="0.2032" layer="51"/>
+<wire x1="-2.5654" y1="3.937" x2="-2.5654" y2="4.6482" width="0.2032" layer="51"/>
+<wire x1="-2.5654" y1="4.6482" x2="-2.1082" y2="5.1054" width="0.2032" layer="51"/>
+<wire x1="-2.1082" y1="5.1054" x2="2.1082" y2="5.1054" width="0.2032" layer="51"/>
+<wire x1="2.1082" y1="5.1054" x2="2.5654" y2="4.6482" width="0.2032" layer="51"/>
+<wire x1="2.5654" y1="4.6482" x2="2.5654" y2="3.937" width="0.2032" layer="51"/>
+<wire x1="2.5654" y1="3.937" x2="-2.5654" y2="3.937" width="0.2032" layer="51"/>
+<smd name="3" x="0" y="2.5" dx="5.4" dy="6.2" layer="1"/>
+<smd name="1" x="-2.28" y="-4.8" dx="1" dy="1.6" layer="1"/>
+<smd name="2" x="2.28" y="-4.8" dx="1" dy="1.6" layer="1"/>
+<text x="-3.81" y="-5.715" size="1.27" layer="25" font="vector" ratio="10" rot="R90">&gt;NAME</text>
+<text x="5.08" y="-5.715" size="1.27" layer="27" font="vector" rot="R90">&gt;VALUE</text>
+<rectangle x1="-2.7178" y1="-5.1562" x2="-1.8542" y2="-2.2606" layer="51"/>
+<rectangle x1="1.8542" y1="-5.1562" x2="2.7178" y2="-2.2606" layer="51"/>
+<rectangle x1="-0.4318" y1="-3.0226" x2="0.4318" y2="-2.2606" layer="21"/>
+<rectangle x1="-3.683" y1="-5.715" x2="3.683" y2="5.715" layer="39"/>
+<polygon width="0.1998" layer="51">
+<vertex x="-2.5654" y="3.937"/>
+<vertex x="-2.5654" y="4.6482"/>
+<vertex x="-2.1082" y="5.1054"/>
+<vertex x="2.1082" y="5.1054"/>
+<vertex x="2.5654" y="4.6482"/>
+<vertex x="2.5654" y="3.937"/>
+</polygon>
+</package>
+<package name="SOT669" urn="urn:adsk.eagle:footprint:10805610/1" library_version="155">
+<description>&lt;b&gt;SOT 669 (LFPAK)&lt;/b&gt;&lt;p&gt;
+Source: http://www.nxp.com/acrobat_download/datasheets/PH7030L_4.pdf</description>
+<wire x1="-2.4" y1="1.95" x2="2.4" y2="1.95" width="0.2032" layer="51"/>
+<wire x1="2.4" y1="1.95" x2="2.4" y2="-1.95" width="0.2032" layer="51"/>
+<wire x1="2.4" y1="-1.95" x2="-2.4" y2="-1.95" width="0.2032" layer="51"/>
+<wire x1="-2.4" y1="-1.95" x2="-2.4" y2="1.95" width="0.2032" layer="51"/>
+<wire x1="-2.527" y1="-1.95" x2="-2.527" y2="-1.4028" width="0.2032" layer="21"/>
+<wire x1="2.527" y1="-1.4028" x2="2.527" y2="-1.95" width="0.2032" layer="21"/>
+<circle x="-1.625" y="0" radius="0.325" width="0.2032" layer="51"/>
+<smd name="1" x="-1.905" y="-2.65" dx="0.7" dy="1.4" layer="1"/>
+<smd name="2" x="-0.635" y="-2.65" dx="0.7" dy="1.4" layer="1"/>
+<smd name="3" x="0.635" y="-2.65" dx="0.7" dy="1.4" layer="1"/>
+<smd name="4" x="1.905" y="-2.65" dx="0.7" dy="1.4" layer="1"/>
+<smd name="MB" x="0" y="1.35" dx="5" dy="5" layer="1" cream="no"/>
+<text x="-3.175" y="-3.175" size="1.27" layer="25" font="vector" ratio="10" rot="R90">&gt;NAME</text>
+<text x="4.445" y="-3.175" size="1.27" layer="27" font="vector" rot="R90">&gt;VALUE</text>
+<rectangle x1="-2.155" y1="-3.1" x2="-1.655" y2="-2.05" layer="51"/>
+<rectangle x1="-2.205" y1="-2.8" x2="-1.605" y2="-2.175" layer="51"/>
+<rectangle x1="-0.885" y1="-3.1" x2="-0.385" y2="-2.05" layer="51"/>
+<rectangle x1="-0.935" y1="-2.8" x2="-0.335" y2="-2.175" layer="51"/>
+<rectangle x1="0.385" y1="-3.1" x2="0.885" y2="-2.05" layer="51"/>
+<rectangle x1="0.335" y1="-2.8" x2="0.935" y2="-2.175" layer="51"/>
+<rectangle x1="1.655" y1="-3.1" x2="2.155" y2="-2.05" layer="51"/>
+<rectangle x1="1.605" y1="-2.8" x2="2.205" y2="-2.175" layer="51"/>
+<rectangle x1="-2.413" y1="2.05" x2="2.425" y2="3.302" layer="31"/>
+<rectangle x1="-1.905" y1="-1.025" x2="1.905" y2="2.075" layer="31"/>
+<rectangle x1="-2.921" y1="-3.429" x2="2.921" y2="3.937" layer="39"/>
+<polygon width="0.2032" layer="51">
+<vertex x="-2.1" y="2.15"/>
+<vertex x="-2.1" y="2.8" curve="-90"/>
+<vertex x="-1.9" y="3"/>
+<vertex x="1.9" y="3" curve="-90"/>
+<vertex x="2.1" y="2.8"/>
+<vertex x="2.1" y="2.15"/>
+<vertex x="1.2" y="2.15"/>
+<vertex x="1.2" y="2.3"/>
+<vertex x="-1.2" y="2.3"/>
+<vertex x="-1.2" y="2.15"/>
+</polygon>
 </package>
 </packages>
 <packages3d>
@@ -5352,7 +5425,7 @@ package type ST</description>
 <packageinstance name="2PIN_SCREW"/>
 </packageinstances>
 </package3d>
-<package3d name="USB-C-16P-2LAYER-PADS" urn="urn:adsk.eagle:package:49053406/2" type="model" library_version="143">
+<package3d name="USB-C-16P-2LAYER-PADS" urn="urn:adsk.eagle:package:49053406/4" type="model" library_version="155">
 <packageinstances>
 <packageinstance name="USB-C-16P-2LAYER-PADS"/>
 </packageinstances>
@@ -5408,30 +5481,9 @@ package type ST</description>
 <packageinstance name="POLOLU_VOLTAG_REGULATOR_U3V16FX_VERT"/>
 </packageinstances>
 </package3d>
-<package3d name="ARDUINO_PRO_MICRO_2D" urn="urn:adsk.eagle:package:49177699/1" type="box" library_version="152" library_locally_modified="yes">
+<package3d name="ARDUINO_PRO_MICRO_2D" urn="urn:adsk.eagle:package:49177699/2" type="box" library_version="154">
 <packageinstances>
 <packageinstance name="ARDUINO_PRO_MICRO_2D"/>
-</packageinstances>
-</package3d>
-<package3d name="STAND-OFF-#4" urn="urn:adsk.eagle:package:10805933/1" type="box" library_version="151">
-<description>&lt;b&gt;Stand Off&lt;/b&gt;&lt;p&gt;
-This is the mechanical footprint for a #4 phillips button head screw. Use the keepout ring to avoid running the screw head into surrounding components. SKU : PRT-00447</description>
-<packageinstances>
-<packageinstance name="STAND-OFF-#4"/>
-</packageinstances>
-</package3d>
-<package3d name="STAND-OFF-TIGHT-#4" urn="urn:adsk.eagle:package:10805934/1" type="box" library_version="151">
-<description>&lt;b&gt;Stand Off&lt;/b&gt;&lt;p&gt;
-This is the mechanical footprint for a #4 phillips button head screw. Use the keepout ring to avoid running the screw head into surrounding components. SKU : PRT-00447</description>
-<packageinstances>
-<packageinstance name="STAND-OFF-TIGHT-#4"/>
-</packageinstances>
-</package3d>
-<package3d name="0402-CAP" urn="urn:adsk.eagle:package:10805925/1" type="box" library_version="151">
-<description>&lt;b&gt;CAPACITOR&lt;/b&gt;&lt;p&gt;
-chip</description>
-<packageinstances>
-<packageinstance name="0402-CAP"/>
 </packageinstances>
 </package3d>
 <package3d name="ARDUINO_PRO_MICRO" urn="urn:adsk.eagle:package:49061028/3" type="model" library_version="151">
@@ -5439,43 +5491,14 @@ chip</description>
 <packageinstance name="ARDUINO_PRO_MICRO"/>
 </packageinstances>
 </package3d>
-<package3d name="TO252" urn="urn:adsk.eagle:package:10805826/1" type="box" library_version="151">
-<description>&lt;b&gt;SMALL OUTLINE TRANSISTOR&lt;/b&gt;&lt;p&gt;
-TS-003</description>
-<packageinstances>
-<packageinstance name="TO252"/>
-</packageinstances>
-</package3d>
-<package3d name="SOT669" urn="urn:adsk.eagle:package:10805828/1" type="box" library_version="151">
-<description>&lt;b&gt;SOT 669 (LFPAK)&lt;/b&gt;&lt;p&gt;
-Source: http://www.nxp.com/acrobat_download/datasheets/PH7030L_4.pdf</description>
-<packageinstances>
-<packageinstance name="SOT669"/>
-</packageinstances>
-</package3d>
-<package3d name="0805-ARV" urn="urn:adsk.eagle:package:49177700/2" type="box" library_version="152" library_locally_modified="yes">
+<package3d name="0805-ARV" urn="urn:adsk.eagle:package:49177700/3" type="box" library_version="153" library_locally_modified="yes">
 <description>4X2012(0805) resistor array</description>
 <packageinstances>
-<packageinstance name="2012-ARV"/>
+<packageinstance name="2012_ARV"/>
 </packageinstances>
 </package3d>
-<package3d name="1206_RA" urn="urn:adsk.eagle:package:49177701/1" type="box" library_version="152" library_locally_modified="yes">
-<description>&lt;h3&gt;4 Resistor Array&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Total Size: 3.2mm x 1.6mm (1206)&lt;/li&gt;
-&lt;li&gt;Pad Size: .5mm - .7mm x .55mm&lt;/li&gt;
-&lt;li&gt;Pitch: .5mm&lt;/li&gt;
-&lt;li&gt;&lt;/li&gt;
-&lt;li&gt;&lt;/li&gt;
-
-&lt;/ul&gt;
-Modified from original sparkfun footprint (smaller large footprints) for DRC</description>
-<packageinstances>
-<packageinstance name="1206_RA"/>
-</packageinstances>
-</package3d>
-<package3d name="SO08" urn="urn:adsk.eagle:package:16404/2" type="model" library_version="7">
-<description>Small Outline Package 8
+<package3d name="SO08" urn="urn:adsk.eagle:package:49204900/1" type="model" library_version="154">
+<description>&lt;b&gt;Small Outline Package 8&lt;/b&gt;&lt;br&gt;
 NS Package M08A</description>
 <packageinstances>
 <packageinstance name="SO08"/>
@@ -5492,6 +5515,56 @@ NS Package M08A</description>
 package type ST</description>
 <packageinstances>
 <packageinstance name="TSSOP8"/>
+</packageinstances>
+</package3d>
+<package3d name="1206_RA" urn="urn:adsk.eagle:package:49177701/2" type="box" library_version="154">
+<description>&lt;h3&gt;4 Resistor Array&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Total Size: 3.2mm x 1.6mm (1206)&lt;/li&gt;
+&lt;li&gt;Pad Size: .5mm - .7mm x .55mm&lt;/li&gt;
+&lt;li&gt;Pitch: .5mm&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+
+&lt;/ul&gt;
+Modified from original sparkfun footprint (smaller large footprints) for DRC</description>
+<packageinstances>
+<packageinstance name="1206_RA"/>
+</packageinstances>
+</package3d>
+<package3d name="STAND-OFF-#4" urn="urn:adsk.eagle:package:10805933/1" type="box" library_version="155">
+<description>&lt;b&gt;Stand Off&lt;/b&gt;&lt;p&gt;
+This is the mechanical footprint for a #4 phillips button head screw. Use the keepout ring to avoid running the screw head into surrounding components. SKU : PRT-00447</description>
+<packageinstances>
+<packageinstance name="STAND-OFF-#4"/>
+</packageinstances>
+</package3d>
+<package3d name="STAND-OFF-TIGHT-#4" urn="urn:adsk.eagle:package:10805934/1" type="box" library_version="155">
+<description>&lt;b&gt;Stand Off&lt;/b&gt;&lt;p&gt;
+This is the mechanical footprint for a #4 phillips button head screw. Use the keepout ring to avoid running the screw head into surrounding components. SKU : PRT-00447</description>
+<packageinstances>
+<packageinstance name="STAND-OFF-TIGHT-#4"/>
+</packageinstances>
+</package3d>
+<package3d name="0402-CAP" urn="urn:adsk.eagle:package:10805925/1" type="box" library_version="155">
+<description>&lt;b&gt;CAPACITOR&lt;/b&gt;&lt;p&gt;
+chip</description>
+<packageinstances>
+<packageinstance name="0402-CAP"/>
+</packageinstances>
+</package3d>
+<package3d name="TO252" urn="urn:adsk.eagle:package:10805826/1" type="box" library_version="155">
+<description>&lt;b&gt;SMALL OUTLINE TRANSISTOR&lt;/b&gt;&lt;p&gt;
+TS-003</description>
+<packageinstances>
+<packageinstance name="TO252"/>
+</packageinstances>
+</package3d>
+<package3d name="SOT669" urn="urn:adsk.eagle:package:10805828/1" type="box" library_version="155">
+<description>&lt;b&gt;SOT 669 (LFPAK)&lt;/b&gt;&lt;p&gt;
+Source: http://www.nxp.com/acrobat_download/datasheets/PH7030L_4.pdf</description>
+<packageinstances>
+<packageinstance name="SOT669"/>
 </packageinstances>
 </package3d>
 </packages3d>
@@ -5761,7 +5834,7 @@ may have serval functions.  (off on center, momentary on ends, etc)</description
 <pin name="2" x="5.08" y="0" visible="off" length="short" direction="pas" swaplevel="1" rot="R180"/>
 <pin name="1" x="-5.08" y="0" visible="off" length="short" direction="pas" swaplevel="1"/>
 </symbol>
-<symbol name="OPAMP" library_version="152" library_locally_modified="yes">
+<symbol name="OPAMP" urn="urn:adsk.eagle:symbol:49204895/1" library_version="154">
 <wire x1="-5.08" y1="5.08" x2="-5.08" y2="-5.08" width="0.4064" layer="94"/>
 <wire x1="-5.08" y1="-5.08" x2="5.08" y2="0" width="0.4064" layer="94"/>
 <wire x1="5.08" y1="0" x2="-5.08" y2="5.08" width="0.4064" layer="94"/>
@@ -5774,7 +5847,7 @@ may have serval functions.  (off on center, momentary on ends, etc)</description
 <pin name="+IN" x="-7.62" y="2.54" visible="pad" length="short" direction="in"/>
 <pin name="OUT" x="7.62" y="0" visible="pad" length="short" direction="out" rot="R180"/>
 </symbol>
-<symbol name="PWR+-" library_version="152" library_locally_modified="yes">
+<symbol name="PWR+-" urn="urn:adsk.eagle:symbol:49204896/1" library_version="154">
 <text x="1.27" y="3.175" size="0.8128" layer="93" rot="R90">V+</text>
 <text x="1.27" y="-4.445" size="0.8128" layer="93" rot="R90">V-</text>
 <pin name="V+" x="0" y="7.62" visible="pad" length="middle" direction="pwr" rot="R270"/>
@@ -5782,7 +5855,7 @@ may have serval functions.  (off on center, momentary on ends, etc)</description
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="STAND-OFF" urn="urn:adsk.eagle:component:10806055/5" prefix="STANDOFF" library_version="151">
+<deviceset name="STAND-OFF" urn="urn:adsk.eagle:component:10806055/5" prefix="STANDOFF" library_version="155">
 <description>&lt;b&gt;#4 Stand Off&lt;/b&gt;&lt;p&gt;
 This is the mechanical footprint for a #4 phillips button head screw. Use the keepout ring to avoid running the screw head into surrounding components. SKU : PRT-00447
 &lt;/br&gt;
@@ -5821,7 +5894,7 @@ Keystone has a fancy smt solder-in standoff that can be used essentially as a so
 </device>
 </devices>
 </deviceset>
-<deviceset name="CAP" urn="urn:adsk.eagle:component:10806050/1" prefix="C" uservalue="yes" library_version="151">
+<deviceset name="CAP" urn="urn:adsk.eagle:component:10806050/1" prefix="C" uservalue="yes" library_version="155">
 <description>&lt;b&gt;Capacitor&lt;/b&gt;
 Standard 0603 ceramic capacitor, and 0.1" leaded capacitor.</description>
 <gates>
@@ -6007,7 +6080,7 @@ Button commonly used for reset or general input. Spark Fun Electronics SKU : COM
 </device>
 </devices>
 </deviceset>
-<deviceset name="USB_C" urn="urn:adsk.eagle:component:49053428/1" prefix="J" uservalue="yes" library_version="144">
+<deviceset name="USB_C" urn="urn:adsk.eagle:component:49053428/3" prefix="J" uservalue="yes" library_version="155">
 <description>&lt;h3&gt;USB Type C 16Pin Connector&lt;/h3&gt;
 
 Super Speed pins not available on the 16-pin purely SMD connector so this part is best for USB 2.0 implementations. D1 and D2 are tied together enabling D+/- no matter which way the cable is plugged into the connector. The two channel configuration pins (CC1/2) are exposed. These are normally connected to ground via 5.1k resistors but can be reconfigured for high current/high power applications.
@@ -6050,7 +6123,7 @@ If designing 4-layer board, make sure to select the variant &lt;strong&gt;_4-LAY
 <connect gate="J1" pin="VBUS" pad="VBUS1 VBUS2"/>
 </connects>
 <package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:49053406/2"/>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:49053406/4"/>
 </package3dinstances>
 <technologies>
 <technology name="">
@@ -6119,7 +6192,7 @@ digikey:  EG2377-ND</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="ARDUINO_PRO_MICRO" urn="urn:adsk.eagle:component:49061053/2" prefix="IC" uservalue="yes" library_version="152" library_locally_modified="yes">
+<deviceset name="ARDUINO_PRO_MICRO" urn="urn:adsk.eagle:component:49061053/3" prefix="IC" uservalue="yes" library_version="154">
 <description>&lt;b&gt;Arduino Pro Micro&lt;/b&gt;
 
 &lt;p&gt;Electrical System Year 9's Smart Sensor Core&lt;/p&gt;
@@ -6240,7 +6313,7 @@ digikey:  EG2377-ND</description>
 <connect gate="APM" pin="VCC" pad="VCC"/>
 </connects>
 <package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:49177699/1"/>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:49177699/2"/>
 </package3dinstances>
 <technologies>
 <technology name=""/>
@@ -6248,7 +6321,7 @@ digikey:  EG2377-ND</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="P-CHANNEL-MOSFET" urn="urn:adsk.eagle:component:10806015/2" prefix="Q" library_version="151">
+<deviceset name="P-CHANNEL-MOSFET" urn="urn:adsk.eagle:component:10806015/2" prefix="Q" library_version="155">
 <description>&lt;b&gt;P-Channel PowerTrench® MOSFET&lt;/b&gt;&lt;p&gt;
 Source:  FDD4141.pdf</description>
 <gates>
@@ -6289,7 +6362,7 @@ Source:  FDD4141.pdf</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="N-CHANNEL-MOSFET" urn="urn:adsk.eagle:component:10806014/2" prefix="Q" library_version="151">
+<deviceset name="N-CHANNEL-MOSFET" urn="urn:adsk.eagle:component:10806014/2" prefix="Q" library_version="155">
 <description>&lt;b&gt;N-channel TrenchMOS (TM) logic level FET&lt;/b&gt;
 &lt;p&gt;Source:
 &lt;p&gt;SOT23-3:  http://www.nxp.com/documents/data_sheet/BSS123.pdf
@@ -6388,7 +6461,7 @@ SOT669:  http://www.nxp.com/documents/data_sheet/PH7030L.pdf &lt;/p&gt;
 </device>
 </devices>
 </deviceset>
-<deviceset name="RESISTOR_ARRAY_(4)" urn="urn:adsk.eagle:component:49177704/2" locally_modified="yes" prefix="R" uservalue="yes" library_version="152" library_locally_modified="yes">
+<deviceset name="RESISTOR_ARRAY_(4)" urn="urn:adsk.eagle:component:49177704/4" prefix="R" uservalue="yes" library_version="154">
 <description>&lt;h3&gt;EXB-38V XXX JV&lt;/h3&gt;
 
 &lt;p&gt;Four Resistory Array - AEC-Q200 Certified&lt;/p&gt;
@@ -6417,7 +6490,7 @@ Each resistor is approximate footprint pitch of 0603, but is longer.  It is poss
 <connect gate="D" pin="2" pad="P5"/>
 </connects>
 <package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:49177701/1"/>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:49177701/2"/>
 </package3dinstances>
 <technologies>
 <technology name=""/>
@@ -6435,7 +6508,7 @@ Each resistor is approximate footprint pitch of 0603, but is longer.  It is poss
 <connect gate="D" pin="2" pad="5"/>
 </connects>
 <package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:49177700/2"/>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:49177700/3"/>
 </package3dinstances>
 <technologies>
 <technology name=""/>
@@ -6443,7 +6516,7 @@ Each resistor is approximate footprint pitch of 0603, but is longer.  It is poss
 </device>
 </devices>
 </deviceset>
-<deviceset name="MCP602" prefix="IC" library_version="152" library_locally_modified="yes">
+<deviceset name="MCP602" urn="urn:adsk.eagle:component:49204901/1" prefix="IC" library_version="154">
 <description>&lt;b&gt;Single Op Amp&lt;/b&gt; 2.7V to 6.0V Single Supply CMOS&lt;p&gt;
 Source: http://ww1.microchip.com/downloads/en/DeviceDoc/21314g.pdf</description>
 <gates>
@@ -6484,7 +6557,7 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/21314g.pdf</description>
 <connect gate="P" pin="V-" pad="4"/>
 </connects>
 <package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:16404/2"/>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:49204900/1"/>
 </package3dinstances>
 <technologies>
 <technology name="">
@@ -11135,10 +11208,10 @@ Part Number: HA-522</description>
 <part name="FRAME1" library="pie" deviceset="FRAME_SCHEMATIC" device="">
 <attribute name="REVISION" value="D2"/>
 </part>
-<part name="UC1" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="ARDUINO_PRO_MICRO" device="2D" package3d_urn="urn:adsk.eagle:package:49177699/1"/>
+<part name="UC1" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="ARDUINO_PRO_MICRO" device="2D" package3d_urn="urn:adsk.eagle:package:49177699/2"/>
 <part name="ST1" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="2PIN_SCREW" device="" package3d_urn="urn:adsk.eagle:package:49052268/3"/>
 <part name="ST2" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="2PIN_SCREW" device="" package3d_urn="urn:adsk.eagle:package:49052268/3"/>
-<part name="U5" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="MCP602" device="SN" package3d_urn="urn:adsk.eagle:package:16404/2" value="MCP6042"/>
+<part name="U5" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="MCP602" device="SN" package3d_urn="urn:adsk.eagle:package:49204900/1" value="MCP6042"/>
 <part name="SUPPLY1" library="pie" deviceset="GND" device=""/>
 <part name="SUPPLY3" library="pie" deviceset="GND" device=""/>
 <part name="U$3" library="pie" deviceset="5V" device=""/>
@@ -11169,7 +11242,7 @@ Part Number: HA-522</description>
 <part name="C1" library="SparkFun-Capacitors" deviceset="CAP_POL" device="PTH4" override_package3d_urn="urn:adsk.eagle:package:49053456/2" override_package_urn="urn:adsk.eagle:footprint:49053457/1" value="1000uF"/>
 <part name="STANDOFF1" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="STAND-OFF" device="KEYSTONE_SMT_STANDOFF" package3d_urn="urn:adsk.eagle:package:49038533/2"/>
 <part name="STANDOFF2" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="STAND-OFF" device="KEYSTONE_SMT_STANDOFF" package3d_urn="urn:adsk.eagle:package:49038533/2"/>
-<part name="J1" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="USB_C" device="_2-LAYER_PADS" package3d_urn="urn:adsk.eagle:package:49053406/2"/>
+<part name="J1" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="USB_C" device="_2-LAYER_PADS" package3d_urn="urn:adsk.eagle:package:49053406/4"/>
 <part name="R8" library="pie" deviceset="R-US_" device="R0603" value="5.1K"/>
 <part name="R9" library="pie" deviceset="R-US_" device="R0603" value="5.1K"/>
 <part name="SUPPLY2" library="pie" deviceset="GND" device=""/>
@@ -11190,7 +11263,7 @@ Part Number: HA-522</description>
 <part name="Q2" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="N-CHANNEL-MOSFET" device="SOT23-3" package3d_urn="urn:adsk.eagle:package:10805827/2" value="DMG3402L-7"/>
 <part name="SUPPLY27" library="pie" deviceset="GND" device=""/>
 <part name="SUPPLY25" library="SparkFun-PowerSymbols" deviceset="VIN" device=""/>
-<part name="U6" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="MCP602" device="SN" package3d_urn="urn:adsk.eagle:package:16404/2" value="MCP6042"/>
+<part name="U6" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="MCP602" device="SN" package3d_urn="urn:adsk.eagle:package:49204900/1" value="MCP6042"/>
 <part name="U$1" library="pie" deviceset="5V" device=""/>
 <part name="SUPPLY28" library="pie" deviceset="GND" device=""/>
 <part name="C2" library="pie" deviceset="CAP" device="0603-CAP" value=".1uF"/>
@@ -11214,8 +11287,8 @@ Part Number: HA-522</description>
 <part name="SUPPLY31" library="SparkFun-PowerSymbols" deviceset="15V" device=""/>
 <part name="J5" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:49052309" deviceset="CONN_04" device="PTH" package3d_urn="urn:adsk.eagle:package:49052925/1"/>
 <part name="J3" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:49052309" deviceset="CONN_03" device="" package3d_urn="urn:adsk.eagle:package:49052910/1" value="455-1750-1-ND"/>
-<part name="R2" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="RESISTOR_ARRAY_(4)" device="-2012-1/8W-5%" package3d_urn="urn:adsk.eagle:package:49177700/2" value="22k"/>
-<part name="R3" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="RESISTOR_ARRAY_(4)" device="-2012-1/8W-5%" package3d_urn="urn:adsk.eagle:package:49177700/2" value="1M"/>
+<part name="R2" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="RESISTOR_ARRAY_(4)" device="-2012-1/8W-5%" package3d_urn="urn:adsk.eagle:package:49177700/3" value="22k"/>
+<part name="R3" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="RESISTOR_ARRAY_(4)" device="-2012-1/8W-5%" package3d_urn="urn:adsk.eagle:package:49177700/3" value="1M"/>
 </parts>
 <sheets>
 <sheet>
@@ -11587,8 +11660,8 @@ To trigger @ zero crossing.</text>
 <attribute name="NAME" x="172.72" y="104.648" size="1.778" layer="95" font="vector"/>
 </instance>
 <instance part="R2" gate="A" x="119.38" y="86.36" smashed="yes">
-<attribute name="NAME" x="119.38" y="87.884" size="1.778" layer="95" font="vector" align="bottom-center"/>
-<attribute name="VALUE" x="127" y="87.884" size="1.778" layer="96" font="vector" rot="R180" align="top-center"/>
+<attribute name="NAME" x="116.84" y="87.884" size="1.778" layer="95" font="vector" align="bottom-center"/>
+<attribute name="VALUE" x="124.46" y="87.884" size="1.778" layer="96" font="vector" rot="R180" align="top-center"/>
 </instance>
 <instance part="R2" gate="B" x="38.1" y="101.6" smashed="yes" rot="R180">
 <attribute name="NAME" x="43.18" y="103.124" size="1.778" layer="95" font="vector" align="bottom-center"/>
@@ -11602,17 +11675,21 @@ To trigger @ zero crossing.</text>
 <attribute name="NAME" x="20.32" y="82.804" size="1.778" layer="95" font="vector" align="bottom-center"/>
 <attribute name="VALUE" x="12.7" y="82.804" size="1.778" layer="96" font="vector" rot="R180" align="top-center"/>
 </instance>
-<instance part="R3" gate="A" x="215.9" y="167.64" smashed="yes">
-<attribute name="NAME" x="215.9" y="169.164" size="1.778" layer="95" font="vector" align="bottom-center"/>
-<attribute name="VALUE" x="215.9" y="166.116" size="1.778" layer="96" font="vector" align="top-center"/>
+<instance part="R3" gate="A" x="154.94" y="104.14" smashed="yes" rot="R180">
+<attribute name="NAME" x="157.48" y="105.664" size="1.778" layer="95" font="vector" align="bottom-center"/>
+<attribute name="VALUE" x="152.4" y="105.664" size="1.778" layer="96" font="vector" rot="R180" align="top-center"/>
 </instance>
 <instance part="R3" gate="B" x="25.4" y="38.1" smashed="yes">
 <attribute name="NAME" x="25.4" y="39.624" size="1.778" layer="95" font="vector" align="bottom-center"/>
 <attribute name="VALUE" x="25.4" y="36.576" size="1.778" layer="96" font="vector" align="top-center"/>
 </instance>
-<instance part="R3" gate="C" x="58.42" y="30.48" smashed="yes" rot="R90">
-<attribute name="NAME" x="56.896" y="30.48" size="1.778" layer="95" font="vector" rot="R90" align="bottom-center"/>
-<attribute name="VALUE" x="59.944" y="30.48" size="1.778" layer="96" font="vector" rot="R90" align="top-center"/>
+<instance part="R3" gate="C" x="60.96" y="33.02" smashed="yes" rot="R90">
+<attribute name="NAME" x="59.436" y="33.02" size="1.778" layer="95" font="vector" rot="R90" align="bottom-center"/>
+<attribute name="VALUE" x="62.484" y="33.02" size="1.778" layer="96" font="vector" rot="R90" align="top-center"/>
+</instance>
+<instance part="R3" gate="D" x="215.9" y="167.64" smashed="yes">
+<attribute name="NAME" x="215.9" y="169.164" size="1.778" layer="95" font="vector" align="bottom-center"/>
+<attribute name="VALUE" x="215.9" y="166.116" size="1.778" layer="96" font="vector" align="top-center"/>
 </instance>
 </instances>
 <busses>
@@ -11814,18 +11891,16 @@ To trigger @ zero crossing.</text>
 <pinref part="IC1" gate="G$1" pin="VCC+"/>
 <wire x1="45.72" y1="33.02" x2="50.8" y2="33.02" width="0.1524" layer="91"/>
 <pinref part="U$8" gate="G$1" pin="5V"/>
-<wire x1="50.8" y1="33.02" x2="50.8" y2="35.56" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="G$1" pin="/RES"/>
-<wire x1="50.8" y1="35.56" x2="50.8" y2="38.1" width="0.1524" layer="91"/>
+<wire x1="50.8" y1="33.02" x2="50.8" y2="38.1" width="0.1524" layer="91"/>
 <wire x1="45.72" y1="30.48" x2="50.8" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="50.8" y1="30.48" x2="50.8" y2="33.02" width="0.1524" layer="91"/>
 <junction x="50.8" y="33.02"/>
-<wire x1="58.42" y1="35.56" x2="50.8" y2="35.56" width="0.1524" layer="91"/>
-<junction x="50.8" y="35.56"/>
 <wire x1="30.48" y1="38.1" x2="50.8" y2="38.1" width="0.1524" layer="91"/>
 <junction x="50.8" y="38.1"/>
 <pinref part="R3" gate="B" pin="2"/>
 <pinref part="R3" gate="C" pin="2"/>
+<wire x1="50.8" y1="38.1" x2="60.96" y2="38.1" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="IC2" gate="G$1" pin="VDD"/>
@@ -11851,6 +11926,9 @@ To trigger @ zero crossing.</text>
 <pinref part="Q4" gate="G$1" pin="S"/>
 <pinref part="U$2" gate="G$1" pin="5V"/>
 <wire x1="139.7" y1="104.14" x2="139.7" y2="101.6" width="0.1524" layer="91"/>
+<wire x1="149.86" y1="104.14" x2="139.7" y2="104.14" width="0.1524" layer="91"/>
+<junction x="139.7" y="104.14"/>
+<pinref part="R3" gate="A" pin="2"/>
 </segment>
 <segment>
 <pinref part="U2" gate="G$1" pin="VOUT"/>
@@ -12018,7 +12096,7 @@ To trigger @ zero crossing.</text>
 <wire x1="215.9" y1="162.56" x2="220.98" y2="162.56" width="0.1524" layer="91"/>
 <pinref part="Q1" gate="G$1" pin="G"/>
 <pinref part="Q2" gate="G$1" pin="D"/>
-<pinref part="R3" gate="A" pin="2"/>
+<pinref part="R3" gate="D" pin="2"/>
 </segment>
 <segment>
 <pinref part="Q2" gate="G$1" pin="G"/>
@@ -12227,8 +12305,13 @@ To trigger @ zero crossing.</text>
 <net name="PEAK_RST" class="0">
 <segment>
 <pinref part="Q4" gate="G$1" pin="G"/>
-<wire x1="147.32" y1="99.06" x2="162.56" y2="99.06" width="0.1524" layer="91"/>
+<wire x1="147.32" y1="99.06" x2="165.1" y2="99.06" width="0.1524" layer="91"/>
 <label x="149.86" y="99.06" size="1.778" layer="95"/>
+<wire x1="165.1" y1="99.06" x2="167.64" y2="99.06" width="0.1524" layer="91"/>
+<junction x="165.1" y="99.06"/>
+<pinref part="R3" gate="A" pin="1"/>
+<wire x1="160.02" y1="104.14" x2="165.1" y2="104.14" width="0.1524" layer="91"/>
+<wire x1="165.1" y1="104.14" x2="165.1" y2="99.06" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <wire x1="182.88" y1="83.82" x2="187.96" y2="83.82" width="0.1524" layer="91"/>
@@ -12264,7 +12347,7 @@ To trigger @ zero crossing.</text>
 <wire x1="210.82" y1="167.64" x2="208.28" y2="167.64" width="0.1524" layer="91"/>
 <junction x="208.28" y="167.64"/>
 <pinref part="SUPPLY26" gate="G$1" pin="12V"/>
-<pinref part="R3" gate="A" pin="1"/>
+<pinref part="R3" gate="D" pin="1"/>
 </segment>
 <segment>
 <pinref part="J2" gate="J1" pin="4"/>
@@ -12319,14 +12402,6 @@ To trigger @ zero crossing.</text>
 </net>
 <net name="TIMER_RESTART" class="0">
 <segment>
-<pinref part="IC1" gate="G$1" pin="OUT"/>
-<label x="53.34" y="25.4" size="1.778" layer="95"/>
-<wire x1="45.72" y1="25.4" x2="58.42" y2="25.4" width="0.1524" layer="91"/>
-<pinref part="R3" gate="C" pin="1"/>
-<wire x1="58.42" y1="25.4" x2="71.12" y2="25.4" width="0.1524" layer="91"/>
-<junction x="58.42" y="25.4"/>
-</segment>
-<segment>
 <pinref part="UC1" gate="APM" pin="7"/>
 <wire x1="99.06" y1="15.24" x2="81.28" y2="15.24" width="0.1524" layer="91"/>
 <label x="81.28" y="15.24" size="1.778" layer="95"/>
@@ -12335,6 +12410,15 @@ To trigger @ zero crossing.</text>
 <wire x1="182.88" y1="81.28" x2="187.96" y2="81.28" width="0.1524" layer="91"/>
 <label x="185.42" y="81.28" size="1.778" layer="95"/>
 <pinref part="J5" gate="J1" pin="2"/>
+</segment>
+<segment>
+<pinref part="IC1" gate="G$1" pin="OUT"/>
+<wire x1="45.72" y1="25.4" x2="60.96" y2="25.4" width="0.1524" layer="91"/>
+<label x="48.26" y="25.4" size="1.778" layer="95"/>
+<pinref part="R3" gate="C" pin="1"/>
+<wire x1="60.96" y1="25.4" x2="66.04" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="60.96" y1="27.94" x2="60.96" y2="25.4" width="0.1524" layer="91"/>
+<junction x="60.96" y="25.4"/>
 </segment>
 </net>
 <net name="N$2" class="0">
