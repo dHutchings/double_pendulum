@@ -2,3 +2,4 @@ Mechanical/REV_E/1155_battery_holder.SLDPRT filter=lfs diff=lfs merge=lfs -text
 Mechanical/REV_E/pie-logo.png filter=lfs diff=lfs merge=lfs -text
 Mechanical/REV_E/pie-logo-B&W.png filter=lfs diff=lfs merge=lfs -text
 Magnetic/20250716_171724.jpg filter=lfs diff=lfs merge=lfs -text
+Mechanical/REV_E/BEST_Logo_BW.bmp filter=lfs diff=lfs merge=lfs -text
