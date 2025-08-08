@@ -9,7 +9,19 @@ void setup_ui()
 
   pinMode(start,INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(start),start_sequence,LOW);
-  
+
+  //How to Turn off built-in RX / TX LEDs, to save power.
+  //only relevant if there is USB serial traffic to begin with, which only shows up in debugging implimentations.
+
+  pinMode(LED_BUILTIN_RX, OUTPUT); // TX LED
+  pinMode(LED_BUILTIN_TX, OUTPUT); // TX LED
+  digitalWrite(LED_BUILTIN_RX, LOW); // Turn TX LED on  
+  digitalWrite(LED_BUILTIN_TX, LOW); // Turn TX LED on
+
+  delay(500);
+  digitalWrite(LED_BUILTIN_RX, HIGH); // Turn TX LED off  
+  digitalWrite(LED_BUILTIN_TX, HIGH); // Turn TX LED off
+
 }
 
 void speed_up()

@@ -25,6 +25,11 @@ void  setup_sensing()
 
 void push()
 {
+  #if DEBUG
+  digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on
+  //Serial.println(prev_interrupts);
+  #endif
+
   if(prev_interrupts > 0)
   {
     //need to impliment more inteligent re-cross detection.  We're going to set the threshold of V2 to 2V, busy-wait for a transition, set it back, and then push.
@@ -61,6 +66,9 @@ void push()
     
   }
 
+  #if DEBUG
+  digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED off  
+  #endif
 }
 
 void start_pendulum()
@@ -69,9 +77,16 @@ void start_pendulum()
   {
     delay_many_microseconds(400000);
     digitalWrite(mosfet,LOW);
+    #if DEBUG
+    digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on
+    #endif
+
     delay_many_microseconds(300000);
     digitalWrite(mosfet,HIGH);
     
+    #if DEBUG
+    digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED off  
+    #endif    
     
   }
 
