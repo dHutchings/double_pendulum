@@ -1,5 +1,8 @@
 #include <LowPower.h>
 
+#include <TimerOne.h> //use internal timer for precise wake-ups (only when in idle).  See quickstart 57.  It only works for periods < 8.3 seconds.
+
+
 //code that will test power consumption of CPU under various conditions.
 
 int mosfet = 9;  //pin 9
@@ -33,6 +36,13 @@ void setup() {
   digitalWrite(LED_BUILTIN_RX, HIGH); // Turn TX LED off  
   digitalWrite(LED_BUILTIN_TX, HIGH); // Turn TX LED off
 
+
+  //Uncomment to try the Idle self-waking
+  /*
+  Timer1.attachInterrupt(push);
+  Timer1.initialize(8388480 ); //8388480  is from https://deepbluembedded.com/arduino-timerone-library/#:~:text=Timer1.setPeriod(period)&text=The%20minimum%20period%20or%20highest,frequencies%20and%20duty%20cycles%20simultaneously.
+  */
+
   
 
 
@@ -47,8 +57,6 @@ void loop() {
     // Enter power down state with ADC and BOD module disabled.
     // Wake up when wake up pin is low.
 
-    //31mA when no power saving is applied.
-    //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //19mA, when powered via VCC.
     detachInterrupt(digitalPinToInterrupt(interrupt_in)); //detach interrupt immediately, as a form of debounce protection
 
     digitalWrite(LED_BUILTIN_TX, LOW); // Turn TX LED on  
@@ -58,8 +66,19 @@ void loop() {
 
     attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING); //reattach interrupt so I can wake back up
 
+    //31mA when no power saving is applied.
+    //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //16.8 for USBC, 19mA for old APM, when powered via VCC.
+
+    //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_ON, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //leaving timer0 on will basically mean that we don't sleep for longer than 1ms, ever.  BOO.
+
+    //Uncomment to try the Idle self-waking
+    /*
+    Timer1.resume();
+    LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_ON, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //17.2 mS.
+    */
+ 
     
-   // LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_OFF); //73.72 uA on the USB C APM.  118 uA on the old APM.  but only on pins 2&3.  0&1 draw ~.5mA... and on the new APM there isn't any pin 1 vs pin 3 performance difference.  Takes 3.65 ms to wake up.
+    LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_OFF); //73.72 uA on the USB C APM.  118 uA on the old APM.  but only on pins 2&3.  0&1 draw ~.5mA... and on the new APM there isn't any pin 1 vs pin 3 performance difference.  Takes 3.65 ms to wake up.
     //For some reason, BOD_ON results in less power dissipation.  Wierd.
     
 
@@ -71,7 +90,7 @@ void loop() {
     //LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_OFF);  ///558.6 ish on the USB C APM   Takes 16 us to 32 us (depends on which point of the RC curve you measure from) to wake up 
     //LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_ON);  ///560.6 ish on the USB C APM     
 
-    LowPower.powerExtStandby(SLEEP_8S, ADC_OFF, BOD_OFF, TIMER2_OFF); //567.2.  Takes 16 us to 32 us (depends on which point of the RC curve you measure from) to wake up 
+    //LowPower.powerExtStandby(SLEEP_8S, ADC_OFF, BOD_OFF, TIMER2_OFF); //567.2.  Takes 16 us to 32 us (depends on which point of the RC curve you measure from) to wake up 
 
 
 
@@ -92,12 +111,27 @@ void loop() {
 
 void push() //used
 {
+  //Uncomment to try the Idle self-waking
+  //Timer1.stop(); //very first thing we do, 
+  
   digitalWrite(mosfet,HIGH);
   delayMicroseconds(100);
   digitalWrite(mosfet,LOW);
   digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on  
+  
   delay(250);
-  digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED on  
+  //Uncomment to try the Idle self-waking
+  /*
+  //IMPORTANT
+  //If using IDLE with some of the timers off (TODO: TEST WHICH)
+  //I cannot use delay in the interrupt (makes sense, the timers are off!)
+  //have to use delayMicroseconds + for loops.
+  for(int i = 0; i < 20; i++)
+  {
+    delayMicroseconds(16383);
+  }
+  */
 
+  digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED on  
 
 }
