@@ -42,7 +42,7 @@ void push()
     //set_voltage(V2,1.9); //reset to original voltage threshold.
 
     
-    delay(5); // we are pushing too early!  This ideal delay actually varies by how fast im going & the exact zero-crossing threshold, this is a hackkk.  If i'm going fast, this delay is too long  If i'm going slow, it's too short
+    delay(3); // we are pushing too early!  This ideal delay actually varies by how fast im going & the exact zero-crossing threshold, this is a hackkk.  If i'm going fast, this delay is too long  If i'm going slow, it's too short
 
     if(random(0,100) > chance_no_push)  //sometimes, don't push.
     {
@@ -79,7 +79,10 @@ void push()
     #if DEBUG_PRINTS
     Serial.println(last_bemf);
     #endif
-    delayMicroseconds(16000); //it just works better if we delay for a bit, to avoid hysteresis.  Also, I need to wait for hte curve to go more fully up. before resetting the BEMF, otherwise, I'm going to end the resetting while the curve is still R-L-C ing its way up, so it will immediately snap to too low of a value.
+    //it just works better if we delay for a bit, to avoid hysteresis. 
+    //Also, I need to wait for hte curve to go more fully up. before resetting the BEMF, otherwise, I'm going to end the resetting while the curve is still R-L-C ing its way up, so it will immediately snap to too low of a value.
+    LowPower.powerStandby(SLEEP_15MS,ADC_OFF,BOD_ON); //low-power sleep, we need to sleep.  Reduces power from 3ma-ish to 1.99-ish on average (over continual running), really goes to show how much power the uC draws when its fully booted up.
+    
     clear_BEMF_sensing();
     
     
