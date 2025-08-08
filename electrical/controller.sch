@@ -11316,8 +11316,8 @@ Part Number: HA-522</description>
 <wire x1="210.82" y1="55.88" x2="248.92" y2="55.88" width="0.4064" layer="94"/>
 <wire x1="91.44" y1="55.88" x2="170.18" y2="55.88" width="0.4064" layer="94"/>
 <text x="213.36" y="48.26" size="5.08" layer="97">Mounting</text>
-<text x="101.6" y="2.54" size="1.27" layer="91">Interrupts Available on:
-0,1,2,3,7</text>
+<text x="96.52" y="2.54" size="1.27" layer="91">Interrupts Available on:  0,1,2,3,7
+0 thru 3 fully functional; 7 can do FALLING but not CHANGE</text>
 <text x="127" y="40.64" size="1.27" layer="91">The scoop on the pinout:
 - hardware i2c is 2/3: those are taken by interrupts.
 - We therefore use a software bit-banging approach for i2c.

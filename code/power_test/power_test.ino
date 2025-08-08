@@ -6,11 +6,9 @@
 //code that will test power consumption of CPU under various conditions.
 
 int mosfet = 9;  //pin 9
-int interrupt_in = 1;  //pin 3.  Was pin 7, but pin 7 maps to interupt #4, which doesn't have the ability to wake from power off.
+int interrupt_in = 7;  //pin 3.  Was pin 7, but pin 7 maps to interupt #4, which doesn't have the ability to wake from power off.
 
 volatile unsigned long push_time_us = 12*1000;
-
-volatile int prev_interrupts;
  
 
 void setup() {
@@ -65,6 +63,7 @@ void loop() {
     delay(1500);
 
     attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING); //reattach interrupt so I can wake back up
+    //pin 0,1,2,3 can do CHANGE
 
     //31mA when no power saving is applied.
     //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //16.8 for USBC, 19mA for old APM, when powered via VCC.
@@ -73,14 +72,22 @@ void loop() {
 
     //Uncomment to try the Idle self-waking
     /*
-    Timer1.resume();
-    LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_ON, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //17.2 mS.
+    //do NOT use restart (or start), it generates unwanted interrupts.
+    //Best you can do is resume - which doesnt reset the counter - which is why it's important to cal stop as the first step of the interrupt.
+    //unfortunately, this means that if we stop sleeping due to an external interrupt, the next time we wake from an internal interupt, we won't sleep for the right time.
+    Timer1.resume(); 
+    
+    
+    LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_ON, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //16.8 mA...
+    //note timer 0 is off, you will need to use delayMicroseconds
+    //note timer 0 CANNOT be turned on, since that'd trigger an interrupt every 1ms, and foil the plan.
+    //timer 3 works pretty much the same way and draws the same amount of power as timer1.
     */
- 
     
     LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_OFF); //73.72 uA on the USB C APM.  118 uA on the old APM.  but only on pins 2&3.  0&1 draw ~.5mA... and on the new APM there isn't any pin 1 vs pin 3 performance difference.  Takes 3.65 ms to wake up.
     //For some reason, BOD_ON results in less power dissipation.  Wierd.
-    
+
+
 
     //LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //108.15 on the USB C APM  227 uA on the Old APM.  But be careful, can only wake up on changes to interupts 0:3, pins 3,2,1,0.  
 
@@ -93,11 +100,6 @@ void loop() {
     //LowPower.powerExtStandby(SLEEP_8S, ADC_OFF, BOD_OFF, TIMER2_OFF); //567.2.  Takes 16 us to 32 us (depends on which point of the RC curve you measure from) to wake up 
 
 
-
-
-    //LowePower.idle doesnt stop void loop (confusing?).  Perhaps my library is broken?  Dunno, very confusing.
-    //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_ON); //23mA, when powered via VCC on the old APM.  33.78 on the USB C APM
-    //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_ON, SPI_OFF, USART1_OFF, TWI_OFF, USB_ON); //23.3 mA, when powered via VCC.
 
 
     //NOTE:
@@ -123,7 +125,7 @@ void push() //used
   //Uncomment to try the Idle self-waking
   /*
   //IMPORTANT
-  //If using IDLE with some of the timers off (TODO: TEST WHICH)
+  //If using IDLE with timer 0 off
   //I cannot use delay in the interrupt (makes sense, the timers are off!)
   //have to use delayMicroseconds + for loops.
   for(int i = 0; i < 20; i++)
