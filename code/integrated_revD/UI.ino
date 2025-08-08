@@ -27,7 +27,7 @@ void setup_ui()
 void speed_up()
 {
   
-  push_time_us = push_time_us + 1000;
+  push_time_us = push_time_us + 500;
   push_time_us = constrain(push_time_us,0,25000);
 
   while(digitalRead(faster) == LOW)
@@ -42,7 +42,7 @@ void speed_up()
 
 void slow_down()
 {
-    push_time_us = push_time_us - 1000;
+    push_time_us = push_time_us - 500;
     push_time_us = constrain(push_time_us,0,25000);
 
     while(digitalRead(slower) == LOW)
@@ -73,4 +73,3 @@ void start_sequence()
   
   attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
 }
-
