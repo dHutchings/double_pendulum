@@ -3,7 +3,7 @@
 //code that will test power consumption of CPU under various conditions.
 
 int mosfet = 9;  //pin 9
-int interrupt_in = 0;  //pin 3.  Was pin 7, but pin 7 maps to interupt #4, which doesn't have the ability to wake from power off.
+int interrupt_in = 1;  //pin 3.  Was pin 7, but pin 7 maps to interupt #4, which doesn't have the ability to wake from power off.
 
 volatile unsigned long push_time_us = 12*1000;
 
@@ -14,60 +14,90 @@ void setup() {
   // put your setup code here, to run once:
 
 
-  prev_interrupts = 0;
-
   pinMode(mosfet,OUTPUT);
-  digitalWrite(mosfet,!digitalRead(mosfet));
+  digitalWrite(mosfet,LOW);
 
-  delay(100);
   
   pinMode(interrupt_in,INPUT); //hook up to function generator.
-  //attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING); //used to demonstrate that the interupt (and uC) is actually working).
-  
+  //But be careful, can only wake up on changes to interupts 0:3, pins 3,2,1,0.
 
-  delay(100);
+  
+  //attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
+
+  pinMode(LED_BUILTIN_RX, OUTPUT); // TX LED
+  pinMode(LED_BUILTIN_TX, OUTPUT); // TX LED
+  digitalWrite(LED_BUILTIN_RX, LOW); // Turn TX LED on
+  digitalWrite(LED_BUILTIN_TX, LOW); // Turn TX LED on
+  delay(5000); //time for the uC to be booted, making it easier to reprogram
+
+  digitalWrite(LED_BUILTIN_RX, HIGH); // Turn TX LED off  
+  digitalWrite(LED_BUILTIN_TX, HIGH); // Turn TX LED off
+
+  
 
 
 }
 
 void loop() {
-    // Allow wake up pin to trigger interrupt on low.
-    //digitalWrite(is_awake,HIGH);
-    attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
+
+    //I'm in loop once We're done with the interrupt.
+    //Twiddle some lights
+    //And then immediately go back to sleep
     
     // Enter power down state with ADC and BOD module disabled.
     // Wake up when wake up pin is low.
 
     //31mA when no power saving is applied.
     //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //19mA, when powered via VCC.
+    detachInterrupt(digitalPinToInterrupt(interrupt_in)); //detach interrupt immediately, as a form of debounce protection
+
+    digitalWrite(LED_BUILTIN_TX, LOW); // Turn TX LED on  
+    delay(1500);
+    digitalWrite(LED_BUILTIN_TX, HIGH); // Turn TX LED off  
+    delay(1500);
+
+    attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING); //reattach interrupt so I can wake back up
+
     
-    LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //118 uA.  but only on pins 2&3.  0&1 draw ~.5mA.
-    //But be careful, can only wake up on changes to interupts 0:3, pins 3,2,1,0.
+   // LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_OFF); //73.72 uA on the USB C APM.  118 uA on the old APM.  but only on pins 2&3.  0&1 draw ~.5mA... and on the new APM there isn't any pin 1 vs pin 3 performance difference.  Takes 3.65 ms to wake up.
     //For some reason, BOD_ON results in less power dissipation.  Wierd.
     
 
-    //LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_OFF); //227 uA.  But be careful, can only wake up on changes to interupts 0:3, pins 3,2,1,0.
-    
-    //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_ON); //23mA, when powered via VCC.
+    //LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //108.15 on the USB C APM  227 uA on the Old APM.  But be careful, can only wake up on changes to interupts 0:3, pins 3,2,1,0.  
+
+    //LowPower.powerSave(SLEEP_FOREVER,ADC_OFF,BOD_OFF,TIMER2_OFF);  //108.35 ish on the USB C APM  Takes 3.63 ms to wake up.
+    //LowPower.powerSave(SLEEP_FOREVER,ADC_OFF,BOD_OFF,TIMER2_ON);  //108.47 ish on the USB C APM 
+
+    //LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_OFF);  ///558.6 ish on the USB C APM   Takes 16 us to 32 us (depends on which point of the RC curve you measure from) to wake up 
+    //LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_ON);  ///560.6 ish on the USB C APM     
+
+    LowPower.powerExtStandby(SLEEP_8S, ADC_OFF, BOD_OFF, TIMER2_OFF); //567.2.  Takes 16 us to 32 us (depends on which point of the RC curve you measure from) to wake up 
+
+
+
+
+    //LowePower.idle doesnt stop void loop (confusing?).  Perhaps my library is broken?  Dunno, very confusing.
+    //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_ON); //23mA, when powered via VCC on the old APM.  33.78 on the USB C APM
     //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_ON, SPI_OFF, USART1_OFF, TWI_OFF, USB_ON); //23.3 mA, when powered via VCC.
 
 
+    //NOTE:
+    //TEST CONDITIONS/
 
+    //Run this test with the USB cable unplugged so power only flows from the power supply.
+    //ALSO, run this test AFTER A POWER-CYCLE.  The BOD_on vs BOD_OFF stuff was shown explicitly to have different behaviour if it wasn't vs was done after a power cycle (not just a reprogram) - THere may be other stuff too.
 
-    //digitalWrite(is_awake,HIGH);
-    // Disable external pin interrupt on wake up pin.
-    detachInterrupt(digitalPinToInterrupt(interrupt_in));
-    
-    // Do something here
-    // Example: Read sensor, data logging, data transmission.
   
 }
 
 void push() //used
 {
-  digitalWrite(mosfet,!digitalRead(mosfet));
- 
+  digitalWrite(mosfet,HIGH);
+  delayMicroseconds(100);
+  digitalWrite(mosfet,LOW);
+  digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on  
+  delay(250);
+  digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED on  
+
 
 }
-
-
