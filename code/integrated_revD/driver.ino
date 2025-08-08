@@ -8,13 +8,13 @@ void setup_driver()
 
   prev_interrupts = 0;
 
-  pinMode(mosfet,OUTPUT);
-  digitalWrite(mosfet,HIGH); //using pmos.  HIGH is off.
+  pinMode(drive_mosfet,OUTPUT);
+  digitalWrite(drive_mosfet,LOW); //using nmos, pmos.  HIGH is on. LOW is off.
   delay(100); //just in case transients from MOSFET.
 
 }
 
-void  setup_sensing()
+void  setup_zero_crossing_sensing()
 {
   
   pinMode(interrupt_in,INPUT_PULLUP);
@@ -40,14 +40,19 @@ void push()
     //}
     //set_voltage(V2,1.9); //reset to original voltage threshold.
 
+    
+    delay(5); // we are pushing too early!  This ideal delay actually varies by how fast im going & the exact zero-crossing threshold, this is a hackkk.  If i'm going fast, this delay is too long  If i'm going slow, it's too short
 
     if(random(0,100) > chance_no_push)  //sometimes, don't push.
     {
-      delayMicroseconds(1); //allow to cross zero.
+      //delayMicroseconds(1); //allow to cross zero.
+      //this delay, is really should be on the order of MS, if we even use it!
+      //This new (lower current, but slower) op-amps slew rate is so dang long that using the op-amp as a comparator is easy, but, may be bad.  We may want to go faster.
       //left in for future-proofing, but i may not need this.  uC requires significant time to wake from powerOff state, and I can change timing by also affecting the voltage threshold value.
-      digitalWrite(mosfet,LOW);
+      digitalWrite(drive_mosfet,HIGH); //unlike rev C, now we don't invert the signal in software (its in HW)..  So, drive_mosfet HIGH turns the coil on.
+
       delay_many_microseconds(push_time_us + random_time);
-      digitalWrite(mosfet,HIGH);
+      digitalWrite(drive_mosfet,LOW);
   
       prev_interrupts = 0;
       prev_pushes ++;
@@ -76,14 +81,14 @@ void start_pendulum()
   for(int i = 0; i<10; i++)
   {
     delay_many_microseconds(400000);
-    digitalWrite(mosfet,LOW);
+    digitalWrite(drive_mosfet,HIGH);
+
     #if DEBUG
     digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on
     #endif
 
     delay_many_microseconds(300000);
-    digitalWrite(mosfet,HIGH);
-    
+    digitalWrite(drive_mosfet,LOW);
     #if DEBUG
     digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED off  
     #endif    

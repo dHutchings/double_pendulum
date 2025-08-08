@@ -1,15 +1,17 @@
 #include <LowPower.h> //https://github.com/LowPowerLab/LowPower //LowPower_LowPower on the library manager
 #include "pins.h"
+extern volatile int prev_interrupts;  //remember that I need to reject the first interrupt because the coil's inductance could trigger a self-perpetuating cycle
 
 
 
 
 //a series of constants that affect push time & randomness
 
-volatile long push_time_us = 10*1000;  //push time.  It needs to be here, since multiple code segments deal with it.
+volatile long push_time_us = 7.5*1000;  //push time.  It needs to be here, since multiple code segments deal with it.
 volatile long random_time_max = 4000; //allow for +/- 4000uS push time randomness... used to prevent long-term cyclic oscilations.
 volatile int max_pushes = 3; //number of times the pendulum will push untill is chooses a new random push time
-volatile int chance_no_push = 5; //5% chance of not pushing this time, b/c randomness. 
+volatile int chance_no_push = 10; //5% chance of not pushing this time, b/c randomness.  Set to -1 to turn off.
+
 #define DEBUG false //set to true for debug-only prints && TX / RX LEDs
 
 void setup() {
@@ -24,7 +26,7 @@ void setup() {
   setup_dac();
   setup_ui();
   start_pendulum();
-  setup_sensing();
+  setup_zero_crossing_sensing();
 
   
 
