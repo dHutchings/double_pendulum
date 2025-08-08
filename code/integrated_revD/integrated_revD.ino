@@ -12,8 +12,8 @@ volatile long random_time_max = 4000; //allow for +/- 4000uS push time randomnes
 volatile int max_pushes = 3; //number of times the pendulum will push untill is chooses a new random push time
 volatile int chance_no_push = 10; //5% chance of not pushing this time, b/c randomness.  Set to -1 to turn off.
 
-#define DEBUG true //set to true for debug-only TX / RX LEDs
-#define DEBUG_PRINTS true //set to tue for debug-only prints.  This means the system cannot power down (USB issues).  ALSO, be aware that if the serial monitor window isnt open but we are still trying to send prints, the pendulum will stop working, too.
+#define DEBUG false //set to true for debug-only TX / RX LEDs
+#define DEBUG_PRINTS false //set to tue for debug-only prints.  This means the system cannot power down (USB issues).  ALSO, be aware that if the serial monitor window isnt open but we are still trying to send prints, the pendulum will stop working, too.
 
 void setup() {
 
@@ -37,17 +37,14 @@ void setup() {
 void loop() {
 
     // Allow wake up pin to trigger interrupt on low.
+  
     attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
 
     #if !DEBUG_PRINTS
-    LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_ON); //118 uA.  but only on pins 2&3.  0&1 draw ~.5mA.
+    LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_ON); //500 uA-ish --> See the power tester for more info.  but only on pins 2&3.  0&1 draw ~.5mA.
+    //LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //70 uA-ish --> See the power tester for more info.
     //powerStandby wakes up much faster than powerDown, likely because powerStandby keeps the crystal oscilator running (https://www.engineersgarage.com/reducing-arduino-power-consumption-sleep-modes/)
     #endif
-    //TODO: Measure the power delta here.  THis wasn't something Ive done before.  I dont think it's a lot of power.... but we really need to check.
-    //LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //118 uA.  but only on pins 2&3.  0&1 draw ~.5mA.
-    
-    
-    //remember that I've powered down timers here.  THerefore, timer0 (used for delay) may not work, avoid using delay().  use delayMicroseconds() instead.
 
 
   
