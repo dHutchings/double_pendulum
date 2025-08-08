@@ -3,6 +3,7 @@ volatile int prev_interrupts;  //remember that I need to reject the first interr
 volatile int prev_pushes; //how many times have I pushed since I last chose a random number?
 volatile long random_time; //random value
 
+volatile float last_bemf; //the value of the most recent BEMF
 void setup_driver()
 {
 
@@ -56,18 +57,31 @@ void push()
   
       prev_interrupts = 0;
       prev_pushes ++;
-      
+
+      last_bemf = measure_BEMF();
+
       if(prev_pushes > max_pushes)
       {
         prev_pushes = 0;
         random_time = random(-random_time_max,random_time_max);
         
       }
+      
+      clear_BEMF_sensing();
     }
   }
   else
   {
     prev_interrupts ++;
+    
+
+    //put the BEMF sensince here... if I HAVE To delay for BEMF resetting reasons, I might as well use that time for prints.
+    #if DEBUG_PRINTS
+    Serial.println(last_bemf);
+    #endif
+    delayMicroseconds(16000); //it just works better if we delay for a bit, to avoid hysteresis.  Also, I need to wait for hte curve to go more fully up. before resetting the BEMF, otherwise, I'm going to end the resetting while the curve is still R-L-C ing its way up, so it will immediately snap to too low of a value.
+    clear_BEMF_sensing();
+    
     
   }
 

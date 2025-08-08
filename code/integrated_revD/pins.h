@@ -16,7 +16,7 @@ int cc1 = A0;
 int cc2 = A1;
 
 //pins for measuring the peak voltages
-int a_peak = 4;
+int a_peak = A6; //pin 4, but, for reasons surpassing understanding you do really need to say A6 //https://forum.arduino.cc/t/analogread-returns-varying-values-when-connected-to-gnd-3-3v-5v/460706
 int a_peak_rst = 5;
 
 //i2c capabilities
