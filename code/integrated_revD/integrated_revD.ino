@@ -36,8 +36,15 @@ void loop() {
 
     // Allow wake up pin to trigger interrupt on low.
     attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
+
     
-    LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //118 uA.  but only on pins 2&3.  0&1 draw ~.5mA.
+    LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_ON); //118 uA.  but only on pins 2&3.  0&1 draw ~.5mA.
+    //powerStandby wakes up much faster than powerDown, likely because powerStandby keeps the crystal oscilator running (https://www.engineersgarage.com/reducing-arduino-power-consumption-sleep-modes/)
+    
+    //TODO: Measure the power delta here.  THis wasn't something Ive done before.  I dont think it's a lot of power.... but we really need to check.
+    //LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //118 uA.  but only on pins 2&3.  0&1 draw ~.5mA.
+    
+    
     //remember that I've powered down timers here.  THerefore, timer0 (used for delay) may not work, avoid using delay().  use delayMicroseconds() instead.
 
 
