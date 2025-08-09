@@ -1,8 +1,7 @@
 void setup_BEMF_sensing()
 {
-  pinMode(a_peak_rst,OUTPUT);
+  pinMode(a_peak_rst,INPUT); // dont reset the A_peak_sensing
   pinMode(a_peak,INPUT);
-  digitalWrite(a_peak_rst,HIGH); // don't reset the A_peak_sensing
 
 }
 
@@ -18,7 +17,8 @@ float measure_BEMF()
 //This is all we need to reset the BEMF measurement circuit, but, it is incumbent on whoever calls this function to make sure it's a good time to reset it!
 void clear_BEMF_sensing()
 {
-  digitalWrite(a_peak_rst,LOW);
+  pinMode(a_peak_rst,OUTPUT);
+  digitalWrite(a_peak_rst,HIGH); //directly load 5V into the capacitor
   delayMicroseconds(5);
-  digitalWrite(a_peak_rst,HIGH);
+  pinMode(a_peak_rst,INPUT); //turn the DIO back into an input, so its floating and the PEAK_RST line is now controlled by the op=amps.
 }
