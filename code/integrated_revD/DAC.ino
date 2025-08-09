@@ -14,6 +14,9 @@ float voltage_threshold = 1.65;  //Set the threshold to generate an trigger for 
 void setup_dac()
 {
   Wire.begin();
+  Wire.setClock(120000); //the best we are able to do is 119 kHz, if I ask for 120.  Limitations of FlexWire using delayMicroseconds.  It is still faster than the original 100 KHz...
+    
+
 
   if (!mcp.begin()) {
     Serial.println("Failed to find MCP4728 chip");

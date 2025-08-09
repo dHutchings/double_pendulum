@@ -26,7 +26,8 @@ void setup_ui()
 
 void speed_up()
 {
-  
+  REASON_FOR_POWERUP = UI;
+
   push_time_us = push_time_us + 500;
   push_time_us = constrain(push_time_us,0,25000);
 
@@ -37,28 +38,32 @@ void speed_up()
 
 
   //then 100ms more to avoid debounce.
+  //don't use any power-saving modes since Im in an ISR here
   delay_many_microseconds(100000);
 }
 
 void slow_down()
 {
-    push_time_us = push_time_us - 500;
-    push_time_us = constrain(push_time_us,0,25000);
+  REASON_FOR_POWERUP = UI;
 
-    while(digitalRead(slower) == LOW)
-    {
-      delayMicroseconds(1000); //keep waiting for unpress.  
-    }
+  push_time_us = push_time_us - 500;
+  push_time_us = constrain(push_time_us,0,25000);
+
+  while(digitalRead(slower) == LOW)
+  {
+    delayMicroseconds(1000); //keep waiting for unpress.  
+  }
 
 
-    //then 100ms more to avoid debounce.
-    delay_many_microseconds(100000);
-
-    
+  //then 100ms more to avoid debounce.
+  //don't use any power-saving modes since Im in an ISR here
+  delay_many_microseconds(100000);
 }
 
 void start_sequence()
 {
+  REASON_FOR_POWERUP = MANUAL_RESTART;
+
   while(digitalRead(start) == LOW)
   {
     delayMicroseconds(1000); //keep waiting for unpress.  
@@ -67,9 +72,5 @@ void start_sequence()
 
   //then 100ms more to avoid debounce.
   delay_many_microseconds(100000);
-  detachInterrupt(digitalPinToInterrupt(interrupt_in));
-
-  start_pendulum();
   
-  attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
 }

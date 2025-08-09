@@ -18,5 +18,9 @@ void inform_restart_timer(bool MOS_State)
 
 void auto_restart()
 {
-  start_pendulum();
+  //detach the interrupt as soon as possible to prevent chain-calling.
+  detachInterrupt(digitalPinToInterrupt(auto_timer_restart)); //i tried falling, but because TIMER_RESTART is bound to Dio 7 right now, Falling doesn't work and I have to rely on LOW.
+
+  REASON_FOR_POWERUP = AUTO_RESTART;
+  //start_pendulum();
 }
