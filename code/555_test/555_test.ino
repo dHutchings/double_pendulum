@@ -1,4 +1,9 @@
-int mosfet = 10;  //pin 10... for turning the MOSFET on / pushing the magnet.
+#define USE_BJT true //original incantations of the 555 timer circuit, following figure 7-1 and the other canonical stuff, use a BJT.
+//but I thought I could use the DIO cleverly - but i failed 
+//I leave this option here for posterity.
+
+
+int mosfet = 16;  //pin 10... for turning the MOSFET on / pushing the magnet. back when the MOSFET and timer were the same sign.  On newer revisions of the board, there is a TIEMR_RESET
 int auto_restart = 7; //pin 7... hooked up to the 555 timer.
 
 int pulse_duration_ms = 200; //the time, in ms, that the pulse will be low / active / 'pushing'
@@ -20,8 +25,14 @@ void setup() {
   Serial.println("Auto-Restart 555 Test!");
   delay(1000);
 
+  
+  #if USE_BJT
   pinMode(mosfet,OUTPUT);
   digitalWrite(mosfet,HIGH); //the normal, "not-pushing state"
+  #else
+  pinMode(mosfet,INPUT); //let N$7 float.
+  #endif
+  
   pinMode(auto_restart,INPUT);
 
   last_changed_mos = millis();
@@ -32,7 +43,13 @@ void loop() {
   if(! mos_state & (millis() - last_pulse_low_at > pulse_duration_ms))
   {
     mos_state = true;
+    #if USE_BJT    
     digitalWrite(mosfet,mos_state);
+    #else
+    pinMode(mosfet,OUTPUT);
+    digitalWrite(mosfet,LOW); //directly discharge N$7 through the DIO.
+    #endif
+    
     last_changed_mos = millis();
     duration_between_pulses += 200; //the next pulse will be less often than the curent one.
     if(duration_between_pulses > 10000)
@@ -45,7 +62,11 @@ void loop() {
   if(mos_state & ( millis() - last_changed_mos > duration_between_pulses))
   {
     mos_state = false;
+    #if USE_BJT    
     digitalWrite(mosfet,mos_state);
+    #else
+    pinMode(mosfet,INPUT); //let N$7 float again
+    #endif
     last_changed_mos = millis();
     last_pulse_low_at = millis();
   }

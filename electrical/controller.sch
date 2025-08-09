@@ -11378,6 +11378,8 @@ VShift = 2 V-</text>
 Use spare op-amp
 As comparator to DAC voltage
 To trigger @ zero crossing.</text>
+<text x="7.62" y="43.18" size="1.27" layer="91">TIMER_RESTART will go HIGH after
+1M * 4.7uF = 4.7 sec of no pulses.</text>
 </plain>
 <instances>
 <instance part="FRAME1" gate="G$1" x="0" y="0" smashed="yes"/>

@@ -29,6 +29,7 @@ void setup() {
   start_pendulum();
   setup_zero_crossing_sensing();
   setup_BEMF_sensing();
+  setup_restart();
 
 
 

@@ -50,10 +50,10 @@ void push()
       //this delay, is really should be on the order of MS, if we even use it!
       //This new (lower current, but slower) op-amps slew rate is so dang long that using the op-amp as a comparator is easy, but, may be bad.  We may want to go faster.
       //left in for future-proofing, but i may not need this.  uC requires significant time to wake from powerOff state, and I can change timing by also affecting the voltage threshold value.
-      digitalWrite(drive_mosfet,HIGH); //unlike rev C, now we don't invert the signal in software (its in HW)..  So, drive_mosfet HIGH turns the coil on.
+      drive_MOS(HIGH); //unlike rev C, now we don't invert the signal in software (its in HW)..  So, drive_mosfet HIGH turns the coil on & lets the 555 timer know.
 
       delay_many_microseconds(push_time_us + random_time);
-      digitalWrite(drive_mosfet,LOW);
+      drive_MOS(LOW);
   
       prev_interrupts = 0;
       prev_pushes ++;
@@ -97,15 +97,15 @@ void start_pendulum()
 {
   for(int i = 0; i<10; i++)
   {
+    
     delay_many_microseconds(400000);
-    digitalWrite(drive_mosfet,HIGH);
-
+    drive_MOS(HIGH);
     #if DEBUG
     digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on
     #endif
 
     delay_many_microseconds(300000);
-    digitalWrite(drive_mosfet,LOW);
+    drive_MOS(LOW);
     #if DEBUG
     digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED off  
     #endif    
@@ -115,3 +115,9 @@ void start_pendulum()
   
 }
 
+//convienence function for both driving the MOSfET and letting the 555 timer know about it
+void drive_MOS(bool value)
+{
+  digitalWrite(drive_mosfet,value);
+  inform_restart_timer(value);
+}
