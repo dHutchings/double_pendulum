@@ -8,7 +8,7 @@
 
 //a series of constants that affect push time & randomness
 
-volatile long push_time_us = 6.5*1000;  //push time.  It needs to be here, since multiple code segments deal with it.
+volatile long push_time_us = 5.5*1000;  //push time.  It needs to be here, since multiple code segments deal with it.
 volatile long random_time_max = 3000; //allow for +/- 4000uS push time randomness... used to prevent long-term cyclic oscilations.
 volatile int max_pushes = 3; //number of times the pendulum will push untill is chooses a new random push time
 volatile int chance_no_push = 10; //5% chance of not pushing this time, b/c randomness.  Set to -1 to turn off.
@@ -21,10 +21,11 @@ enum POWERUP_REASONS {
   AUTO_RESTART,
   MANUAL_RESTART,
   UI,
-  WAIT,
+  DEEPSLEEP_WAIT, //This uses the powerDown mode
+  LIGHTSLEEP_WAIT, //This uses the powerStandby mode
 };
 
-int REASON_FOR_POWERUP = WAIT; //a nice, neutral, way to start
+int REASON_FOR_POWERUP = DEEPSLEEP_WAIT; //a nice, neutral, way to start
 
 void setup() {
 
@@ -42,28 +43,31 @@ void setup() {
   setup_BEMF_sensing(); 
   setup_restart(); //do this AFTER the pendulum is started so we can clear the timer...
 
-
-
+  
 }
 
 void loop() {
   switch(REASON_FOR_POWERUP)
   {
     case PUSH:
-      //detachInterrupt before doing the starting, so we don't have "You started up 
-      //detachInterrupt(digitalPinToInterrupt(interrupt_in));
+      //detachInterrupt before doing the starting, so we don't have the secondary flyback pulses interrupt our handing of this.
+      detachInterrupt(digitalPinToInterrupt(interrupt_in));
       push();
-      //attachInterrupt(digitalPinToInterrupt(interrupt_in),push2,FALLING);
-      REASON_FOR_POWERUP = WAIT;
+      attachInterrupt(digitalPinToInterrupt(interrupt_in),push2,CHANGE);
+      REASON_FOR_POWERUP = DEEPSLEEP_WAIT;
       break;
     case AUTO_RESTART:
       //detachInterrupt before doing the starting, so we can start cleanly w/out the startup sequence.
-      //detachInterrupt(digitalPinToInterrupt(interrupt_in));
+      detachInterrupt(digitalPinToInterrupt(auto_timer_restart)); //i tried falling, but because TIMER_RESTART is bound to Dio 7 right now, Falling doesn't work and I have to rely on LOW.
+      detachInterrupt(digitalPinToInterrupt(interrupt_in));
+      
+      //Don't need to detach reattach interrupts - all the interrupt does is change a flag now (which I will shortly change, down here)
       start_pendulum();
-      //attachInterrupt(digitalPinToInterrupt(interrupt_in),push2,FALLING);
+
       attachInterrupt(digitalPinToInterrupt(auto_timer_restart),auto_restart,LOW); //i tried falling, but because TIMER_RESTART is bound to Dio 7 right now, Falling doesn't work and I have to rely on LOW.
-      //reattach the interrupt - I had to remove it to reduce the possibility of chain calling.
-      REASON_FOR_POWERUP = WAIT;
+      attachInterrupt(digitalPinToInterrupt(interrupt_in),push2,CHANGE);
+
+      REASON_FOR_POWERUP = DEEPSLEEP_WAIT;
       break;
     case MANUAL_RESTART:
       detachInterrupt(digitalPinToInterrupt(auto_timer_restart));
@@ -71,22 +75,26 @@ void loop() {
       attachInterrupt(digitalPinToInterrupt(auto_timer_restart),auto_restart,LOW); //i tried falling, but because TIMER_RESTART is bound to Dio 7 right now, Falling doesn't work and I have to rely on LOW.
       
     case UI:
-      REASON_FOR_POWERUP = WAIT;
+      REASON_FOR_POWERUP = DEEPSLEEP_WAIT;
       break; //do nothing, the UI interrupt handlers dealt with it
-    case WAIT:
-      break; //do nothing.  WAIT is a standard backup case.
-    
+    case DEEPSLEEP_WAIT:
+      break;
+    case LIGHTSLEEP_WAIT:
+      break;    
   }
 
-  // Allow wake up pin to trigger interrupt on low.
-
-  //attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
-
-  #if !DEBUG_PRINTS
-  LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_ON); //500 uA-ish --> See the power tester for more info.  but only on pins 2&3.  0&1 draw ~.5mA.
-  //LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //70 uA-ish --> See the power tester for more info.
-  //powerStandby wakes up much faster than powerDown, likely because powerStandby keeps the crystal oscilator running (https://www.engineersgarage.com/reducing-arduino-power-consumption-sleep-modes/)
-  #endif
+  //depending on the sleep mode, do different things here.
+  if(REASON_FOR_POWERUP == DEEPSLEEP_WAIT)
+  {
+    #if !DEBUG_PRINTS
+    LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //70 uA-ish --> See the power tester for more info.
+    #endif
+  }
+  else if(REASON_FOR_POWERUP == LIGHTSLEEP_WAIT)
+  {
+    LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_ON); //500 uA-ish --> See the power tester for more info.  but only on pins 2&3.  0&1 draw ~.5mA.    
+    //powerStandby wakes up much faster than powerDown, likely because powerStandby keeps the crystal oscilator running (https://www.engineersgarage.com/reducing-arduino-power-consumption-sleep-modes/)
+  }
 
 
   

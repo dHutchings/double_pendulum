@@ -15,13 +15,24 @@ void  setup_zero_crossing_sensing()
 {
   
   pinMode(interrupt_in,INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(interrupt_in),push2,FALLING);
+  attachInterrupt(digitalPinToInterrupt(interrupt_in),push2,CHANGE);
 
 }
 
 void push2()
 {
-  REASON_FOR_POWERUP = PUSH;
+  if(digitalRead(interrupt_in)) //this is a RISING edge.  That's the first edge I get.  I don't want to do anyting here.
+  {
+    //This RISING edge means that The pulse is beginning.  I can no longer deepsleep (because that takes too long to boot up from), so let's go to the sleep that wakes up faster.
+   digitalWrite(auto_timer_reset,HIGH);
+   REASON_FOR_POWERUP = LIGHTSLEEP_WAIT;
+  }
+  else
+  {
+    digitalWrite(auto_timer_reset,LOW);
+    //now, it's time to push...
+    REASON_FOR_POWERUP = PUSH;
+  }
 }
 
 
@@ -74,7 +85,8 @@ void push()
   Serial.println(last_bemf);
   #endif
 
-  LowPower.powerDown(SLEEP_15MS,ADC_OFF,BOD_ON); //low-power sleep, we need to sleep.  Reduces power from 3ma-ish to 1.99-ish on average (over continual running), really goes to show how much power the uC draws when its fully booted up.
+  LowPower.powerStandby(SLEEP_15MS,ADC_OFF,BOD_ON); //low-power sleep, we need to sleep.  Reduces power from 3ma-ish to 1.99-ish on average (over continual running), really goes to show how much power the uC draws when its fully booted up.
+  //precise_idle(15000);
 
   //this would not work from an interrupt context, but since we call this from a loop it's fine.
   //since we just pushed, we can afford to do the powerDown (lowest power / wrong wake-up time) for just a bit
