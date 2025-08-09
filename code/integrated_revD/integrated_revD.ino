@@ -13,7 +13,7 @@ volatile long random_time_max = 3000; //allow for +/- 4000uS push time randomnes
 volatile int max_pushes = 3; //number of times the pendulum will push untill is chooses a new random push time
 volatile int chance_no_push = 10; //5% chance of not pushing this time, b/c randomness.  Set to -1 to turn off.
 
-#define DEBUG false //set to true for debug-only TX / RX LEDs
+#define DEBUG false //set to true for debug-only TX / RX LEDs.  TX LED (left?) is generally around the drive interrupt trigger times, RX is around the MOSFET driving.
 #define DEBUG_PRINTS false //set to tue for debug-only prints.  This means the system cannot power down (USB issues).  ALSO, be aware that if the serial monitor window isnt open but we are still trying to send prints, the pendulum will stop working, too.
 
 enum POWERUP_REASONS {
@@ -29,7 +29,7 @@ int REASON_FOR_POWERUP = DEEPSLEEP_WAIT; //a nice, neutral, way to start
 
 void setup() {
 
-  #if DEBUG
+  #if DEBUG_PRINTS
   Serial.begin(115200);
   delay(1000);
   Serial.println("Hello World");

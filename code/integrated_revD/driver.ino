@@ -23,12 +23,20 @@ void push2()
 {
   if(digitalRead(interrupt_in)) //this is a RISING edge.  That's the first edge I get.  I don't want to do anyting here.
   {
+    #if DEBUG
+    digitalWrite(LED_BUILTIN_TX, LOW); // Turn TX LED on  
+    #endif
+
     //This RISING edge means that The pulse is beginning.  I can no longer deepsleep (because that takes too long to boot up from), so let's go to the sleep that wakes up faster.
    digitalWrite(auto_timer_reset,HIGH);
    REASON_FOR_POWERUP = LIGHTSLEEP_WAIT;
   }
   else
   {
+    #if DEBUG
+    digitalWrite(LED_BUILTIN_TX, HIGH); // Turn TX LED off  
+    #endif
+
     digitalWrite(auto_timer_reset,LOW);
     //now, it's time to push...
     REASON_FOR_POWERUP = PUSH;
@@ -41,18 +49,6 @@ void push()
   #if DEBUG
   digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on
   #endif
-
-  //need to impliment more inteligent re-cross detection.  We're going to set the threshold of V2 to 2V, busy-wait for a transition, set it back, and then push.
-  //set_voltage(V2,2.0);
-  //while(digitalRead(interrupt_in) == LOW)
-  //{
-  //  delayMicroseconds(1);
-  //}
-  //set_voltage(V2,1.9); //reset to original voltage threshold.
-
-  
-  //precise_idle(1000); // we are pushing too early!  This ideal delay actually varies by how fast im going & the exact zero-crossing threshold, this is a hackkk.  If i'm going fast, this delay is too long  If i'm going slow, it's too short  
-  //delay(10); //delay does NOT work here - either due to the power down, or the interrupts.
   
   if(random(0,100) > chance_no_push)  //sometimes, don't push.
   {
@@ -83,10 +79,11 @@ void push()
 
   #if DEBUG_PRINTS
   Serial.println(last_bemf);
-  #endif
+  delay(15);
+  #else
 
   LowPower.powerStandby(SLEEP_15MS,ADC_OFF,BOD_ON); //low-power sleep, we need to sleep.  Reduces power from 3ma-ish to 1.99-ish on average (over continual running), really goes to show how much power the uC draws when its fully booted up.
-  //precise_idle(15000);
+  #endif
 
   //this would not work from an interrupt context, but since we call this from a loop it's fine.
   //since we just pushed, we can afford to do the powerDown (lowest power / wrong wake-up time) for just a bit
