@@ -29,7 +29,7 @@ void setup() {
   start_pendulum();
   setup_zero_crossing_sensing();
   setup_BEMF_sensing();
-  setup_restart();
+  setup_restart(); //do this AFTER the pendulum is started so we can clear the timer...
 
 
 
