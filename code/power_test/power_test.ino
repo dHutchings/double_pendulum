@@ -83,6 +83,7 @@ void loop() {
     */
 
     /* Duration Data data */
+    //BOD_ON makes no difference.
     //LowPower.powerDown(SLEEP_15MS,ADC_OFF,BOD_OFF); // takes about 21.15 ms to fully execute 
     //LowPower.powerDown(SLEEP_30MS,ADC_OFF,BOD_OFF); // takes about 41.90 ms to fully execute 
     //LowPower.powerDown(SLEEP_60MS,ADC_OFF,BOD_OFF); // takes about 77.50 ms to fully execute 
@@ -131,10 +132,12 @@ void loop() {
 
     //digitalWriteHIGH, digitalWriteLOW back to back takes only 5.4 us.
 
-    //digitalWrite(mosfet,HIGH);
-    timer_sleep(5000000); //About 17.1 mA
+    digitalWrite(mosfet,HIGH);
+    LowPower.powerDown(SLEEP_30MS,ADC_OFF,BOD_ON); // takes about 21.15 ms to fully execute 
 
-    //digitalWrite(mosfet,LOW);
+    //timer_sleep(5000000); //About 17.1 mA
+
+    digitalWrite(mosfet,LOW);
   
     //For some reason, BOD_ON results in less power dissipation.  Wierd.
 
