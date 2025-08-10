@@ -9,7 +9,13 @@ enum power_source {
 
 
 /*
- * void loop() {
+*   //suggests that I should set
+  /*
+  DIDR0 |= _BV(ADC7D) | _BV(ADC6D);
+  */
+  /*
+ *
+ void loop() {
   // put your main code here, to run repeatedly:
   float v_cc1 = float(analogRead(cc1))*5/1024;
   float v_cc2 = float(analogRead(cc2))*5/1024;

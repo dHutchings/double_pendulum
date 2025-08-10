@@ -2,6 +2,9 @@ void setup_BEMF_sensing()
 {
   pinMode(a_peak_rst,INPUT); // dont reset the A_peak_sensing
   pinMode(a_peak,INPUT);
+  DIDR2 |= _BV(ADC8D);
+  //per the datasheet, 7.8.6. we need to explicitly disable the digital input buffer since we're using it as an analog port.
+  //This change makes little difference at rest .. but it's thing to do according to the datasheet.
 
 }
 

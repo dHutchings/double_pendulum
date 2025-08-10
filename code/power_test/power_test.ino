@@ -33,6 +33,31 @@ void setup() {
   digitalWrite(LED_BUILTIN_RX, HIGH); // Turn TX LED off  
   digitalWrite(LED_BUILTIN_TX, HIGH); // Turn TX LED off
 
+  //44.25
+  //
+  //Serial.begin(9600);
+  //delay(5000);
+  /*
+  Serial.println(DIDR0);
+  Serial.println(DIDR1);
+  Serial.println(DIDR2);
+  */
+
+  /*
+   * The datasheet says to do this "If the On-chip debug system is enabled by the OCDEN Fuse...
+   * Unfortunately, I can't check that fuse.  Tests suggest that this change saves 0, so it does nothing.
+   * so it must not be enabeled.
+  int desired_mcucr = MCUCR | _BV(JTD);
+  //MCUCR = desired_mcucr;
+  //MCUCR = desired_mcucr;
+  // In order to avoid unintentional disabling or enabling of the JTAG interface, a timed
+  //sequence must be followed when changing this bit: The application software must write this bit to the desired
+  //value twice within four cycles to change its value.
+  
+  MCUCR = MCUCR | (1<<7);
+  MCUCR = MCUCR | (1<<7);
+  Serial.println(MCUCR);
+  */
 
   //Uncomment to try the Idle self-waking
   /*
@@ -147,9 +172,9 @@ void loop() {
     //These 3 commands bring us from 73.72 down to 44.63 uA for the powerDown command.  Major success, everyone is happy!
     //this freezes various USB clocks which apparently were left on but the datasheet does explicitly call out as being able to turn off.
     //safe to say, serial prints aren't working if we run these.
-    USBCON |= (1 << FRZCLK);             // Freeze the USB Clock              
-    PLLCSR &= ~(1 << PLLE);              // Disable the USB Clock (PPL) 
-    USBCON &=  ~(1 << USBE  );           // Disable the USB  
+    //USBCON |= (1 << FRZCLK);             // Freeze the USB Clock              
+    //PLLCSR &= ~(1 << PLLE);              // Disable the USB Clock (PPL) 
+    //USBCON &=  ~(1 << USBE  );           // Disable the USB  
     
     LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_OFF); //73.72 uA on the USB C APM.  118 uA on the old APM.  but only on pins 2&3.  0&1 draw ~.5mA... and on the new APM there isn't any pin 1 vs pin 3 performance difference.  Takes 3.65 ms to wake up.
     //LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //108.15 on the USB C APM  227 uA on the Old APM.  But be careful, can only wake up on changes to interupts 0:3, pins 3,2,1,0.  
