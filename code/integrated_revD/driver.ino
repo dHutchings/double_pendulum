@@ -65,7 +65,12 @@ void push()
     drive_MOS(LOW);
   
     prev_pushes ++;
-  
+
+    //According to the datasheet (Page 55), the bandgap reference takes 40 to 70uS to start up, and draws 10uA.
+    //I havent had any success with saving power via BOD, (fuses?) - while the library's API suggests I can disable BOD
+    //on my board its only possible via fuse settings.
+    //according to datsheet, BOD on will also put on the Bandgap reference.
+     
     last_bemf = measure_BEMF();
   
     if(prev_pushes > max_pushes)

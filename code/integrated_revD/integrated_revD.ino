@@ -33,6 +33,12 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
   Serial.println("Hello World");
+  #else
+  //various powersaving which trims 29uA off the power consumption, Praise be to https://forum.arduino.cc/t/power-consumption-of-atmega32u4-during-sleep-power-down-higher-than-expected/685915/28?page=2
+  //these probably kill serial prints, so only run them if we need the debug prints.
+  USBCON |= (1 << FRZCLK);             // Freeze the USB Clock              
+  PLLCSR &= ~(1 << PLLE);              // Disable the USB Clock (PPL) 
+  USBCON &=  ~(1 << USBE  );           // Disable the USB  
   #endif
 
   setup_driver();

@@ -14,8 +14,6 @@ volatile unsigned long push_time_us = 12*1000;
 void setup() {
   // put your setup code here, to run once:
 
-
-
   pinMode(mosfet,OUTPUT);
   digitalWrite(mosfet,LOW);
 
@@ -132,18 +130,28 @@ void loop() {
 
     //digitalWriteHIGH, digitalWriteLOW back to back takes only 5.4 us.
 
-    digitalWrite(mosfet,HIGH);
-    LowPower.powerDown(SLEEP_30MS,ADC_OFF,BOD_ON); // takes about 21.15 ms to fully execute 
+    //digitalWrite(mosfet,HIGH);
+    //LowPower.powerDown(SLEEP_30MS,ADC_OFF,BOD_ON); // takes about 21.15 ms to fully execute 
 
     //timer_sleep(5000000); //About 17.1 mA
 
-    digitalWrite(mosfet,LOW);
+    //digitalWrite(mosfet,LOW);
   
     //For some reason, BOD_ON results in less power dissipation.  Wierd.
 
+    
 
     /* power & Wake-up time data */
-    //LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_OFF); //73.72 uA on the USB C APM.  118 uA on the old APM.  but only on pins 2&3.  0&1 draw ~.5mA... and on the new APM there isn't any pin 1 vs pin 3 performance difference.  Takes 3.65 ms to wake up.
+
+    //Praise be to https://forum.arduino.cc/t/power-consumption-of-atmega32u4-during-sleep-power-down-higher-than-expected/685915/28?page=2
+    //These 3 commands bring us from 73.72 down to 44.63 uA for the powerDown command.  Major success, everyone is happy!
+    //this freezes various USB clocks which apparently were left on but the datasheet does explicitly call out as being able to turn off.
+    //safe to say, serial prints aren't working if we run these.
+    USBCON |= (1 << FRZCLK);             // Freeze the USB Clock              
+    PLLCSR &= ~(1 << PLLE);              // Disable the USB Clock (PPL) 
+    USBCON &=  ~(1 << USBE  );           // Disable the USB  
+    
+    LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_OFF); //73.72 uA on the USB C APM.  118 uA on the old APM.  but only on pins 2&3.  0&1 draw ~.5mA... and on the new APM there isn't any pin 1 vs pin 3 performance difference.  Takes 3.65 ms to wake up.
     //LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //108.15 on the USB C APM  227 uA on the Old APM.  But be careful, can only wake up on changes to interupts 0:3, pins 3,2,1,0.  
 
     //LowPower.powerSave(SLEEP_FOREVER,ADC_OFF,BOD_OFF,TIMER2_OFF);  //108.35 ish on the USB C APM  Takes 3.63 ms to wake up.
@@ -154,11 +162,19 @@ void loop() {
 
     //LowPower.powerExtStandby(SLEEP_8S, ADC_OFF, BOD_OFF, TIMER2_OFF); //567.2.  Takes 16 us to 32 us (depends on which point of the RC curve you measure from) to wake up 
 
+    // Disable analog comparator and it's interrupts.  Does not matter for power extStandby
+    //16.65 vs 16.50 (after lots of waiting for R/C_ ... not perfect...) so we DO want to turn this off.. I really cant tell if this makes a difference but the datasheet says so.  Google Gemini claims that it draws 50uA but I can't see that via measurements.
+    //ACSR = (ACSR & ~_BV(ACIE)) | _BV(ACD);
+    //16.78 vs  vs 16.78 ... so I can't confirm this one...
 
     //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //16.8 for USBC, 19mA for old APM, when powered via VCC.
     //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_ON, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //leaving timer0 on will basically mean that we don't sleep for longer than 1ms, ever.  BOO.
     //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_ON, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //About 17.1 mA
     //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_ON, TIMER3_ON, TIMER1_ON, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //about 17.3 uA
+
+
+
+    //LowPower.adcNoiseReduction(SLEEP_FOREVER, ADC_OFF, TIMER2_OFF);  //17.65; more than Idle (nteresting, I thought it would have been lower...)
 
 
     //NOTE:
