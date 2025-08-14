@@ -190,8 +190,6 @@
 <wire x1="0" y1="25.4" x2="0" y2="0" width="0" layer="20"/>
 <text x="39.37" y="23.622" size="0.762" layer="25" font="vector" ratio="18">RESET</text>
 <text x="65.024" y="16.51" size="0.762" layer="25" font="vector" ratio="18">BAT  OFF  USB</text>
-<text x="13.208" y="1.016" size="0.762" layer="25" font="vector" ratio="18">ALL RESISTORS 10k
-UNLESS OTHERWISE NOTED</text>
 <text x="54.102" y="10.414" size="1.27" layer="26" font="vector" ratio="18" rot="MR0">Douglas Hutchings
 Double Pendulum Driver
 Rev D2     7-21-25</text>
@@ -543,18 +541,18 @@ For JLCPCB, the zero-width arcs and slots on the milling layer.
 For Osh-park, the line with width 0.6 (currently on TDOCU) needs to be on milling instead.
 TLDR: Have to edit the part for the specific manufacturer.</text>
 </package>
-<package name="E-SWITCH-SPDT" urn="urn:adsk.eagle:footprint:49052300/1" library_version="144">
+<package name="E-SWITCH-SPDT" urn="urn:adsk.eagle:footprint:49052300/1" locally_modified="yes" library_version="155" library_locally_modified="yes">
 <description>E-switch SPDT</description>
-<pad name="P2" x="0" y="0" drill="1.8542" diameter="3.81"/>
-<pad name="P1" x="-4.699" y="0" drill="1.8542" diameter="3.81"/>
-<pad name="P3" x="4.699" y="0" drill="1.8542" diameter="3.81"/>
-<wire x1="-8.89" y1="3.81" x2="-8.89" y2="-3.81" width="0.127" layer="21"/>
-<wire x1="-8.89" y1="-3.81" x2="8.89" y2="-3.81" width="0.127" layer="21"/>
-<wire x1="8.89" y1="-3.81" x2="8.89" y2="3.81" width="0.127" layer="21"/>
-<wire x1="8.89" y1="3.81" x2="-8.89" y2="3.81" width="0.127" layer="21"/>
-<text x="-7.62" y="5.08" size="1.27" layer="25">&gt;NAME</text>
-<text x="0" y="5.08" size="1.27" layer="27">&gt;VALUE</text>
-<rectangle x1="-8.89" y1="-3.81" x2="8.89" y2="3.81" layer="39"/>
+<pad name="P2" x="0" y="0" drill="1.8542" diameter="3.429"/>
+<pad name="P1" x="-4.699" y="0" drill="1.8542" diameter="3.429"/>
+<pad name="P3" x="4.699" y="0" drill="1.8542" diameter="3.429"/>
+<wire x1="-6.604" y1="3.556" x2="-6.604" y2="-3.556" width="0.127" layer="21"/>
+<wire x1="-6.604" y1="-3.556" x2="6.604" y2="-3.556" width="0.127" layer="21"/>
+<wire x1="6.604" y1="-3.556" x2="6.604" y2="3.556" width="0.127" layer="21"/>
+<wire x1="6.604" y1="3.556" x2="-6.604" y2="3.556" width="0.127" layer="21"/>
+<text x="-7.62" y="0" size="1.27" layer="25" font="vector" ratio="18" rot="R90" align="bottom-center">&gt;NAME</text>
+<text x="7.62" y="0" size="1.27" layer="27" font="vector" ratio="18" rot="R90" align="top-center">&gt;VALUE</text>
+<rectangle x1="-6.604" y1="-3.556" x2="6.604" y2="3.556" layer="39"/>
 </package>
 <package name="SOT23-3" urn="urn:adsk.eagle:footprint:10805609/1" library_version="148" library_locally_modified="yes">
 <description>SOT23-3 Package</description>
@@ -845,7 +843,7 @@ Modified from original sparkfun footprint (smaller large footprints) for DRC</de
 <packageinstance name="USB-C-16P-2LAYER-PADS"/>
 </packageinstances>
 </package3d>
-<package3d name="E-SWITCH-SPDT" urn="urn:adsk.eagle:package:49052299/2" type="model" library_version="144">
+<package3d name="E-SWITCH-SPDT" urn="urn:adsk.eagle:package:49052299/2" type="model" library_version="155" library_locally_modified="yes">
 <description>E-switch SPDT</description>
 <packageinstances>
 <packageinstance name="E-SWITCH-SPDT"/>
@@ -2017,6 +2015,8 @@ Please make sure your boards conform to these design rules.</description>
 <contactref element="J1" pad="VBUS1"/>
 <contactref element="J1" pad="VBUS2"/>
 <contactref element="S_PWR" pad="P3"/>
+<wire x1="60.997" y1="18.628" x2="68.199" y2="21.336" width="0" layer="19" extent="1-1"/>
+<wire x1="56.097" y1="18.628" x2="60.997" y2="18.628" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="USR3">
 <contactref element="S3" pad="4"/>

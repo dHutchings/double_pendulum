@@ -877,18 +877,18 @@ For JLCPCB, the zero-width arcs and slots on the milling layer.
 For Osh-park, the line with width 0.6 (currently on TDOCU) needs to be on milling instead.
 TLDR: Have to edit the part for the specific manufacturer.</text>
 </package>
-<package name="E-SWITCH-SPDT" urn="urn:adsk.eagle:footprint:49052300/1" library_version="144">
+<package name="E-SWITCH-SPDT" urn="urn:adsk.eagle:footprint:49052300/1" locally_modified="yes" library_version="155" library_locally_modified="yes">
 <description>E-switch SPDT</description>
-<pad name="P2" x="0" y="0" drill="1.8542" diameter="3.81"/>
-<pad name="P1" x="-4.699" y="0" drill="1.8542" diameter="3.81"/>
-<pad name="P3" x="4.699" y="0" drill="1.8542" diameter="3.81"/>
-<wire x1="-8.89" y1="3.81" x2="-8.89" y2="-3.81" width="0.127" layer="21"/>
-<wire x1="-8.89" y1="-3.81" x2="8.89" y2="-3.81" width="0.127" layer="21"/>
-<wire x1="8.89" y1="-3.81" x2="8.89" y2="3.81" width="0.127" layer="21"/>
-<wire x1="8.89" y1="3.81" x2="-8.89" y2="3.81" width="0.127" layer="21"/>
-<text x="-7.62" y="5.08" size="1.27" layer="25">&gt;NAME</text>
-<text x="0" y="5.08" size="1.27" layer="27">&gt;VALUE</text>
-<rectangle x1="-8.89" y1="-3.81" x2="8.89" y2="3.81" layer="39"/>
+<pad name="P2" x="0" y="0" drill="1.8542" diameter="3.429"/>
+<pad name="P1" x="-4.699" y="0" drill="1.8542" diameter="3.429"/>
+<pad name="P3" x="4.699" y="0" drill="1.8542" diameter="3.429"/>
+<wire x1="-6.604" y1="3.556" x2="-6.604" y2="-3.556" width="0.127" layer="21"/>
+<wire x1="-6.604" y1="-3.556" x2="6.604" y2="-3.556" width="0.127" layer="21"/>
+<wire x1="6.604" y1="-3.556" x2="6.604" y2="3.556" width="0.127" layer="21"/>
+<wire x1="6.604" y1="3.556" x2="-6.604" y2="3.556" width="0.127" layer="21"/>
+<text x="-7.62" y="0" size="1.27" layer="25" font="vector" ratio="18" rot="R90" align="bottom-center">&gt;NAME</text>
+<text x="7.62" y="0" size="1.27" layer="27" font="vector" ratio="18" rot="R90" align="top-center">&gt;VALUE</text>
+<rectangle x1="-6.604" y1="-3.556" x2="6.604" y2="3.556" layer="39"/>
 </package>
 <package name="USB-C-16P-4LAYER-ISOLATED" urn="urn:adsk.eagle:footprint:49053422/1" library_version="144">
 <smd name="B6" x="0.75" y="-0.34" dx="0.3" dy="1" layer="1"/>
@@ -3798,46 +3798,6 @@ Source: http://www.vishay.com .. dcrcw.pdf</description>
 <text x="0" y="3.8647" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
 <text x="0" y="-3.4247" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
 </package>
-<package name="ARDUINO_PRO_MICRO_USBC" library_version="155" library_locally_modified="yes">
-<wire x1="-9.398" y1="-15.748" x2="-9.398" y2="21.336" width="0.127" layer="25"/>
-<wire x1="-9.398" y1="21.336" x2="9.398" y2="21.336" width="0.127" layer="25"/>
-<wire x1="9.398" y1="21.336" x2="9.398" y2="-15.748" width="0.127" layer="25"/>
-<wire x1="9.398" y1="-15.748" x2="-9.398" y2="-15.748" width="0.127" layer="25"/>
-<wire x1="-4.572" y1="22.86" x2="-4.572" y2="15.3416" width="0.127" layer="21"/>
-<wire x1="-4.572" y1="15.3416" x2="4.572" y2="15.3416" width="0.127" layer="21"/>
-<wire x1="4.572" y1="15.3416" x2="4.572" y2="22.86" width="0.127" layer="21"/>
-<pad name="9" x="-7.62" y="-13.97" drill="1" diameter="1.9812"/>
-<pad name="8" x="-7.62" y="-11.43" drill="1" diameter="1.9812"/>
-<pad name="7" x="-7.62" y="-8.89" drill="1" diameter="1.9812"/>
-<pad name="6" x="-7.62" y="-6.35" drill="1" diameter="1.9812"/>
-<pad name="5" x="-7.62" y="-3.81" drill="1" diameter="1.9812"/>
-<pad name="4" x="-7.62" y="-1.27" drill="1" diameter="1.9812"/>
-<pad name="3" x="-7.62" y="1.27" drill="1" diameter="1.9812"/>
-<pad name="2" x="-7.62" y="3.81" drill="1" diameter="1.9812"/>
-<pad name="GND@1" x="-7.62" y="6.35" drill="1" diameter="1.9812"/>
-<pad name="GND@0" x="-7.62" y="8.89" drill="1" diameter="1.9812"/>
-<pad name="RXI" x="-7.62" y="11.43" drill="1" diameter="1.9812"/>
-<pad name="TXO" x="-7.62" y="13.97" drill="1" diameter="1.9812"/>
-<pad name="RAW" x="7.62" y="13.97" drill="1" diameter="1.9812"/>
-<pad name="GND@2" x="7.62" y="11.43" drill="1" diameter="1.9812"/>
-<pad name="RST" x="7.62" y="8.89" drill="1" diameter="1.9812"/>
-<pad name="VCC" x="7.62" y="6.35" drill="1" diameter="1.9812"/>
-<pad name="A3" x="7.62" y="3.81" drill="1" diameter="1.9812"/>
-<pad name="A2" x="7.62" y="1.27" drill="1" diameter="1.9812"/>
-<pad name="A1" x="7.62" y="-1.27" drill="1" diameter="1.9812"/>
-<pad name="A0" x="7.62" y="-3.81" drill="1" diameter="1.9812"/>
-<pad name="15" x="7.62" y="-6.35" drill="1" diameter="1.9812"/>
-<pad name="14" x="7.62" y="-8.89" drill="1" diameter="1.9812"/>
-<pad name="16" x="7.62" y="-11.43" drill="1" diameter="1.9812"/>
-<pad name="10" x="7.62" y="-13.97" drill="1" diameter="1.9812"/>
-<text x="0" y="17.78" size="1.016" layer="25" align="bottom-center">USB-C</text>
-<text x="0" y="-7.62" size="1.27" layer="21" font="vector" rot="R90" align="center">&gt;NAME</text>
-<wire x1="-4.572" y1="22.86" x2="4.572" y2="22.86" width="0.127" layer="21"/>
-<rectangle x1="-8.89" y1="-15.24" x2="-6.35" y2="15.24" layer="39"/>
-<rectangle x1="6.35" y1="-15.24" x2="8.89" y2="15.24" layer="39"/>
-<rectangle x1="-8.89" y1="-15.24" x2="-6.35" y2="15.24" layer="40"/>
-<rectangle x1="6.35" y1="-15.24" x2="8.89" y2="15.24" layer="40"/>
-</package>
 <package name="SOP65P490X110-8N" urn="urn:adsk.eagle:footprint:49278257/1" library_version="155" library_locally_modified="yes">
 <description>8-SOP, 0.65 mm pitch, 4.90 mm span, 3.00 X 3.00 X 1.10 mm body
 8-pin SOP package with 0.65 mm pitch, 4.90 mm span with body size 3.00 X 3.00 X 1.10 mm</description>
@@ -3934,7 +3894,7 @@ Source: http://www.vishay.com .. dcrcw.pdf</description>
 <packageinstance name="USB-C-16P-6LAYER-ISOLATED"/>
 </packageinstances>
 </package3d>
-<package3d name="E-SWITCH-SPDT" urn="urn:adsk.eagle:package:49052299/2" type="model" library_version="144">
+<package3d name="E-SWITCH-SPDT" urn="urn:adsk.eagle:package:49052299/2" type="model" library_version="155" library_locally_modified="yes">
 <description>E-switch SPDT</description>
 <packageinstances>
 <packageinstance name="E-SWITCH-SPDT"/>
@@ -5211,7 +5171,7 @@ If designing 4-layer board, make sure to select the variant &lt;strong&gt;_4-LAY
 </device>
 </devices>
 </deviceset>
-<deviceset name="SPDT_TOGGLE_SWITCH" urn="urn:adsk.eagle:component:49053429/1" library_version="144">
+<deviceset name="SPDT_TOGGLE_SWITCH" urn="urn:adsk.eagle:component:49053429/1" library_version="155" library_locally_modified="yes">
 <description>Toggle Switch SPDT Panel Mount 
 
 digikey:  EG2377-ND</description>
@@ -5234,7 +5194,7 @@ digikey:  EG2377-ND</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="ARDUINO_PRO_MICRO" urn="urn:adsk.eagle:component:49061053/3" locally_modified="yes" prefix="IC" uservalue="yes" library_version="155" library_locally_modified="yes">
+<deviceset name="ARDUINO_PRO_MICRO" urn="urn:adsk.eagle:component:49061053/3" prefix="IC" uservalue="yes" library_version="155" library_locally_modified="yes">
 <description>&lt;b&gt;Arduino Pro Micro&lt;/b&gt;
 
 &lt;p&gt;Electrical System Year 9's Smart Sensor Core&lt;/p&gt;
@@ -5361,37 +5321,6 @@ digikey:  EG2377-ND</description>
 <technology name=""/>
 </technologies>
 </device>
-<device name="USBC" package="ARDUINO_PRO_MICRO_USBC">
-<connects>
-<connect gate="APM" pin="10" pad="10"/>
-<connect gate="APM" pin="14" pad="14"/>
-<connect gate="APM" pin="15" pad="15"/>
-<connect gate="APM" pin="16" pad="16"/>
-<connect gate="APM" pin="2" pad="2"/>
-<connect gate="APM" pin="3" pad="3"/>
-<connect gate="APM" pin="4" pad="4"/>
-<connect gate="APM" pin="5" pad="5"/>
-<connect gate="APM" pin="6" pad="6"/>
-<connect gate="APM" pin="7" pad="7"/>
-<connect gate="APM" pin="8" pad="8"/>
-<connect gate="APM" pin="9" pad="9"/>
-<connect gate="APM" pin="A0" pad="A0"/>
-<connect gate="APM" pin="A1" pad="A1"/>
-<connect gate="APM" pin="A2" pad="A2"/>
-<connect gate="APM" pin="A3" pad="A3"/>
-<connect gate="APM" pin="GND@0" pad="GND@0"/>
-<connect gate="APM" pin="GND@1" pad="GND@1"/>
-<connect gate="APM" pin="GND@2" pad="GND@2"/>
-<connect gate="APM" pin="RAW" pad="RAW"/>
-<connect gate="APM" pin="RST" pad="RST"/>
-<connect gate="APM" pin="RXI" pad="RXI"/>
-<connect gate="APM" pin="TXO" pad="TXO"/>
-<connect gate="APM" pin="VCC" pad="VCC"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
 </devices>
 </deviceset>
 <deviceset name="P-CHANNEL-MOSFET" urn="urn:adsk.eagle:component:10806015/2" prefix="Q" library_version="155">
@@ -5480,12 +5409,12 @@ Source:  FDD4141.pdf</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="RESISTOR_ARRAY_(4)" urn="urn:adsk.eagle:component:49177704/4" locally_modified="yes" prefix="R" uservalue="yes" library_version="155" library_locally_modified="yes">
+<deviceset name="RESISTOR_ARRAY_(4)" urn="urn:adsk.eagle:component:49177704/4" prefix="R" uservalue="yes" library_version="155" library_locally_modified="yes">
 <description>&lt;h3&gt;EXB-38V XXX JV&lt;/h3&gt;
 
 &lt;p&gt;Four Resistory Array - AEC-Q200 Certified&lt;/p&gt;
 
-Panasonic 1206 Resistor Array (Panasonic EXB-38V105JV or similar, perhaps Bourns CAY16-512J4LF too)
+Panasonic 1206 Resistor Array (EXB-38V105JV or similar)
 Each resistor is approximate footprint size larger than 0402 but not as big as as 0603 even though datasheet says it replicates 0603 (metric / imperial?) &lt;br&gt;&lt;br&gt;
 
 Yaego 2012 Resistor Array (YC324-JK-07100KL or similar)
