@@ -3823,6 +3823,46 @@ Source: http://www.vishay.com .. dcrcw.pdf</description>
 <text x="0" y="2.6016" size="1.27" layer="25" align="bottom-center">&gt;NAME</text>
 <text x="0" y="-2.185" size="1.27" layer="27" align="top-center">&gt;VALUE</text>
 </package>
+<package name="ARDUINO_PRO_MICRO_USBC" urn="urn:adsk.eagle:footprint:49279250/1" library_version="157">
+<wire x1="-9.398" y1="-15.748" x2="-9.398" y2="21.336" width="0.127" layer="25"/>
+<wire x1="-9.398" y1="21.336" x2="9.398" y2="21.336" width="0.127" layer="25"/>
+<wire x1="9.398" y1="21.336" x2="9.398" y2="-15.748" width="0.127" layer="25"/>
+<wire x1="9.398" y1="-15.748" x2="-9.398" y2="-15.748" width="0.127" layer="25"/>
+<wire x1="-4.572" y1="22.86" x2="-4.572" y2="15.3416" width="0.127" layer="21"/>
+<wire x1="-4.572" y1="15.3416" x2="4.572" y2="15.3416" width="0.127" layer="21"/>
+<wire x1="4.572" y1="15.3416" x2="4.572" y2="22.86" width="0.127" layer="21"/>
+<wire x1="-4.572" y1="22.86" x2="4.572" y2="22.86" width="0.127" layer="21"/>
+<pad name="9" x="-7.62" y="-13.97" drill="1" diameter="1.9812"/>
+<pad name="8" x="-7.62" y="-11.43" drill="1" diameter="1.9812"/>
+<pad name="7" x="-7.62" y="-8.89" drill="1" diameter="1.9812"/>
+<pad name="6" x="-7.62" y="-6.35" drill="1" diameter="1.9812"/>
+<pad name="5" x="-7.62" y="-3.81" drill="1" diameter="1.9812"/>
+<pad name="4" x="-7.62" y="-1.27" drill="1" diameter="1.9812"/>
+<pad name="3" x="-7.62" y="1.27" drill="1" diameter="1.9812"/>
+<pad name="2" x="-7.62" y="3.81" drill="1" diameter="1.9812"/>
+<pad name="GND@1" x="-7.62" y="6.35" drill="1" diameter="1.9812"/>
+<pad name="GND@0" x="-7.62" y="8.89" drill="1" diameter="1.9812"/>
+<pad name="RXI" x="-7.62" y="11.43" drill="1" diameter="1.9812"/>
+<pad name="TXO" x="-7.62" y="13.97" drill="1" diameter="1.9812"/>
+<pad name="RAW" x="7.62" y="13.97" drill="1" diameter="1.9812"/>
+<pad name="GND@2" x="7.62" y="11.43" drill="1" diameter="1.9812"/>
+<pad name="RST" x="7.62" y="8.89" drill="1" diameter="1.9812"/>
+<pad name="VCC" x="7.62" y="6.35" drill="1" diameter="1.9812"/>
+<pad name="A3" x="7.62" y="3.81" drill="1" diameter="1.9812"/>
+<pad name="A2" x="7.62" y="1.27" drill="1" diameter="1.9812"/>
+<pad name="A1" x="7.62" y="-1.27" drill="1" diameter="1.9812"/>
+<pad name="A0" x="7.62" y="-3.81" drill="1" diameter="1.9812"/>
+<pad name="15" x="7.62" y="-6.35" drill="1" diameter="1.9812"/>
+<pad name="14" x="7.62" y="-8.89" drill="1" diameter="1.9812"/>
+<pad name="16" x="7.62" y="-11.43" drill="1" diameter="1.9812"/>
+<pad name="10" x="7.62" y="-13.97" drill="1" diameter="1.9812"/>
+<text x="0" y="17.78" size="1.016" layer="25" align="bottom-center">USB-C</text>
+<text x="0" y="-7.62" size="1.27" layer="21" font="vector" rot="R90" align="center">&gt;NAME</text>
+<rectangle x1="-8.89" y1="-15.24" x2="-6.35" y2="15.24" layer="39"/>
+<rectangle x1="6.35" y1="-15.24" x2="8.89" y2="15.24" layer="39"/>
+<rectangle x1="-8.89" y1="-15.24" x2="-6.35" y2="15.24" layer="40"/>
+<rectangle x1="6.35" y1="-15.24" x2="8.89" y2="15.24" layer="40"/>
+</package>
 </packages>
 <packages3d>
 <package3d name="0805" urn="urn:adsk.eagle:package:10805922/1" type="box" library_version="136" library_locally_modified="yes">
@@ -4608,6 +4648,11 @@ Source: http://www.vishay.com .. dcrcw.pdf</description>
 <packageinstance name="SOP65P490X110-8N"/>
 </packageinstances>
 </package3d>
+<package3d name="ARDUINO_PRO_MICRO_USBC" urn="urn:adsk.eagle:package:49279253/1" type="box" library_version="157">
+<packageinstances>
+<packageinstance name="ARDUINO_PRO_MICRO_USBC"/>
+</packageinstances>
+</package3d>
 </packages3d>
 <symbols>
 <symbol name="STAND-OFF" urn="urn:adsk.eagle:symbol:10805509/1" library_version="136" library_locally_modified="yes">
@@ -5194,7 +5239,7 @@ digikey:  EG2377-ND</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="ARDUINO_PRO_MICRO" urn="urn:adsk.eagle:component:49061053/3" prefix="IC" uservalue="yes" library_version="155" library_locally_modified="yes">
+<deviceset name="ARDUINO_PRO_MICRO" urn="urn:adsk.eagle:component:49061053/4" prefix="IC" uservalue="yes" library_version="157">
 <description>&lt;b&gt;Arduino Pro Micro&lt;/b&gt;
 
 &lt;p&gt;Electrical System Year 9's Smart Sensor Core&lt;/p&gt;
@@ -5316,6 +5361,40 @@ digikey:  EG2377-ND</description>
 </connects>
 <package3dinstances>
 <package3dinstance package3d_urn="urn:adsk.eagle:package:49177699/2"/>
+</package3dinstances>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="USBC" package="ARDUINO_PRO_MICRO_USBC">
+<connects>
+<connect gate="APM" pin="10" pad="10"/>
+<connect gate="APM" pin="14" pad="14"/>
+<connect gate="APM" pin="15" pad="15"/>
+<connect gate="APM" pin="16" pad="16"/>
+<connect gate="APM" pin="2" pad="2"/>
+<connect gate="APM" pin="3" pad="3"/>
+<connect gate="APM" pin="4" pad="4"/>
+<connect gate="APM" pin="5" pad="5"/>
+<connect gate="APM" pin="6" pad="6"/>
+<connect gate="APM" pin="7" pad="7"/>
+<connect gate="APM" pin="8" pad="8"/>
+<connect gate="APM" pin="9" pad="9"/>
+<connect gate="APM" pin="A0" pad="A0"/>
+<connect gate="APM" pin="A1" pad="A1"/>
+<connect gate="APM" pin="A2" pad="A2"/>
+<connect gate="APM" pin="A3" pad="A3"/>
+<connect gate="APM" pin="GND@0" pad="GND@0"/>
+<connect gate="APM" pin="GND@1" pad="GND@1"/>
+<connect gate="APM" pin="GND@2" pad="GND@2"/>
+<connect gate="APM" pin="RAW" pad="RAW"/>
+<connect gate="APM" pin="RST" pad="RST"/>
+<connect gate="APM" pin="RXI" pad="RXI"/>
+<connect gate="APM" pin="TXO" pad="TXO"/>
+<connect gate="APM" pin="VCC" pad="VCC"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:49279253/1"/>
 </package3dinstances>
 <technologies>
 <technology name=""/>
@@ -12688,7 +12767,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="FRAME1" library="pie" deviceset="FRAME_SCHEMATIC" device="">
 <attribute name="REVISION" value="D2"/>
 </part>
-<part name="UC1" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="ARDUINO_PRO_MICRO" device="2D" package3d_urn="urn:adsk.eagle:package:49177699/2"/>
+<part name="UC1" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="ARDUINO_PRO_MICRO" device="USBC" package3d_urn="urn:adsk.eagle:package:49279253/1"/>
 <part name="ST1" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="2PIN_SCREW" device="" package3d_urn="urn:adsk.eagle:package:49052268/3"/>
 <part name="ST2" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="2PIN_SCREW" device="" package3d_urn="urn:adsk.eagle:package:49052268/3"/>
 <part name="IC1" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="MCP602" device="SN" package3d_urn="urn:adsk.eagle:package:49204900/1" value="MCP6232"/>
