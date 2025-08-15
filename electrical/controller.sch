@@ -13851,6 +13851,16 @@ to use resistor array for easier soldering</text>
 <wire x1="111.76" y1="142.24" x2="119.38" y2="142.24" width="0.1524" layer="91"/>
 <pinref part="SUPPLY31" gate="G$1" pin="12V"/>
 </segment>
+<segment>
+<pinref part="JP1" gate="G$1" pin="1"/>
+<pinref part="SUPPLY20" gate="G$1" pin="12V"/>
+<wire x1="76.2" y1="154.94" x2="81.28" y2="154.94" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="IC5" gate="G$1" pin="VDD"/>
+<pinref part="SUPPLY16" gate="G$1" pin="12V"/>
+<wire x1="215.9" y1="172.72" x2="213.36" y2="172.72" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="A_PEAK" class="0">
 <segment>
@@ -13919,18 +13929,6 @@ to use resistor array for easier soldering</text>
 <pinref part="U1" gate="G$1" pin="VOUT"/>
 <pinref part="JP1" gate="G$1" pin="2"/>
 <wire x1="91.44" y1="154.94" x2="93.98" y2="154.94" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="12V" class="0">
-<segment>
-<pinref part="JP1" gate="G$1" pin="1"/>
-<pinref part="SUPPLY20" gate="G$1" pin="12V"/>
-<wire x1="76.2" y1="154.94" x2="81.28" y2="154.94" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="IC5" gate="G$1" pin="VDD"/>
-<pinref part="SUPPLY16" gate="G$1" pin="12V"/>
-<wire x1="215.9" y1="172.72" x2="213.36" y2="172.72" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$9" class="0">
