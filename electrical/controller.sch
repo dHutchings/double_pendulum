@@ -14500,8 +14500,8 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="SUPPLY32" library="SparkFun-PowerSymbols" deviceset="15V" device=""/>
 <part name="U$5" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="5V" device=""/>
 <part name="SUPPLY26" library="SparkFun-PowerSymbols" deviceset="15V" device=""/>
-<part name="J4" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:49052309" deviceset="CONN_05" device="PTH" package3d_urn="urn:adsk.eagle:package:49052939/1"/>
-<part name="J2" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:49052309" deviceset="CONN_04" device="PTH" package3d_urn="urn:adsk.eagle:package:49052925/1"/>
+<part name="J4" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:49052309" deviceset="CONN_05" device="NO_SILK" package3d_urn="urn:adsk.eagle:package:49052940/1"/>
+<part name="J2" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:49052309" deviceset="CONN_04" device="1X04_NO_SILK" package3d_urn="urn:adsk.eagle:package:49052934/1"/>
 <part name="U$6" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="5V" device=""/>
 <part name="SUPPLY31" library="SparkFun-PowerSymbols" deviceset="15V" device=""/>
 <part name="R2" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="RESISTOR_ARRAY_(4)" device="-1206-1/16W-5%" package3d_urn="urn:adsk.eagle:package:49177701/2" value="50k"/>
@@ -14519,7 +14519,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="SUPPLY9" library="pie" deviceset="GND" device=""/>
 <part name="TP1" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPS" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="TPSPAD1-13"/>
 <part name="J5" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:49052309" deviceset="CONN_06" device="NO_SILK_NO_POP" package3d_urn="urn:adsk.eagle:package:49053105/1"/>
-<part name="J6" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:49052309" deviceset="CONN_02" device="" package3d_urn="urn:adsk.eagle:package:49052890/1"/>
+<part name="J6" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:49052309" deviceset="CONN_02" device="1X02_NO_SILK" package3d_urn="urn:adsk.eagle:package:49052902/1"/>
 </parts>
 <sheets>
 <sheet>
