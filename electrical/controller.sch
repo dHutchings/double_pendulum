@@ -14442,7 +14442,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 </classes>
 <parts>
 <part name="FRAME1" library="pie" deviceset="FRAME_SCHEMATIC" device="">
-<attribute name="REVISION" value="D2"/>
+<attribute name="REVISION" value="D3"/>
 </part>
 <part name="UC1" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="ARDUINO_PRO_MICRO" device="USBC" package3d_urn="urn:adsk.eagle:package:49279263/1"/>
 <part name="ST1" library="BEST_Custom" library_urn="urn:adsk.eagle:library:10805467" deviceset="2PIN_SCREW" device="" package3d_urn="urn:adsk.eagle:package:49052268/3"/>
@@ -14546,11 +14546,11 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <text x="213.36" y="106.68" size="5.08" layer="97">User Input</text>
 <wire x1="210.82" y1="114.3" x2="210.82" y2="55.88" width="0.4064" layer="94"/>
 <wire x1="210.82" y1="55.88" x2="248.92" y2="55.88" width="0.4064" layer="94"/>
-<wire x1="91.44" y1="55.88" x2="170.18" y2="55.88" width="0.4064" layer="94"/>
+<wire x1="91.44" y1="55.88" x2="147.32" y2="55.88" width="0.4064" layer="94"/>
 <text x="213.36" y="48.26" size="5.08" layer="97">Mounting</text>
 <text x="88.9" y="2.54" size="1.27" layer="91">Interrupts Available on:  0,1,2,3,7
 0 thru 3 fully functional; 7 can do LOW but not CHANGE or FALLING</text>
-<text x="2.54" y="144.78" size="1.27" layer="91">5.1K resistors per the spec, allows
+<text x="2.54" y="147.32" size="1.27" layer="91">5.1K resistors per the spec, allows
 uC to sense USB C power advertisement.
 (not negotiate - the analog protocol)</text>
 <text x="7.62" y="10.16" size="1.27" layer="91" rot="R90">PNP BJT</text>
@@ -14564,6 +14564,7 @@ Use CD40109 to level shift
 Hence, the !DRIVE Line is needed since
 we cannot use the DRIVE Line</text>
 <text x="7.62" y="48.26" size="5.08" layer="97">Auto Restart Timer</text>
+<wire x1="147.32" y1="55.88" x2="170.18" y2="55.88" width="0.4064" layer="94"/>
 <wire x1="170.18" y1="55.88" x2="210.82" y2="55.88" width="0.4064" layer="94"/>
 <wire x1="73.66" y1="55.88" x2="73.66" y2="0" width="0.4064" layer="94"/>
 <text x="78.74" y="48.26" size="5.08" layer="97">Microcontroller</text>
@@ -14617,6 +14618,8 @@ to use resistor array for easier soldering</text>
 <wire x1="195.58" y1="167.64" x2="185.42" y2="167.64" width="0.4064" layer="94"/>
 <wire x1="185.42" y1="167.64" x2="185.42" y2="114.3" width="0.4064" layer="94"/>
 <wire x1="185.42" y1="114.3" x2="187.96" y2="114.3" width="0.1524" layer="94"/>
+<wire x1="147.32" y1="55.88" x2="147.32" y2="35.56" width="0.4064" layer="94"/>
+<text x="160.02" y="48.26" size="5.08" layer="97">Unused</text>
 </plain>
 <instances>
 <instance part="FRAME1" gate="G$1" x="0" y="0" smashed="yes"/>
@@ -14832,9 +14835,9 @@ to use resistor array for easier soldering</text>
 <instance part="SUPPLY31" gate="G$1" x="119.38" y="142.24" smashed="yes">
 <attribute name="VALUE" x="119.38" y="145.034" size="1.778" layer="96" font="vector" align="bottom-center"/>
 </instance>
-<instance part="R2" gate="A" x="276.86" y="76.2" smashed="yes">
-<attribute name="NAME" x="274.32" y="77.724" size="1.778" layer="95" font="vector" align="bottom-center"/>
-<attribute name="VALUE" x="281.94" y="77.724" size="1.778" layer="96" font="vector" rot="R180" align="top-center"/>
+<instance part="R2" gate="A" x="193.04" y="43.18" smashed="yes">
+<attribute name="NAME" x="190.5" y="44.704" size="1.778" layer="95" font="vector" align="bottom-center"/>
+<attribute name="VALUE" x="198.12" y="44.704" size="1.778" layer="96" font="vector" rot="R180" align="top-center"/>
 </instance>
 <instance part="R2" gate="B" x="38.1" y="101.6" smashed="yes" rot="R180">
 <attribute name="NAME" x="43.18" y="103.124" size="1.778" layer="95" font="vector" align="bottom-center"/>
@@ -14866,13 +14869,13 @@ to use resistor array for easier soldering</text>
 <attribute name="NAME" x="33.02" y="166.116" size="1.778" layer="95" font="vector" rot="R180" align="bottom-center"/>
 <attribute name="VALUE" x="40.64" y="166.116" size="1.778" layer="96" font="vector" align="top-center"/>
 </instance>
-<instance part="R5" gate="C" x="264.16" y="76.2" smashed="yes">
-<attribute name="NAME" x="264.16" y="77.724" size="1.778" layer="95" font="vector" align="bottom-center"/>
-<attribute name="VALUE" x="264.16" y="74.676" size="1.778" layer="96" font="vector" align="top-center"/>
+<instance part="R5" gate="C" x="177.8" y="43.18" smashed="yes">
+<attribute name="NAME" x="177.8" y="44.704" size="1.778" layer="95" font="vector" align="bottom-center"/>
+<attribute name="VALUE" x="177.8" y="41.656" size="1.778" layer="96" font="vector" align="top-center"/>
 </instance>
-<instance part="R5" gate="D" x="264.16" y="68.58" smashed="yes">
-<attribute name="NAME" x="264.16" y="70.104" size="1.778" layer="95" font="vector" align="bottom-center"/>
-<attribute name="VALUE" x="264.16" y="67.056" size="1.778" layer="96" font="vector" align="top-center"/>
+<instance part="R5" gate="D" x="162.56" y="43.18" smashed="yes">
+<attribute name="NAME" x="162.56" y="44.704" size="1.778" layer="95" font="vector" align="bottom-center"/>
+<attribute name="VALUE" x="162.56" y="41.656" size="1.778" layer="96" font="vector" align="top-center"/>
 </instance>
 <instance part="R6" gate="A" x="17.78" y="86.36" smashed="yes">
 <attribute name="NAME" x="15.24" y="87.884" size="1.778" layer="95" font="vector" align="bottom-center"/>
@@ -14916,9 +14919,9 @@ to use resistor array for easier soldering</text>
 <attribute name="NAME" x="24.13" y="29.21" size="1.778" layer="95" rot="R180"/>
 <attribute name="TP_SIGNAL_NAME" x="21.59" y="31.75" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="J5" gate="J1" x="177.8" y="43.18" smashed="yes">
-<attribute name="VALUE" x="172.72" y="33.274" size="1.778" layer="96" font="vector"/>
-<attribute name="NAME" x="172.72" y="53.848" size="1.778" layer="95" font="vector"/>
+<instance part="J5" gate="J1" x="180.34" y="83.82" smashed="yes">
+<attribute name="VALUE" x="175.26" y="73.914" size="1.778" layer="96" font="vector"/>
+<attribute name="NAME" x="175.26" y="94.488" size="1.778" layer="95" font="vector"/>
 </instance>
 <instance part="J6" gate="J1" x="175.26" y="99.06" smashed="yes">
 <attribute name="VALUE" x="172.72" y="94.234" size="1.778" layer="96" font="vector"/>
@@ -15307,8 +15310,8 @@ to use resistor array for easier soldering</text>
 </segment>
 <segment>
 <pinref part="J5" gate="J1" pin="6"/>
-<wire x1="182.88" y1="50.8" x2="193.04" y2="50.8" width="0.1524" layer="91"/>
-<label x="185.42" y="50.8" size="1.778" layer="95"/>
+<wire x1="185.42" y1="91.44" x2="195.58" y2="91.44" width="0.1524" layer="91"/>
+<label x="187.96" y="91.44" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="RST" class="0">
@@ -15504,8 +15507,8 @@ to use resistor array for easier soldering</text>
 </segment>
 <segment>
 <pinref part="J5" gate="J1" pin="5"/>
-<wire x1="182.88" y1="48.26" x2="193.04" y2="48.26" width="0.1524" layer="91"/>
-<label x="185.42" y="48.26" size="1.778" layer="95"/>
+<wire x1="185.42" y1="88.9" x2="195.58" y2="88.9" width="0.1524" layer="91"/>
+<label x="187.96" y="88.9" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="UC1" gate="APM" pin="9"/>
@@ -15554,8 +15557,8 @@ to use resistor array for easier soldering</text>
 </segment>
 <segment>
 <pinref part="J5" gate="J1" pin="4"/>
-<wire x1="182.88" y1="45.72" x2="193.04" y2="45.72" width="0.1524" layer="91"/>
-<label x="185.42" y="45.72" size="1.778" layer="95"/>
+<wire x1="185.42" y1="86.36" x2="195.58" y2="86.36" width="0.1524" layer="91"/>
+<label x="187.96" y="86.36" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="UC1" gate="APM" pin="6"/>
@@ -15581,8 +15584,8 @@ to use resistor array for easier soldering</text>
 </segment>
 <segment>
 <pinref part="J5" gate="J1" pin="2"/>
-<wire x1="182.88" y1="40.64" x2="193.04" y2="40.64" width="0.1524" layer="91"/>
-<label x="185.42" y="40.64" size="1.778" layer="95"/>
+<wire x1="185.42" y1="81.28" x2="195.58" y2="81.28" width="0.1524" layer="91"/>
+<label x="187.96" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="TIMER_RESTART" class="0">
@@ -15598,8 +15601,8 @@ to use resistor array for easier soldering</text>
 </segment>
 <segment>
 <pinref part="J5" gate="J1" pin="1"/>
-<wire x1="182.88" y1="38.1" x2="193.04" y2="38.1" width="0.1524" layer="91"/>
-<label x="185.42" y="38.1" size="1.778" layer="95"/>
+<wire x1="185.42" y1="78.74" x2="195.58" y2="78.74" width="0.1524" layer="91"/>
+<label x="187.96" y="78.74" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$8" class="0">
@@ -15683,8 +15686,8 @@ to use resistor array for easier soldering</text>
 <net name="DEBUG_WAKE" class="0">
 <segment>
 <pinref part="J5" gate="J1" pin="3"/>
-<wire x1="182.88" y1="43.18" x2="193.04" y2="43.18" width="0.1524" layer="91"/>
-<label x="185.42" y="43.18" size="1.778" layer="95"/>
+<wire x1="185.42" y1="83.82" x2="195.58" y2="83.82" width="0.1524" layer="91"/>
+<label x="187.96" y="83.82" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="UC1" gate="APM" pin="5"/>
