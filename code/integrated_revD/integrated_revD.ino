@@ -13,8 +13,8 @@ volatile long random_time_max = 3000; //allow for +/- 4000uS push time randomnes
 volatile int max_pushes = 3; //number of times the pendulum will push untill is chooses a new random push time
 volatile int chance_no_push = 10; //5% chance of not pushing this time, b/c randomness.  Set to -1 to turn off.
 
-#define DEBUG false //set to true for debug-only TX / RX LEDs.  TX LED (left?) is generally around the drive interrupt trigger times, RX is around the MOSFET driving.
-#define DEBUG_PRINTS false //set to tue for debug-only prints.  This means the system cannot power down (USB issues).  ALSO, be aware that if the serial monitor window isnt open but we are still trying to send prints, the pendulum will stop working, too.
+#define DEBUG true //set to true for debug-only TX / RX LEDs.  TX LED (left?) is generally around the drive interrupt trigger times, RX is around the MOSFET driving.
+#define DEBUG_PRINTS true //set to tue for debug-only prints.  This means the system cannot power down (USB issues).  ALSO, be aware that if the serial monitor window isnt open but we are still trying to send prints, the pendulum will stop working, too.
 
 enum POWERUP_REASONS {
   PUSH,
@@ -28,10 +28,12 @@ enum POWERUP_REASONS {
 int REASON_FOR_POWERUP = DEEPSLEEP_WAIT; //a nice, neutral, way to start
 
 void setup() {
+  //power_aca_enable  "Enable the Analog Comparator on PortA."  my chip does not have this and it isnt compiling if i leave it in.
 
   #if DEBUG_PRINTS
   Serial.begin(115200);
   delay(1000);
+  delay(10000);
   Serial.println("Hello World");
   #else
   //various powersaving which trims 29uA off the power consumption, Praise be to https://forum.arduino.cc/t/power-consumption-of-atmega32u4-during-sleep-power-down-higher-than-expected/685915/28?page=2
@@ -49,10 +51,11 @@ void setup() {
   setup_BEMF_sensing(); 
   setup_restart(); //do this AFTER the pendulum is started so we can clear the timer...
 
-  
+
 }
 
 void loop() {
+  
   switch(REASON_FOR_POWERUP)
   {
     case PUSH:
@@ -76,11 +79,29 @@ void loop() {
       REASON_FOR_POWERUP = DEEPSLEEP_WAIT;
       break;
     case MANUAL_RESTART:
+      #if DEBUG_PRINTS
+      Serial.print("Manual Restart: ");
+      delay(100); //let the USB prints go through.
+      #endif
       detachInterrupt(digitalPinToInterrupt(auto_timer_restart));
+      detachInterrupt(digitalPinToInterrupt(interrupt_in));
+
       start_pendulum();
       attachInterrupt(digitalPinToInterrupt(auto_timer_restart),auto_restart,LOW); //i tried falling, but because TIMER_RESTART is bound to Dio 7 right now, Falling doesn't work and I have to rely on LOW.
+      attachInterrupt(digitalPinToInterrupt(interrupt_in),push2,CHANGE);
       
     case UI:
+      #if DEBUG_PRINTS
+      Serial.print("Push Time: ");
+      Serial.println(push_time_us);
+      delay(2); //let the USB prints go through.
+      #endif
+      Serial.print("switchState:");
+      Serial.println(type_of_UI_input());
+      detach_interrupts();
+      precise_idle(1000000); //delay for 1 second.
+      attach_interrupts();
+      
       REASON_FOR_POWERUP = DEEPSLEEP_WAIT;
       break; //do nothing, the UI interrupt handlers dealt with it
     case DEEPSLEEP_WAIT:
@@ -88,6 +109,15 @@ void loop() {
     case LIGHTSLEEP_WAIT:
       break;    
   }
+
+  #if DEBUG_PRINTS
+  if( (REASON_FOR_POWERUP != DEEPSLEEP_WAIT) && (REASON_FOR_POWERUP != LIGHTSLEEP_WAIT)) //I dont want to spam prints of being in a sleep mode, at least for now.  Maybe i should program it so it displays exactly once..?
+  { 
+    Serial.print("Loop Reason: ");
+    Serial.println(REASON_FOR_POWERUP);
+    delay(1); //let the USB prints go through.
+  }
+  #endif
 
   //depending on the sleep mode, do different things here.
   if(REASON_FOR_POWERUP == DEEPSLEEP_WAIT)
@@ -98,8 +128,10 @@ void loop() {
   }
   else if(REASON_FOR_POWERUP == LIGHTSLEEP_WAIT)
   {
+    #if !DEBUG_PRINTS
     LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_ON); //500 uA-ish --> See the power tester for more info.  but only on pins 2&3.  0&1 draw ~.5mA.    
     //powerStandby wakes up much faster than powerDown, likely because powerStandby keeps the crystal oscilator running (https://www.engineersgarage.com/reducing-arduino-power-consumption-sleep-modes/)
+    #endif
   }
 
 

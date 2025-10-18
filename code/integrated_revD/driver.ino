@@ -83,8 +83,11 @@ void push()
   }
 
   #if DEBUG_PRINTS
+  /*
+  Serial.print("BEMF: ");
   Serial.println(last_bemf);
-  delay(15);
+  delay(5);
+  */
   #else
 
   LowPower.powerStandby(SLEEP_15MS,ADC_OFF,BOD_ON); //low-power sleep, we need to sleep.  Reduces power from 3ma-ish to 1.99-ish on average (over continual running), really goes to show how much power the uC draws when its fully booted up.
@@ -134,5 +137,5 @@ void start_pendulum()
 void drive_MOS(bool value)
 {
   digitalWrite(drive_mosfet,value);
-  inform_restart_timer(value);
+  inform_restart_timer(value); //remember, the 555 takes the opposite of what the MOSFET does.
 }
