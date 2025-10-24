@@ -8,8 +8,14 @@
 
 //a series of constants that affect push time & randomness
 
-volatile long push_time_us = 5.5*1000;  //push time.  It needs to be here, since multiple code segments deal with it.
-volatile long random_time_max = 3000; //allow for +/- 4000uS push time randomness... used to prevent long-term cyclic oscilations.
+static long nominal_push_time_us = 5500; //nominal push time, fixed value that we always use.
+volatile long push_time_us = nominal_push_time_us;  //actual push time.  It needs to be here, since multiple code segments deal with it.  Can be adjusted up and down via button presses
+volatile long random_time_max = 3000; //allow for +/- 3000uS push time randomness... used to prevent long-term cyclic oscilations.
+#define SCALE_RANDOMNESS true //set to true to enable the amount of randomness to be scaled up and down by how much we are over or underpushing, not just some nominal value.
+
+//the real random push time will be scaled up or down from this value.  EG the nominal push time is 5500uS.  If it's half of that (2750 uS), the nominal random time max could cause a negative push time.
+//instead
+
 volatile int max_pushes = 3; //number of times the pendulum will push untill is chooses a new random push time
 volatile int chance_no_push = 10; //5% chance of not pushing this time, b/c randomness.  Set to -1 to turn off.
 

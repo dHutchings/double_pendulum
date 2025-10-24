@@ -76,11 +76,21 @@ void push()
     if(prev_pushes > max_pushes)
     {
       prev_pushes = 0;
-      random_time = random(-random_time_max,random_time_max);
-      
+
+      #if SCALE_RANDOMNESS
+      random_time = long(float(random(-random_time_max,random_time_max)) * float(push_time_us) / float(nominal_push_time_us)); 
+      #else
+      random_time = random(-random_time_max,random_time_max); 
+      #endif
+      //scale random time by the nominal max push time
       #if DEBUG_PRINTS
       final_time = push_time_us + random_time;
-      Serial.print("New Push Time: ");
+
+      Serial.print("Nom: ");
+      Serial.print(push_time_us);
+      Serial.print("\tRand: ");
+      Serial.print(random_time);
+      Serial.print("\t Push Time: ");
       Serial.println(final_time);
       #endif
     }
