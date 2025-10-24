@@ -92,14 +92,17 @@ void loop() {
   //depending on the sleep mode, do different things here.
   if(REASON_FOR_POWERUP == DEEPSLEEP_WAIT)
   {
-    #if !DEBUG_PRINTS
+    #if !DEBUG_PRINTS //need this otherwise prints wont go through
     LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //70 uA-ish --> See the power tester for more info.
     #endif
   }
   else if(REASON_FOR_POWERUP == LIGHTSLEEP_WAIT)
   {
+    #if !DEBUG_PRINTS //need this otherwise prints wont go through
     LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_ON); //500 uA-ish --> See the power tester for more info.  but only on pins 2&3.  0&1 draw ~.5mA.    
     //powerStandby wakes up much faster than powerDown, likely because powerStandby keeps the crystal oscilator running (https://www.engineersgarage.com/reducing-arduino-power-consumption-sleep-modes/)
+    #endif
+
   }
 
 

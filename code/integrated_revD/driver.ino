@@ -78,15 +78,19 @@ void push()
       prev_pushes = 0;
       random_time = random(-random_time_max,random_time_max);
       
+      #if DEBUG_PRINTS
+      final_time = push_time_us + random_time;
+      Serial.print("New Push Time: ");
+      Serial.println(final_time);
+      #endif
     }
     
   }
 
   #if DEBUG_PRINTS
   Serial.println(last_bemf);
-  delay(15);
+  precise_idle(15000); //have to do this b/c we power standby for 15ms
   #else
-
   LowPower.powerStandby(SLEEP_15MS,ADC_OFF,BOD_ON); //low-power sleep, we need to sleep.  Reduces power from 3ma-ish to 1.99-ish on average (over continual running), really goes to show how much power the uC draws when its fully booted up.
   #endif
 
