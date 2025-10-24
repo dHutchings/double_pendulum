@@ -15,11 +15,11 @@ void  setup_zero_crossing_sensing()
 {
   
   pinMode(interrupt_in,INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(interrupt_in),push2,CHANGE);
+  attachInterrupt(digitalPinToInterrupt(interrupt_in),interrupt_wake,CHANGE);
 
 }
 
-void push2()
+void interrupt_wake() //the helper that triggers the wake (either if I'm in deep, or light sleep).  It will figure out what the correct next step is based on the sign of the INT pin
 {
   if(digitalRead(interrupt_in)) //this is a RISING edge.  That's the first edge I get.  I don't want to do anyting here.
   {
@@ -27,8 +27,6 @@ void push2()
     digitalWrite(LED_BUILTIN_TX, LOW); // Turn TX LED on  
     #endif
 
-    //This RISING edge means that The pulse is beginning.  I can no longer deepsleep (because that takes too long to boot up from), so let's go to the sleep that wakes up faster.
-   digitalWrite(auto_timer_reset,HIGH);
    REASON_FOR_POWERUP = LIGHTSLEEP_WAIT;
   }
   else
@@ -37,8 +35,6 @@ void push2()
     digitalWrite(LED_BUILTIN_TX, HIGH); // Turn TX LED off  
     #endif
 
-    digitalWrite(auto_timer_reset,LOW);
-    //now, it's time to push...
     REASON_FOR_POWERUP = PUSH;
   }
 }

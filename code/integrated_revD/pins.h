@@ -9,7 +9,7 @@ int drive_mosfet = 8;  //pin 10... for turning the MOSFET on / pushing the magne
 
 //pins for automatic missing pulse restarting.
 int auto_timer_restart = 7; //pin 7... hooked up to the 555 timer - used for measuring when the 555 timer says its time to restart
-int auto_timer_reset = 16; //pin 16... hooked up to the 555 timer - used for clearing the timer.
+int timer_rst = 16; //pin 16... hooked up to the 555 timer - used for clearing the timer.
 
 //pins for measuring USB power capability
 int cc1 = A0;
