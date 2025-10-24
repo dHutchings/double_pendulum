@@ -37,8 +37,9 @@ void setup() {
 
   #if DEBUG_PRINTS
   Serial.begin(115200);
-  delay(1000);
+  delay(5000);
   Serial.println("Hello World");
+  delay(1000);
   #else
   //various powersaving which trims 29uA off the power consumption, Praise be to https://forum.arduino.cc/t/power-consumption-of-atmega32u4-during-sleep-power-down-higher-than-expected/685915/28?page=2
   //these probably kill serial prints, so only run them if we need the debug prints.

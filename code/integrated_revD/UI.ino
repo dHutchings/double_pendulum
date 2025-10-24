@@ -36,6 +36,11 @@ void speed_up()
     delayMicroseconds(1000); //keep waiting for unpress.  
   }
 
+ #if DEBUG_PRINTS
+  Serial.print("New Average push time: ");
+  Serial.println(push_time_us);
+  precise_idle(1000);
+  #endif
 
   //then 100ms more to avoid debounce.
   //don't use any power-saving modes since Im in an ISR here
@@ -53,6 +58,12 @@ void slow_down()
   {
     delayMicroseconds(1000); //keep waiting for unpress.  
   }
+
+  #if DEBUG_PRINTS
+  Serial.print("New Average push time: ");
+  Serial.println(push_time_us);
+  precise_idle(1000);
+  #endif
 
 
   //then 100ms more to avoid debounce.
