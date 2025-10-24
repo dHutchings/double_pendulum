@@ -1,5 +1,5 @@
 volatile int prev_pushes; //how many times have I pushed since I last chose a random number?
-volatile long random_time; //random value
+volatile long random_time; //random value, can have a negative value so not unsigned.
 
 volatile float last_bemf; //the value of the most recent BEMF
 void setup_driver()
