@@ -31,13 +31,14 @@ void speed_up()
 
   push_time_us = push_time_us + PUSH_SETTING_STEP;
   push_time_us = constrain(push_time_us,MIN_PUSH,MAX_PUSH);
+  eeprom_current_speed();
 
   while(digitalRead(faster) == LOW)
   {
     delayMicroseconds(1000); //keep waiting for unpress.  
   }
 
- #if DEBUG_PRINTS
+  #if DEBUG_PRINTS
   Serial.print("New Average push time: ");
   Serial.println(push_time_us);
   precise_idle(1000);
@@ -54,11 +55,13 @@ void slow_down()
 
   push_time_us = push_time_us - PUSH_SETTING_STEP;
   push_time_us = constrain(push_time_us,MIN_PUSH,MAX_PUSH);
+  eeprom_current_speed();
 
   while(digitalRead(slower) == LOW)
   {
     delayMicroseconds(1000); //keep waiting for unpress.  
   }
+
 
   #if DEBUG_PRINTS
   Serial.print("New Average push time: ");
@@ -80,6 +83,10 @@ void start_sequence()
   {
     delayMicroseconds(1000); //keep waiting for unpress.  
   }
+
+  push_time_us = NOMINAL_PUSH; //also, reset the speed.
+  reset_eeprom();
+
 
 
   //then 100ms more to avoid debounce.

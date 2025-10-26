@@ -85,7 +85,7 @@ void push()
       #if DEBUG_PRINTS
       final_time = push_time_us + random_time;
 
-      Serial.print("Nom: ");
+      Serial.print("Med: ");
       Serial.print(push_time_us);
       Serial.print("\tRand: ");
       Serial.print(random_time);

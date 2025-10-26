@@ -33,9 +33,11 @@ void setup() {
   USBCON &=  ~(1 << USBE  );           // Disable the USB  
   #endif
 
+
   setup_driver();
   setup_dac();
   setup_ui();
+  load_from_eeprom();
   start_pendulum();
   setup_zero_crossing_sensing(); //do this after the pendulum is started so we dont worry about any "triggering the drive" interrupt problems.
   setup_BEMF_sensing(); 
