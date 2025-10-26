@@ -1,3 +1,4 @@
+#include "constants.h"
 
 void setup_ui()
 {
@@ -28,8 +29,8 @@ void speed_up()
 {
   REASON_FOR_POWERUP = UI;
 
-  push_time_us = push_time_us + 500;
-  push_time_us = constrain(push_time_us,0,25000);
+  push_time_us = push_time_us + PUSH_SETTING_STEP;
+  push_time_us = constrain(push_time_us,MIN_PUSH,MAX_PUSH);
 
   while(digitalRead(faster) == LOW)
   {
@@ -51,8 +52,8 @@ void slow_down()
 {
   REASON_FOR_POWERUP = UI;
 
-  push_time_us = push_time_us - 500;
-  push_time_us = constrain(push_time_us,0,25000);
+  push_time_us = push_time_us - PUSH_SETTING_STEP;
+  push_time_us = constrain(push_time_us,MIN_PUSH,MAX_PUSH);
 
   while(digitalRead(slower) == LOW)
   {

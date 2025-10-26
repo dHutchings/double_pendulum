@@ -2,25 +2,10 @@
 #include <TimerOne.h>
 
 #include "pins.h"
+#include "constants.h"
 
 
 
-
-//a series of constants that affect push time & randomness
-
-static long nominal_push_time_us = 5500; //nominal push time, fixed value that we always use.
-volatile long push_time_us = nominal_push_time_us;  //actual push time.  It needs to be here, since multiple code segments deal with it.  Can be adjusted up and down via button presses
-volatile long random_time_max = 3000; //allow for +/- 3000uS push time randomness... used to prevent long-term cyclic oscilations.
-#define SCALE_RANDOMNESS true //set to true to enable the amount of randomness to be scaled up and down by how much we are over or underpushing, not just some nominal value.
-
-//the real random push time will be scaled up or down from this value.  EG the nominal push time is 5500uS.  If it's half of that (2750 uS), the nominal random time max could cause a negative push time.
-//instead
-
-volatile int max_pushes = 3; //number of times the pendulum will push untill is chooses a new random push time
-volatile int chance_no_push = 10; //5% chance of not pushing this time, b/c randomness.  Set to -1 to turn off.
-
-#define DEBUG false //set to true for debug-only TX / RX LEDs.  TX LED (left?) is generally around the drive interrupt trigger times, RX is around the MOSFET driving.
-#define DEBUG_PRINTS false //set to tue for debug-only prints.  This means the system cannot power down (USB issues).  ALSO, be aware that if the serial monitor window isnt open but we are still trying to send prints, the pendulum will stop working, too.
 
 enum POWERUP_REASONS {
   PUSH,

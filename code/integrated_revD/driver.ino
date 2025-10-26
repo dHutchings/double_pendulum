@@ -1,7 +1,10 @@
-volatile int prev_pushes; //how many times have I pushed since I last chose a random number?
-volatile long random_time; //random value, can have a negative value so not unsigned.
+#include "constants.h"
 
-volatile float last_bemf; //the value of the most recent BEMF
+
+//purely internal variables
+volatile int prev_pushes; //how many times have I pushed since I last chose a random number?
+
+
 void setup_driver()
 {
 
@@ -46,7 +49,7 @@ void push()
   digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on
   #endif
   
-  if(random(0,100) > chance_no_push)  //sometimes, don't push.
+  if(random(0,100) > CHANCE_NO_PUSH)  //sometimes, don't push.
   {
     //delayMicroseconds(1); //allow to cross zero.
     //this delay, is really should be on the order of MS, if we even use it!
@@ -69,14 +72,14 @@ void push()
      
     last_bemf = measure_BEMF();
   
-    if(prev_pushes > max_pushes)
+    if(prev_pushes > MAX_PUSHES)
     {
       prev_pushes = 0;
 
       #if SCALE_RANDOMNESS
-      random_time = long(float(random(-random_time_max,random_time_max)) * float(push_time_us) / float(nominal_push_time_us)); 
+      random_time = long(float(random(-RANDOM_AMOUNT,RANDOM_AMOUNT)) * float(push_time_us) / float(NOMINAL_PUSH)); 
       #else
-      random_time = random(-random_time_max,random_time_max); 
+      random_time = random(-RANDOM_AMOUNT,RANDOM_AMOUNT); 
       #endif
       //scale random time by the nominal max push time
       #if DEBUG_PRINTS
