@@ -73,7 +73,7 @@ void loop() {
       detachInterrupt(digitalPinToInterrupt(auto_timer_restart));
       start_pendulum();
       attachInterrupt(digitalPinToInterrupt(auto_timer_restart),auto_restart,LOW); //i tried falling, but because TIMER_RESTART is bound to Dio 7 right now, Falling doesn't work and I have to rely on LOW.
-      
+      break;
     case UI:
       REASON_FOR_POWERUP = DEEPSLEEP_WAIT;
       break; //do nothing, the UI interrupt handlers dealt with it
