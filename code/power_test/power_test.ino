@@ -136,15 +136,15 @@ void loop() {
     //LowPower.idle(SLEEP_250MS, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //Takes 289.0 ms to fully execute
     //LowPower.idle(SLEEP_500MS, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //Takes 578.0 ms to fully execute
 
-    //timer_sleep(15000); //takes exactly 15ms.
-    //timer_sleep(30000); //takes exactly 30ms.
-    //timer_sleep(32000); //takes exactly 32ms.
-    //timer_sleep(33000); //takes exactly 33 ms.
-    //timer_sleep(33*1000);  //takes 8.4 seconds!
+    //precise_idle(15000); //takes exactly 15ms.
+    //precise_idle(30000); //takes exactly 30ms.
+    //precise_idle(32000); //takes exactly 32ms.
+    //precise_idle(33000); //takes exactly 33 ms.
+    //precise_idle(33*1000);  //takes 8.4 seconds!
     
 
-    //timer_sleep(150000); //takes exactly 150ms
-    //timer_sleep(150*1000); //takes 19.5 ms.
+    //precise_idle(150000); //takes exactly 150ms
+    //precise_idle(150*1000); //takes 19.5 ms.
     //CONCLUSION: DON"T DO MULTIPLICATION HERE, HARDCODE THE NUMBER (probably b/c of the inline thing...)
 
 
@@ -158,7 +158,7 @@ void loop() {
     //digitalWrite(mosfet,HIGH);
     //LowPower.powerDown(SLEEP_30MS,ADC_OFF,BOD_ON); // takes about 21.15 ms to fully execute 
 
-    //timer_sleep(5000000); //About 17.1 mA
+    //precise_idle(5000000); //About 17.1 mA
 
     //digitalWrite(mosfet,LOW);
   
@@ -217,7 +217,7 @@ void foo() //used
 }
 
 
-void timer_sleep(long tim) //works as long as A) you don't do multiplication in the argument and B) 
+void precise_idle(long tim) //works as long as A) you don't do multiplication in the argument and B) 
 {
   Timer1.initialize(tim);
   Timer1.attachInterrupt(foo); //have to attach an interrupt to a blank function, otherwise, it wont generate an interrupt that will get us out of idle.
@@ -225,7 +225,7 @@ void timer_sleep(long tim) //works as long as A) you don't do multiplication in 
   Timer1.stop();  
 }
 
-void push() //unused rn
+void push() //triggered by LOW on the function generator (after the blink)
 {
   //Uncomment to try the Idle self-waking
   //Timer1.stop(); //very first thing we do, 

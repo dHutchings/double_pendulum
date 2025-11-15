@@ -25,6 +25,11 @@ void setup() {
   delay(5000);
   Serial.println("Hello World");
   delay(1000);
+
+    #if DEBUG
+    Serial.println("Warning: DEBUG prints will interfere with the TX LED (the one on the left, as the USB is pointed down");
+    #endif
+
   #else
   //various powersaving which trims 29uA off the power consumption, Praise be to https://forum.arduino.cc/t/power-consumption-of-atmega32u4-during-sleep-power-down-higher-than-expected/685915/28?page=2
   //these probably kill serial prints, so only run them if we need the debug prints.
@@ -88,18 +93,19 @@ void loop() {
   {
     #if !DEBUG_PRINTS //need this otherwise prints wont go through
     LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //70 uA-ish --> See the power tester for more info.
+    #else
+    delay(1);//need some timing room for the debug prints to come through
     #endif
   }
   else if(REASON_FOR_POWERUP == LIGHTSLEEP_WAIT)
   {
-    #if !DEBUG_PRINTS //need this otherwise prints wont go through
+    #if !DEBUG_PRINTS
     LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_ON); //500 uA-ish --> See the power tester for more info.  but only on pins 2&3.  0&1 draw ~.5mA.    
     //powerStandby wakes up much faster than powerDown, likely because powerStandby keeps the crystal oscilator running (https://www.engineersgarage.com/reducing-arduino-power-consumption-sleep-modes/)
+    #else
+    delay(1);//need some timing room for the debug prints to come through
     #endif
-
   }
-
-
   
 }
 
