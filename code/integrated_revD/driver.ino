@@ -146,6 +146,8 @@ void start_pendulum()
 //convienence function for both driving the MOSfET and letting the 555 timer know about it
 void drive_MOS(bool value)
 {
+  #if ! NO_PUSH
   digitalWrite(drive_mosfet,value);
+  #endif
   inform_restart_timer(value);
 }
