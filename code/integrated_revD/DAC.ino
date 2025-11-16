@@ -1,37 +1,22 @@
-#include <FlexWire.h> //Drop-in library that overrides the wire lib to use bit-banging on any pins.
-#include <Adafruit_MCP4728.h>
+#include <SPI.h>
+#include <LTC1661.h>
 
 #include "constants.h"
 
-//order is data,clock.
-FlexWire Wire = FlexWire(SDA_line, SCL_line);
-
-Adafruit_MCP4728 mcp;
+LTC1661 dac(cs);    //creats an instance with chipSelect as CS Pin
 
 
 //The op-amp takes time to swing, so, its best to trigger a little early before the zero-crossing.  This was dialed in via o-scope tests.  It looks like it takes approx about 1.8 ms to swing, hence, why we are triggering < 2v substantially.
 
 void setup_dac()
 {
-  Wire.begin();
-  Wire.setClock(120000); //the best we are able to do is 119 kHz, if I ask for 120.  Limitations of FlexWire using delayMicroseconds.  It is still faster than the original 100 KHz...
-    
+
+  //no begin functionality with this library.
+  //we just hope that it's soldered and the communications are working.
+
+  
+  dac.loUp(constrain(int(voltage_add/5.0*1023), 0, 1023), constrain(int(voltage_threshold/5.0*1023), 0, 1023));  //send values and update both OUTPUTS
 
 
-  if (!mcp.begin()) {
-    Serial.println("Failed to find MCP4728 chip");
-    while (1) {
-      delay(10);
-    }
-  }
-
-  //set channel A and B on the DAC (V1 / V2, respectively) to their correct values.
-  //using the internal Vref (2.048V), which does consume a bit of extra power (60 uA) but it's more stable.
-  mcp.setChannelValue(MCP4728_CHANNEL_A, constrain(int(voltage_add/2.048*4096), 0, 4095) ,MCP4728_VREF_INTERNAL, MCP4728_GAIN_1X);
-  mcp.setChannelValue(MCP4728_CHANNEL_B, constrain(int(voltage_threshold/2.048*4096), 0, 4095), MCP4728_VREF_INTERNAL, MCP4728_GAIN_1X);
-
-  //Turn the other channels off, according to the datasheet this saves 400 uA and is the only reason this chip consumes less power than the older 1 channel DACs
-  mcp.setChannelValue(MCP4728_CHANNEL_C, 0,MCP4728_VREF_INTERNAL, MCP4728_GAIN_1X,MCP4728_PD_MODE_GND_500K);
-  mcp.setChannelValue(MCP4728_CHANNEL_D, 0,MCP4728_VREF_INTERNAL, MCP4728_GAIN_1X,MCP4728_PD_MODE_GND_500K);
 
 }
