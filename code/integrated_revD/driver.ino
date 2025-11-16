@@ -9,7 +9,7 @@ void setup_driver()
 {
 
   pinMode(drive_mosfet,OUTPUT);
-  digitalWrite(drive_mosfet,LOW); //using nmos, pmos.  HIGH is on. LOW is off.
+  drive_MOS(LOW);
   delay(100); //just in case transients from MOSFET.
 
 }
@@ -55,7 +55,7 @@ void push()
     //this delay, is really should be on the order of MS, if we even use it!
     //This new (lower current, but slower) op-amps slew rate is so dang long that using the op-amp as a comparator is easy, but, may be bad.  We may want to go faster.
     //left in for future-proofing, but i may not need this.  uC requires significant time to wake from powerOff state, and I can change timing by also affecting the voltage threshold value.
-    drive_MOS(HIGH); //unlike rev C, now we don't invert the signal in software (its in HW)..  So, drive_mosfet HIGH turns the coil on & lets the 555 timer know.
+    drive_MOS(HIGH); //Drive_mosfet HIGH turns the coil on & lets the 555 timer know... we don't care about sign flips here
     long final_time = push_time_us + random_time;
   
     precise_idle(final_time); //Cuts overall 5V time average from 1.83 ma to 1.572 ma just by precise_idleing here, which cuts in 1/2 the current draw for this very small time.
@@ -144,10 +144,12 @@ void start_pendulum()
 }
 
 //convienence function for both driving the MOSfET and letting the 555 timer know about it
+
+//remember, the MOS is _LOW_ when pushing in rev D3 (i think it was backwards in D2)
 void drive_MOS(bool value)
 {
-  #if ! NO_PUSH
-  digitalWrite(drive_mosfet,value);
+  #if !NO_PUSH
+  digitalWrite(drive_mosfet,!value);
   #endif
   inform_restart_timer(value);
 }
