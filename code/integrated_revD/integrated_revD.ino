@@ -52,8 +52,18 @@ void setup() {
 }
 
 void loop() {
+  #if MOD_DEBUG_PRINTS
+  if( (REASON_FOR_POWERUP != DEEPSLEEP_WAIT) && (REASON_FOR_POWERUP != LIGHTSLEEP_WAIT)) //in debug mode, we do a lot of DEEP_SLEEP waits that fill the screen (actually, 1ms delay)
+  //we don't want to see those.
+  {
+    Serial.print("Powerup: ");
+    Serial.println(REASON_FOR_POWERUP);    
+  }
+  #endif
+
   switch(REASON_FOR_POWERUP)
   {
+    
     case PUSH:
       //detachInterrupt before doing the starting, so we don't have the secondary flyback pulses interrupt our handing of this.
       detachInterrupt(digitalPinToInterrupt(interrupt_in));

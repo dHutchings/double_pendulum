@@ -28,7 +28,7 @@ volatile float last_bemf; //the value of the most recent BEMF
 #define DEBUG false //set to true for debug-only TX / RX LEDs.  TX LED (left?) is generally around the drive interrupt trigger times, RX is around the MOSFET driving.
 #define DEBUG_PRINTS false //set to tue for debug-only prints.  This means the system cannot power down (USB issues).  ALSO, be aware that if the serial monitor window isnt open but we are still trying to send prints, the pendulum will stop working, too.
 #define NO_PUSH false //set to true for absolutely no pushing or driving on the COIL wire.
-
+#define MOD_DEBUG_PRINTS false //wakeup-mode prints.  These things fill the screen
 /* Curve Threshold Sensing Offsets */
 float voltage_add = 1.2;  //Shift the voltage curve measured from the coil of wire up by 2 volts.  We set the V1 to be 1.2V and the op-amp resistor feedback network will scale the COIL and shift it up by 2.
 float voltage_threshold = 1.65;  //Set the threshold to generate an trigger for the interrupt in to 1.65 volts.  Therefore, the voltage cuve must be -.35V to change the comparator's output.  The interrumpt will be generated low-to-high just before the zero point.
