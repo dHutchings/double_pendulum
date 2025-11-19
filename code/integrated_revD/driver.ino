@@ -7,8 +7,9 @@ volatile int prev_pushes; //how many times have I pushed since I last chose a ra
 
 void setup_driver()
 {
-
+  #if !NO_PUSH //if we aren't pushing, don't even bother setting it as an output.  
   pinMode(drive_mosfet,OUTPUT);
+  #endif
   drive_MOS(LOW);
   delay(100); //just in case transients from MOSFET.
 
@@ -82,9 +83,10 @@ void push()
       random_time = random(-RANDOM_AMOUNT,RANDOM_AMOUNT); 
       #endif
       //scale random time by the nominal max push time
-      #if DEBUG_PRINTS
       final_time = push_time_us + random_time;
 
+      
+      #if DEBUG_PRINTS
       Serial.print("Med: ");
       Serial.print(push_time_us);
       Serial.print("\tRand: ");
