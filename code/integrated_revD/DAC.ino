@@ -15,7 +15,7 @@ void setup_dac()
   //we just hope that it's soldered and the communications are working.
 
   
-  dac.loUp(constrain(int(voltage_add/5.0*1023), 0, 1023), constrain(int(voltage_threshold/5.0*1023), 0, 1023));  //send values and update both OUTPUTS
+  dac.loUp(constrain(int(voltage_add/5.0*1024), 0, 1023), constrain(int(voltage_threshold/5.0*1024), 0, 1023));  //send values and update both OUTPUTS
 
 
 
