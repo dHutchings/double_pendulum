@@ -96,9 +96,11 @@ void push()
     
   }
 
-  #if DEBUG_PRINTS
+  #if MOD_DEBUG_PRINTS
+  precise_idle(15000); //have to do this to let the prints through, the power standby will kill the prints
+  #elif DEBUG_PRINTS
   Serial.println(last_bemf);
-  precise_idle(15000); //have to do this b/c we power standby for 15ms
+  precise_idle(15000); //have to do this to let the prints through, the power standby will kill the prints
   #else
   LowPower.powerStandby(SLEEP_15MS,ADC_OFF,BOD_ON); //low-power sleep, we need to sleep.  Reduces power from 3ma-ish to 1.99-ish on average (over continual running), really goes to show how much power the uC draws when its fully booted up.
   #endif
@@ -146,10 +148,20 @@ void start_pendulum()
 //convienence function for both driving the MOSfET and letting the 555 timer know about it
 
 //remember, the MOS is _LOW_ when pushing in rev D3 (i think it was backwards in D2)
+//This code does the inversion, so DRIVE_MOS(true) drives the MOSfet low
 void drive_MOS(bool value)
 {
+  /*
+  Serial.print("Drive: ");
+  Serial.print(value);
+  */
   #if !NO_PUSH
+  /*
+  Serial.print(" MOS doing ");
+  Serial.print(!value);
+  */
   digitalWrite(drive_mosfet,!value);
   #endif
+  //Serial.println();
   inform_restart_timer(value);
 }
