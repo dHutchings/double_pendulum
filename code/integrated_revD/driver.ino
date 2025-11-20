@@ -129,14 +129,19 @@ void start_pendulum()
 {
   for(int i = 0; i<10; i++)
   {
-    
-    precise_idle(400000);
+    //For reasons I super dont understand, on rev D3 hardware...
+    //Precise_idle inside start_pendulu
+    //with DEBUG set to false.
+    //will break the pendulu.  DEBUG set to true will work.
+    //I have no idea, none at all,
+    //but delay(400) as opposed to precise_idle(400000) isn't that big of a difference in power saving; we hardly ever reset; anyway.
+   
+    delay(350);
     drive_MOS(HIGH);
     #if DEBUG
     digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on
     #endif
-
-    precise_idle(300000);
+    delay(250);
     drive_MOS(LOW);
     #if DEBUG
     digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED off  
