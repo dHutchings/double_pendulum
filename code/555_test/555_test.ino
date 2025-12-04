@@ -3,8 +3,8 @@
 //I leave this option here for posterity.
 
 
-int timer_rst = 16;  //pin 10... for turning resetting the 555 timer.  Back when the MOSFET and timer were the same sign, i tried to make these the same wire.  On newer revisions of the board, there is a TIEMR_RESET
-int auto_restart = 7; //pin 7... hooked up to the 555 timer.
+int timer_rst = 4;  //pin 10... for turning resetting the 555 timer.  Back when the MOSFET and timer were the same sign, i tried to make these the same wire.  On newer revisions of the board, there is a TIEMR_RESET
+int auto_restart = 2; //pin 7... hooked up to the 555 timer.
 
 int pulse_duration_ms = 200; //the time, in ms, that the pulse will be low / active / 'pushing'.
 //Easier to test with this set to 200 with the serial plotter.
