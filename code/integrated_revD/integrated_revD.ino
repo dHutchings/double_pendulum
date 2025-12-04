@@ -70,7 +70,9 @@ void loop() {
       //detachInterrupt before doing the starting, so we don't have the secondary flyback pulses interrupt our handing of this.
       detachInterrupt(digitalPinToInterrupt(interrupt_in));
       push();
-      attachInterrupt(digitalPinToInterrupt(interrupt_in),interrupt_wake,CHANGE);
+      //attach interrupts again.
+      setup_zero_crossing_sensing();
+
       #if DEBUG_PRINTS
       Serial.print("Num Pushes: ");
       Serial.print(NUM_PUSHES_BETWEEN_RESTARTS);
@@ -88,8 +90,11 @@ void loop() {
       //Don't need to detach reattach interrupts - all the interrupt does is change a flag now (which I will shortly change, down here)
       start_pendulum();
 
-      attachInterrupt(digitalPinToInterrupt(auto_timer_restart),auto_restart,LOW); //i tried falling, but because TIMER_RESTART is bound to Dio 7 right now, Falling doesn't work and I have to rely on LOW.
-      attachInterrupt(digitalPinToInterrupt(interrupt_in),interrupt_wake,CHANGE);
+
+      //attach interrupts again.
+      setup_restart_interrupt();
+      setup_zero_crossing_sensing();
+
 
       REASON_FOR_POWERUP = DEEPSLEEP_WAIT;
       break;
