@@ -84,7 +84,15 @@ void push()
       random_time = random(-RANDOM_AMOUNT,RANDOM_AMOUNT); 
       #endif
       //scale random time by the nominal max push time
-      final_time = push_time_us + random_time;
+        final_time = push_time_us + random_time;
+
+      //If I started recently, push harder.
+      
+      if( NUM_PUSHES_BETWEEN_RESTARTS <= RESTART_EXTA_PURHSES_COUNT)
+      {
+        final_time += long(RESTART_EXTRA_PUSH_AMOUNT*NUM_PUSHES_BETWEEN_RESTARTS/RESTART_EXTA_PURHSES_COUNT);        
+        final_time -= long(random_time/2); //I also want less random time ( <2 is a divide by 2 operation)
+      }
 
       
       #if DEBUG_PRINTS
@@ -127,8 +135,8 @@ void push()
 }
 
 void start_pendulum()
-{
-  for(int i = 0; i<10; i++)
+{  
+  for(int i = 0; i<4; i++)
   {
     //For reasons I super dont understand, on rev D3 hardware...
     //Precise_idle inside start_pendulu
@@ -137,18 +145,23 @@ void start_pendulum()
     //I have no idea, none at all,
     //but delay(400) as opposed to precise_idle(400000) isn't that big of a difference in power saving; we hardly ever reset; anyway.
    
-    delay(350);
+
+    //Do it very specifically in this order.
+    //so that we aren't delaying with the MOSFET low at the end of this loop
+    //waisting time while we should really reattach the interrupt.
+    #if DEBUG
+    digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED off  
+    #endif
+    delay(300);
     drive_MOS(HIGH);
     #if DEBUG
     digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on
     #endif
-    delay(250);
+    delay(450);
     drive_MOS(LOW);
-    #if DEBUG
-    digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED off  
-    #endif
     
   }
+  
   NUM_PUSHES_BETWEEN_RESTARTS = 0;
   NUM_RESTARTS_SINCE_UI_CHANGE += 1;
 

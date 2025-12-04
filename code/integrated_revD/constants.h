@@ -2,15 +2,20 @@
 #define CONSTANTS_H
 
 
-/* Kinematics Constants: PUSH TIME and RANDOMNESS */
-static long NOMINAL_PUSH = 5500; //nominal push time, fixed value that we always use.
+/* Kinematics Constants: PUSH TIME  */
+static long NOMINAL_PUSH = 7000; //nominal push time, fixed value that we always use.
 static long MAX_PUSH = 25000;
 static long MIN_PUSH = 500;
-static long PUSH_SETTING_STEP = 500;
+static long PUSH_SETTING_STEP = 250;
 
 volatile long push_time_us = NOMINAL_PUSH;  //actual push time.  It needs to be here, since multiple code segments deal with it.  Can be adjusted up and down via button presses
 
-volatile long RANDOM_AMOUNT = 3000; //allow for +/- 3000uS push time randomness... used to prevent long-term cyclic oscilations.
+/* pump more energy into the pendulum just after a restart */
+long RESTART_EXTRA_PUSH_AMOUNT = 4000; //extra amount to push after I just restarted.
+int RESTART_EXTA_PURHSES_COUNT = 40; //at a decreasing amount for these number of pushes.
+
+/* and RANDOMNESS so we can break out of limit cycles */
+volatile long RANDOM_AMOUNT = 2200; //allow for +/- 2000uS push time randomness... used to prevent long-term cyclic oscilations.  Same as the 40% of the push time it was in rev C
 volatile long random_time; //random value, can have a negative value so not unsigned.  This is actually the dyamically computed random value
 
 #define SCALE_RANDOMNESS true //set to true to enable the amount of randomness to be scaled up and down by how much we are over or underpushing, not just some nominal value.
@@ -20,6 +25,7 @@ volatile long random_time; //random value, can have a negative value so not unsi
 volatile int MAX_PUSHES = 3; //number of times the pendulum will push untill is chooses a new random push time
 volatile int CHANCE_NO_PUSH = 10; //5% chance of not pushing this time, b/c randomness.  Set to -1 to turn off.
 
+//Other Stuff
 
 volatile float last_bemf; //the value of the most recent BEMF
 
