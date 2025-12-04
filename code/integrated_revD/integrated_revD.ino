@@ -44,6 +44,7 @@ void setup() {
   setup_ui();
   load_from_eeprom();
   start_pendulum();
+  NUM_RESTARTS_SINCE_UI_CHANGE = 0;
   setup_zero_crossing_sensing(); //do this after the pendulum is started so we dont worry about any "triggering the drive" interrupt problems.
   setup_BEMF_sensing(); 
   setup_restart(); //do this AFTER the pendulum is started so we can clear the timer...
@@ -69,6 +70,13 @@ void loop() {
       detachInterrupt(digitalPinToInterrupt(interrupt_in));
       push();
       attachInterrupt(digitalPinToInterrupt(interrupt_in),interrupt_wake,CHANGE);
+      #if DEBUG_PRINTS
+      Serial.print("Num Pushes: ");
+      Serial.print(NUM_PUSHES_BETWEEN_RESTARTS);
+      Serial.print("\t Num Restarts: ");
+      Serial.println(NUM_RESTARTS_SINCE_UI_CHANGE);
+      #endif
+      
       REASON_FOR_POWERUP = DEEPSLEEP_WAIT;
       break;
     case AUTO_RESTART:
@@ -90,6 +98,7 @@ void loop() {
       attachInterrupt(digitalPinToInterrupt(auto_timer_restart),auto_restart,LOW); //i tried falling, but because TIMER_RESTART is bound to Dio 7 right now, Falling doesn't work and I have to rely on LOW.
       break;
     case UI:
+      NUM_RESTARTS_SINCE_UI_CHANGE = 0; //reset a helpful debug counter.
       REASON_FOR_POWERUP = DEEPSLEEP_WAIT;
       break; //do nothing, the UI interrupt handlers dealt with it
     case DEEPSLEEP_WAIT:

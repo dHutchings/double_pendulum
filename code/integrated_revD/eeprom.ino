@@ -4,6 +4,10 @@ int addr = 0; //just store the speed up front at the beginning of the EEPROM
 
 void load_from_eeprom()
 {
+  #if RESET_EEPROM
+  reset_eeprom();
+  #endif
+  
   long push_time_in_eeprom;
   EEPROM.get(0,push_time_in_eeprom);
   if(push_time_in_eeprom < MIN_PUSH || push_time_in_eeprom > MAX_PUSH)

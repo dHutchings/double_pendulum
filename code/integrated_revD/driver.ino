@@ -46,6 +46,7 @@ void interrupt_wake() //the helper that triggers the wake (either if I'm in deep
 
 void push()
 {
+  NUM_PUSHES_BETWEEN_RESTARTS += 1; //keep track of the number of pushes between restarts.
   #if DEBUG
   digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on
   #endif
@@ -145,9 +146,11 @@ void start_pendulum()
     drive_MOS(LOW);
     #if DEBUG
     digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED off  
-    #endif    
+    #endif
     
   }
+  NUM_PUSHES_BETWEEN_RESTARTS = 0;
+  NUM_RESTARTS_SINCE_UI_CHANGE += 1;
 
   
 }
