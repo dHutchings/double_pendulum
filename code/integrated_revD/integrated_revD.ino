@@ -41,6 +41,7 @@ void setup() {
 
   setup_driver();
   setup_dac();
+  reset_daq_settings();
   setup_ui();
   load_from_eeprom();
   start_pendulum();
@@ -118,6 +119,7 @@ void loop() {
   }
   else if(REASON_FOR_POWERUP == LIGHTSLEEP_WAIT)
   {
+    change_daq_settings();
     #if (!DEBUG_PRINTS) && (!MOD_DEBUG_PRINTS)
     LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_ON); //500 uA-ish --> See the power tester for more info.  but only on pins 2&3.  0&1 draw ~.5mA.    
     //powerStandby wakes up much faster than powerDown, likely because powerStandby keeps the crystal oscilator running (https://www.engineersgarage.com/reducing-arduino-power-consumption-sleep-modes/)

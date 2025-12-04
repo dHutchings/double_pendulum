@@ -107,6 +107,8 @@ void push()
     
   }
 
+  reset_daq_settings(); //reset the voltage threshold.  Do this BEFORE we precise idle, so any interrupts can fire in peace before we reattach stuff.
+
   #if MOD_DEBUG_PRINTS
   precise_idle(15000); //have to do this to let the prints through, the power standby will kill the prints
   #elif DEBUG_PRINTS
