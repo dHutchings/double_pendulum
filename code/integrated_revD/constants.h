@@ -41,8 +41,7 @@ volatile int NUM_RESTARTS_SINCE_UI_CHANGE = 0;
 
 /* Curve Threshold Sensing Offsets */
 float voltage_add = 1.2;  //Shift the voltage curve measured from the coil of wire up by 2 volts.  We set the V1 to be 1.2V and the op-amp resistor feedback network will scale the COIL and shift it up by 2.
+float voltage_threshold = 1.65;  //Set the threshold to generate an trigger for the interrupt in to 1.65 volts.  Therefore, the voltage cuve must be -.35V to change the comparator's output.  The interrumpt will be generated low-to-high just before the zero point.
 
-float voltage_threshold_falling = 1.65;  //Set the threshold to generate an trigger for the interrupt in to 1.65 volts.  Therefore, the voltage cuve must be -.35V to change the comparator's output.  The interrumpt will be generated low-to-high just before the zero point.
-float voltage_threshold_rising = 2.0;
 
 #endif
