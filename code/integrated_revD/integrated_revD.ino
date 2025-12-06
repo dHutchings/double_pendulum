@@ -20,7 +20,7 @@ int REASON_FOR_POWERUP = DEEPSLEEP_WAIT; //a nice, neutral, way to start
 
 void setup() {
 
-  #if DEBUG_PRINTS || MOD_DEBUG_PRINTS
+  #if DEBUG_PRINTS
   Serial.begin(115200);
   delay(5000);
   Serial.println("Hello World");
@@ -74,8 +74,8 @@ void loop() {
       //attach interrupts again.
       setup_zero_crossing_sensing();
 
-      #if DEBUG_PRINTS
       Serial.print("Num Pushes: ");
+      #if GENERAL_DEBUG_PRINTS
       Serial.print(NUM_PUSHES_BETWEEN_RESTARTS);
       Serial.print("\t Num Restarts: ");
       Serial.println(NUM_RESTARTS_SINCE_UI_CHANGE);
@@ -119,7 +119,7 @@ void loop() {
   //depending on the sleep mode, do different things here.
   if(REASON_FOR_POWERUP == DEEPSLEEP_WAIT)
   {
-    #if (!DEBUG_PRINTS) && (!MOD_DEBUG_PRINTS) //need this otherwise prints wont go through
+    #if (!DEBUG_PRINTS)
     LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //70 uA-ish --> See the power tester for more info.
     #else
     delay(1);//need some timing room for the debug prints to come through
@@ -127,7 +127,7 @@ void loop() {
   }
   else if(REASON_FOR_POWERUP == LIGHTSLEEP_WAIT)
   {
-    #if (!DEBUG_PRINTS) && (!MOD_DEBUG_PRINTS)
+    #if (!DEBUG_PRINTS)
     LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_ON); //500 uA-ish --> See the power tester for more info.  but only on pins 2&3.  0&1 draw ~.5mA.    
     //powerStandby wakes up much faster than powerDown, likely because powerStandby keeps the crystal oscilator running (https://www.engineersgarage.com/reducing-arduino-power-consumption-sleep-modes/)
     #else

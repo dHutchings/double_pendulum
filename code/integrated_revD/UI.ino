@@ -38,7 +38,7 @@ void speed_up()
     delayMicroseconds(1000); //keep waiting for unpress.  
   }
 
-  #if DEBUG_PRINTS
+  #if GENERAL_DEBUG_PRINTS
   Serial.print("New Average push time: ");
   Serial.println(push_time_us);
   precise_idle(1000);
@@ -63,7 +63,7 @@ void slow_down()
   }
 
 
-  #if DEBUG_PRINTS
+  #if GENERAL_DEBUG_PRINTS
   Serial.print("New Average push time: ");
   Serial.println(push_time_us);
   precise_idle(1000);

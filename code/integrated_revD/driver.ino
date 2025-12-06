@@ -100,7 +100,7 @@ void push()
       }
 
       
-      #if DEBUG_PRINTS
+      #if GENERAL_DEBUG_PRINTS
       Serial.print("Med: ");
       Serial.print(push_time_us);
       Serial.print("\tRand: ");
@@ -118,11 +118,8 @@ void push()
     NUM_PUSHES_TO_SKIP -= 1;
   }
 
-  #if MOD_DEBUG_PRINTS
-  precise_idle(15000); //have to do this to let the prints through, the power standby will kill the prints
-  #elif DEBUG_PRINTS
-  Serial.println(last_bemf);
-  precise_idle(15000); //have to do this to let the prints through, the power standby will kill the prints
+  #if DEBUG_PRINTS
+  precise_idle(15000); //have to do this to let the prints through, the power standby will kill the print
   #else
   LowPower.powerStandby(SLEEP_15MS,ADC_OFF,BOD_ON); //low-power sleep, we need to sleep.  Reduces power from 3ma-ish to 1.99-ish on average (over continual running), really goes to show how much power the uC draws when its fully booted up.
   #endif

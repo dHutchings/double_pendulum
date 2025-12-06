@@ -34,11 +34,14 @@ volatile int NUM_PUSHES_BETWEEN_RESTARTS = 0;
 volatile int NUM_RESTARTS_SINCE_UI_CHANGE = 0;
 volatile int NUM_PUSHES_TO_SKIP = 0;
 
-/* DEBUG Modes */
+
+/* DEBUG Print Modes */
 #define DEBUG false //set to true for debug-only TX / RX LEDs.  TX LED (left?) is generally around the drive interrupt trigger times, RX is around the MOSFET driving.
-#define DEBUG_PRINTS false //set to tue for debug-only prints.  This means the system cannot power down (USB issues).  ALSO, be aware that if the serial monitor window isnt open but we are still trying to send prints, the pendulum will stop working, too.
+#define GENERAL_DEBUG_PRINTS false //set to tue for debug-only prints.  This means the system cannot power down (USB issues).  ALSO, be aware that if the serial monitor window isnt open but we are still trying to send prints, the pendulum will stop working, too.
 #define SPEED_DEBUG_PRINTS false //prints to show the BEMF speed.
 #define MOD_DEBUG_PRINTS false //wakeup-mode prints.  These things fill the screen
+#define DEBUG_PRINTS GENERAL_DEBUG_PRINTS || SPEED_DEBUG_PRINTS || MOD_DEBUG_PRINTS //this isn't working, just do it manually.
+
 /* DEBUG Modes */
 #define NO_PUSH false //set to true for absolutely no pushing or driving on the COIL wire.
 #define RESET_EEPROM false

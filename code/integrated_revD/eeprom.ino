@@ -13,7 +13,7 @@ void load_from_eeprom()
   if(push_time_in_eeprom < MIN_PUSH || push_time_in_eeprom > MAX_PUSH)
   {
     reset_eeprom();
-    #if DEBUG_PRINTS
+    #if GENERAL_DEBUG_PRINTS
     Serial.println("EEPROM Value is out of bands, resetting with the nominal value.");
     precise_idle(1000);
     
@@ -24,7 +24,7 @@ void load_from_eeprom()
   }
   else
   {
-    #if DEBUG_PRINTS
+    #if GENERAL_DEBUG_PRINTS
     Serial.print("Push time in EEPROM:");
     Serial.println(push_time_in_eeprom);
     precise_idle(1000);
