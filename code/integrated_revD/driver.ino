@@ -50,6 +50,9 @@ void push()
   #if DEBUG
   digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on
   #endif
+
+  last_bemf = measure_BEMF(); //do this first, so I know how fast we're going, before A) I decide to skip this push or B) Flyback is picked up by the negative peak detector and I get a phony value
+
   
   if(random(0,100) > CHANCE_NO_PUSH)  //sometimes, don't push.
   {
@@ -71,9 +74,7 @@ void push()
     //I havent had any success with saving power via BOD, (fuses?) - while the library's API suggests I can disable BOD
     //on my board its only possible via fuse settings.
     //according to datsheet, BOD on will also put on the Bandgap reference.
-     
-    last_bemf = measure_BEMF();
-  
+       
     if(prev_pushes > MAX_PUSHES)
     {
       prev_pushes = 0;
