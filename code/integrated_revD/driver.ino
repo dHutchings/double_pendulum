@@ -113,6 +113,8 @@ void push()
   }
   else
   {
+    clear_restart_timer(); //I still have to lie to the 555 Reset Timer
+    //I noticed that this push should have Occured, I only chose not to this time.
     NUM_PUSHES_TO_SKIP -= 1;
   }
 

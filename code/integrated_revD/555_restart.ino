@@ -15,6 +15,14 @@ void setup_restart_interrupt()
   //relying on LOW is bad due to the possibility of chain-calling.
   //I should swich this for one of the three USR pins - which are capable of using falling but don't in favor of a while-true debounce (which I can't use here).  
 }
+
+void clear_restart_timer() //Deliberately clear the restart timer - use for when mirroring the MOS state isn't suitable because I'm skipping a push
+{
+  inform_restart_timer(true);
+  delayMicroseconds(1);
+  inform_restart_timer(false);  
+}
+
 void inform_restart_timer(bool MOS_State)
 {
   digitalWrite(timer_rst,!MOS_State);
