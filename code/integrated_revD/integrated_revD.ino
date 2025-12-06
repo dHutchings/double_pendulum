@@ -47,7 +47,9 @@ void setup() {
   NUM_RESTARTS_SINCE_UI_CHANGE = 0;
   setup_zero_crossing_sensing(); //do this after the pendulum is started so we dont worry about any "triggering the drive" interrupt problems.
   setup_BEMF_sensing(); 
+  #if USE_RESET
   setup_restart(); //do this AFTER the pendulum is started so we can clear the timer...
+  #endif
 
   
 }
@@ -91,7 +93,9 @@ void loop() {
 
 
       //attach interrupts again.
+      #if USE_RESET
       setup_restart_interrupt();
+      #endif
       setup_zero_crossing_sensing();
 
 
