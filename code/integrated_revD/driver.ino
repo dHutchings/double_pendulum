@@ -53,8 +53,12 @@ void push()
 
   last_bemf = measure_BEMF(); //do this first, so I know how fast we're going, before A) I decide to skip this push or B) Flyback is picked up by the negative peak detector and I get a phony value
 
+  if(random(0,100) < CHANCE_NO_PUSH)  //sometimes, don't push.
+  {
+    NUM_PUSHES_TO_SKIP += 1;
+  }
   
-  if(random(0,100) > CHANCE_NO_PUSH)  //sometimes, don't push.
+  if(NUM_PUSHES_TO_SKIP == 0)
   {
     //delayMicroseconds(1); //allow to cross zero.
     //this delay, is really should be on the order of MS, if we even use it!
@@ -106,6 +110,10 @@ void push()
       #endif
     }
     
+  }
+  else
+  {
+    NUM_PUSHES_TO_SKIP -= 1;
   }
 
   #if MOD_DEBUG_PRINTS

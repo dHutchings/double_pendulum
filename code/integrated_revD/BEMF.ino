@@ -35,6 +35,25 @@ float measure_BEMF()
     #if SPEED_DEBUG_PRINTS
     Serial.println("Detected Swinging In perpetual loop, straight arm");
     #endif
+
+    #if OUTSTRECHED_ARM_SLOWING
+    if(NUM_PUSHES_TO_SKIP == 0)
+    {
+      //Slow down the pendulum just a bit.
+      //but, Just do it the first time.
+      push_time_us = push_time_us - PUSH_SETTING_STEP;
+      push_time_us = constrain(push_time_us,MIN_PUSH,MAX_PUSH);
+      eeprom_current_speed();
+    }
+    
+    NUM_PUSHES_TO_SKIP = 6; //skip the next 6 pushes to let the pendulum restart.
+    //It is probable that I triggered MANY times, not just one, so effectively I skip for each loop I sense I'm too fast + 6 more.
+    //That works.  That way, I will always skip untill I'm slow enough, then skip just a bit more.
+
+
+
+    #endif
+
   }
   
 
