@@ -10,6 +10,35 @@ int interrupt_in = 3;  //pin 3.  Was pin 7, but pin 7 maps to interupt #4, which
 
 volatile unsigned long push_time_us = 12*1000;
  
+bool MEASURE_PULSEIN_DURATION = false; //A setting, set to TRUE to measure pulse in duration - Except that this will force us to use LowPower.Idle (for now) - wastes power.  PLUS, LEDS blink and prints go out.
+bool USE_LEDS = true; //A setting, wastes power, so helpful to easily switch off.
+
+long event_time = 0;
+bool fired_push = false;
+
+int timer1_to_us = 0;
+
+
+//Deduced from https://forum.arduino.cc/t/timer1-prescaler/585241
+int get_prescaler()
+{
+  int prescaler_settings = (TCCR1B & 0b111);
+  switch (prescaler_settings)
+  {
+    case 1:
+      return 1;
+    case 2:
+      return 8;
+    case 3:
+      return 64;
+    case 4:
+      return 256;
+    case 5:
+      return 1024;
+    default:
+      return 0;
+  }
+}
 
 void setup() {
   // put your setup code here, to run once:
@@ -22,7 +51,7 @@ void setup() {
   //But be careful, can only wake up on changes to interupts 0:3, pins 3,2,1,0.
 
   
-  attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING);
+  attachInterrupt(digitalPinToInterrupt(interrupt_in),push,CHANGE);
 
   pinMode(LED_BUILTIN_RX, OUTPUT); // TX LED
   pinMode(LED_BUILTIN_TX, OUTPUT); // TX LED
@@ -34,9 +63,12 @@ void setup() {
   digitalWrite(LED_BUILTIN_TX, HIGH); // Turn TX LED off
 
   //44.25
-  //
-  //Serial.begin(9600);
-  //delay(5000);
+  
+  Serial.begin(9600);
+  Serial.println("Hello World");
+  delay(5000);
+
+
   /*
   Serial.println(DIDR0);
   Serial.println(DIDR1);
@@ -59,16 +91,27 @@ void setup() {
   Serial.println(MCUCR);
   */
 
-  //Uncomment to try the Idle self-waking
+  //Uncomment to try the Idle self-waking OR the pulse-timer stuff.
   /*
   Timer1.attachInterrupt(push);
   Timer1.initialize(8388480 ); //8388480  is from https://deepbluembedded.com/arduino-timerone-library/#:~:text=Timer1.setPeriod(period)&text=The%20minimum%20period%20or%20highest,frequencies%20and%20duty%20cycles%20simultaneously.
   */
 
-  
+  //Uncommend to try the pulse-measuring stuff
+
+  if(MEASURE_PULSEIN_DURATION)
+  {
+    Timer1.initialize(8388480); //max time period, 8.3 seconds.  This is basically the longest it can run, i.e. the longest duration (lowest precision) measurement.  But, get_prescaler() will let us set it shorter if we wanted.
+    timer1_to_us = get_prescaler() / (F_CPU / 1000 / 1000);  //enable us to do the time measurement.
+    Serial.print("pre-scaler");
+    Serial.println(get_prescaler());
+    Serial.print("Each Tic is X uS:");
+    Serial.println(timer1_to_us);
+  }  
 
 
 }
+
 
 void loop() {
 
@@ -79,15 +122,53 @@ void loop() {
     // Enter power down state with ADC and BOD module disabled.
     // Wake up when wake up pin is low.
 
-    detachInterrupt(digitalPinToInterrupt(interrupt_in)); //detach interrupt immediately, as a form of debounce protection
+    //There are LOTS of reasons I can have interrupts fired when I try to leave timers, USB on.
+    //Any of those will wake me.
+    //If its any of htose - or more precisely, any of the NOT-externally fired push() interruots.
+    //I should just put the uC back to sleep ASAP and skip all the funny buisness.
+    if(fired_push)
+    {
 
-    digitalWrite(LED_BUILTIN_TX, LOW); // Turn TX LED on  
-    delay(1500);
-    digitalWrite(LED_BUILTIN_TX, HIGH); // Turn TX LED off  
-    delay(1500);
+      //the timer1's t=0 is MOSFET (YELOW) being written low.
 
-    attachInterrupt(digitalPinToInterrupt(interrupt_in),push,FALLING); //reattach interrupt so I can wake back up
-    //pin 0,1,2,3 can do CHANGE
+
+      //the timer1's tfinal is the INPUT interrupt_in (Yellow) FALLING.
+
+      detachInterrupt(digitalPinToInterrupt(interrupt_in)); //detach interrupt immediately, as a form of debounce protection
+
+      if(MEASURE_PULSEIN_DURATION)
+      {
+    
+        Serial.print("Time Since last fired Push (interupt LOW) (Timer1 Cycles): "); //This wont print when USB gets shut down, more than the first time...
+        Serial.print(event_time);
+        long time_in_us = event_time*timer1_to_us; 
+        Serial.print("\t uS:");
+        Serial.print(time_in_us);
+        Serial.print("\t Hz:");
+        Serial.println(float(1000000)/float(time_in_us));
+      }
+      
+      //Serial.println(event_time/(F_CPU/8));
+  
+      //Having Delays here can veyr much throw o-scope measurements off - makes sense, I'm not attached quickly enough the next time through the loop/
+      if(USE_LEDS)
+      {
+        digitalWrite(LED_BUILTIN_TX, LOW); // Turn TX LED on  
+        delay(100);
+        digitalWrite(LED_BUILTIN_TX, HIGH); // Turn TX LED off  
+        delay(100);
+      }
+      else
+      {
+        delay(200);
+      }
+  
+      attachInterrupt(digitalPinToInterrupt(interrupt_in),push,CHANGE); //reattach interrupt so I can wake back up
+      //pin 0,1,2,3 can do CHANGE
+
+      fired_push = false;
+
+    }
 
     //31mA when no power saving is applied.
 
@@ -174,9 +255,21 @@ void loop() {
     //safe to say, serial prints aren't working if we run these.
     //USBCON |= (1 << FRZCLK);             // Freeze the USB Clock              
     //PLLCSR &= ~(1 << PLLE);              // Disable the USB Clock (PPL) 
-    //USBCON &=  ~(1 << USBE  );           // Disable the USB  
+    //USBCON &=  ~(1 << USBE  );           // Disable the USB 
+
+
+    //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_ON, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_ON); // Does not keep micros OR millis alive.
+    //LowPower.idle(SLEEP_FOREVER, ADC_ON, TIMER4_ON, TIMER3_ON, TIMER1_ON, TIMER0_ON, SPI_ON, USART1_ON, TWI_ON, USB_ON); //millis or micros also not running
+    //Serial.println(TCNT1);
+
+    //LowPower.idle(SLEEP_500MS, ADC_ON, TIMER4_ON, TIMER3_ON, TIMER1_ON, TIMER0_OFF, SPI_ON, USART1_ON, TWI_ON, USB_ON); //Not this, either.
+    //Serial.println(TCNT1);
+
     
-    LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_OFF); //73.72 uA on the USB C APM.  118 uA on the old APM.  but only on pins 2&3.  0&1 draw ~.5mA... and on the new APM there isn't any pin 1 vs pin 3 performance difference.  Takes 3.65 ms to wake up.
+
+
+    
+    //LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_OFF); //73.72 uA on the USB C APM.  118 uA on the old APM.  but only on pins 2&3.  0&1 draw ~.5mA... and on the new APM there isn't any pin 1 vs pin 3 performance difference.  Takes 3.65 ms to wake up.
     //LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //108.15 on the USB C APM  227 uA on the Old APM.  But be careful, can only wake up on changes to interupts 0:3, pins 3,2,1,0.  
 
     //LowPower.powerSave(SLEEP_FOREVER,ADC_OFF,BOD_OFF,TIMER2_OFF);  //108.35 ish on the USB C APM  Takes 3.63 ms to wake up.
@@ -196,10 +289,19 @@ void loop() {
     //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_ON, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //leaving timer0 on will basically mean that we don't sleep for longer than 1ms, ever.  BOO.
     //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_ON, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //About 17.1 mA
     //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_ON, TIMER3_ON, TIMER1_ON, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //about 17.3 uA
+    //LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //16.8 for USBC, 19mA for old APM, when powered via VCC.
 
 
+    //BEWARE: Keeping USB_ON generates lots of interrupts that can easily, easily, throw things off here.
 
+
+    //Use the following setting to keep Timer1 alive, so we can measure the duration of the pulse in.
+    if(MEASURE_PULSEIN_DURATION)
+    {
+      LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_ON, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_ON); //16.8 for USBC, 19mA for old APM, when powered via VCC.
+    }
     //LowPower.adcNoiseReduction(SLEEP_FOREVER, ADC_OFF, TIMER2_OFF);  //17.65; more than Idle (nteresting, I thought it would have been lower...)
+
 
 
     //NOTE:
@@ -207,6 +309,8 @@ void loop() {
 
     //Run this test with the USB cable unplugged so power only flows from the power supply.
     //ALSO, run this test AFTER A POWER-CYCLE.  The BOD_on vs BOD_OFF stuff was shown explicitly to have different behaviour if it wasn't vs was done after a power cycle (not just a reprogram) - THere may be other stuff too.
+
+    //only do this when an external interrupt breaks me out of IDLE early.
 
   
 }
@@ -225,29 +329,75 @@ void precise_idle(long tim) //works as long as A) you don't do multiplication in
   Timer1.stop();  
 }
 
+//This CANNOT be blank, if so, the compiler optimizes it away.  I think.
 void push() //triggered by LOW on the function generator (after the blink)
 {
-  //Uncomment to try the Idle self-waking
-  //Timer1.stop(); //very first thing we do, 
-  
-  digitalWrite(mosfet,HIGH);
-  delayMicroseconds(100);
-  digitalWrite(mosfet,LOW);
-  digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on  
-  
-  //delay(250); //
-  /*
-  //IMPORTANT
-  //If using IDLE with timer 0 off.  Or if using this in an interrupt
-  //I cannot use delay in the interrupt (makes sense, the timers are off & they won't get turned on untill we're out of interrupt context - since they're turned on as the last step of the pwoer-down command (we interrupted in the middle of it)!)
-  //have to use delayMicroseconds + for loops.
-  */
-  for(int i = 0; i < 20; i++)
+  if(digitalRead(interrupt_in)) //HIGH
   {
-    delayMicroseconds(16383);
-  }
-  
+    if(MEASURE_PULSEIN_DURATION)
+    {
+      Timer1.restart(); //Start the the timer - so we start imediately when to start measuring.  We are measuring RISING Interrupt to FALLING interrupt (blue HIGH to blue LOW)
+    }
 
-  digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED on  
+    if(USE_LEDS)
+    {
+      digitalWrite(LED_BUILTIN_TX, LOW); // Turn RX LED on 
+    } 
+    
+    //delay(250); //
+    /*
+    //IMPORTANT
+    //If using IDLE with timer 0 off.  Or if using this in an interrupt
+    //I cannot use delay in the interrupt (makes sense, the timers are off & they won't get turned on untill we're out of interrupt context - since they're turned on as the last step of the pwoer-down command (we interrupted in the middle of it)!)
+    //have to use delayMicroseconds + for loops.
+    */
+    for(int i = 0; i < 1; i++) //approxiately 0.016 seconds.  ISH.
+    {
+      delayMicroseconds(16383); //special number, this is 14 bit max.
+    }
+
+    if(USE_LEDS)
+    {
+      digitalWrite(LED_BUILTIN_TX, HIGH); // Turn RX LED off
+    }
+
+  }
+
+  else
+  {
+    if(MEASURE_PULSEIN_DURATION)
+    {
+      event_time = TCNT1; //save the time on Timer1 as of the time I fired this push.  DO it furst, so we can blink LEDS later.
+    }
+      //Uncomment to try the Idle self-waking
+      //Timer1.stop(); //very first thing we do, 
+      
+      digitalWrite(mosfet,HIGH);
+      if(USE_LEDS)
+      {
+        digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on
+      }  
+      
+      //delay(250); //
+      /*
+      //IMPORTANT
+      //If using IDLE with timer 0 off.  Or if using this in an interrupt
+      //I cannot use delay in the interrupt (makes sense, the timers are off & they won't get turned on untill we're out of interrupt context - since they're turned on as the last step of the pwoer-down command (we interrupted in the middle of it)!)
+      //have to use delayMicroseconds + for loops.
+      */
+      for(int i = 0; i < 20; i++) //approxiately 0.3 seconds.  ISH.
+      {
+        delayMicroseconds(16383); //special number, this is 14 bit max.
+      }
+      digitalWrite(mosfet,LOW);
+      
+      if(USE_LEDS)
+      {
+        digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED off
+      }
+    
+      fired_push = true; //remember that we woke via PUSH, not some other internal interrupt.
+    
+  }
 
 }
