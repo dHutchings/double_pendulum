@@ -3,7 +3,7 @@
 
 //purely internal variables
 volatile int prev_pushes; //how many times have I pushed since I last chose a random number?
-
+long final_time; //how long I plan to push on the next push.  Leave it here so others can get it.
 
 void setup_driver()
 {
@@ -64,8 +64,9 @@ void push()
     //this delay, is really should be on the order of MS, if we even use it!
     //This new (lower current, but slower) op-amps slew rate is so dang long that using the op-amp as a comparator is easy, but, may be bad.  We may want to go faster.
     //left in for future-proofing, but i may not need this.  uC requires significant time to wake from powerOff state, and I can change timing by also affecting the voltage threshold value.
+
     drive_MOS(HIGH); //Drive_mosfet HIGH turns the coil on & lets the 555 timer know... we don't care about sign flips here
-    long final_time = push_time_us + random_time;
+    final_time = push_time_us + random_time;
   
     precise_idle(final_time); //Cuts overall 5V time average from 1.83 ma to 1.572 ma just by precise_idleing here, which cuts in 1/2 the current draw for this very small time.
     //just goes to show how much current the uC draws when fully up.
