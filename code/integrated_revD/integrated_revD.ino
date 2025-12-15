@@ -47,7 +47,7 @@ void setup() {
   NUM_RESTARTS_SINCE_UI_CHANGE = 0;
   setup_zero_crossing_sensing(); //do this after the pendulum is started so we dont worry about any "triggering the drive" interrupt problems.
   setup_BEMF_sensing(); 
-  #if USE_RESET
+  #if USE_RESTART
   setup_restart(); //do this AFTER the pendulum is started so we can clear the timer...
   #endif
 
@@ -77,8 +77,8 @@ void loop() {
       //attach interrupts again.
       setup_zero_crossing_sensing();
 
+      #if COUNT_PRINTS
       Serial.print("Num Pushes: ");
-      #if GENERAL_DEBUG_PRINTS
       Serial.print(NUM_PUSHES_BETWEEN_RESTARTS);
       Serial.print("\t Num Restarts: ");
       Serial.println(NUM_RESTARTS_SINCE_UI_CHANGE);
@@ -96,7 +96,7 @@ void loop() {
 
 
       //attach interrupts again.
-      #if USE_RESET
+      #if USE_RESTART
       setup_restart_interrupt();
       #endif
       setup_zero_crossing_sensing();

@@ -40,12 +40,14 @@ volatile int NUM_PUSHES_TO_SKIP = 0;
 #define GENERAL_DEBUG_PRINTS false //set to tue for debug-only prints.  This means the system cannot power down (USB issues).  ALSO, be aware that if the serial monitor window isnt open but we are still trying to send prints, the pendulum will stop working, too.
 #define SPEED_DEBUG_PRINTS false //prints to show the BEMF speed.
 #define MOD_DEBUG_PRINTS false //wakeup-mode prints.  These things fill the screen
-#define DEBUG_PRINTS GENERAL_DEBUG_PRINTS || SPEED_DEBUG_PRINTS || MOD_DEBUG_PRINTS //this isn't working, just do it manually.
+#define COUNT_PRINTS false //set to true to show count of the various pushes / restarts
+
+#define DEBUG_PRINTS true //must be set to the OR of any of the above prints.  If at any one (at least) of the above is true, this must be true too.  ORs aren't working for whatever reason.
 
 /* DEBUG Modes */
 #define NO_PUSH false //set to true for absolutely no pushing or driving on the COIL wire.
 #define RESET_EEPROM false
-#define USE_RESET true
+#define USE_RESTART true
 
 /* Curve Threshold Sensing Offsets */
 float voltage_add = 1.2;  //Shift the voltage curve measured from the coil of wire up by 2 volts.  We set the V1 to be 1.2V and the op-amp resistor feedback network will scale the COIL and shift it up by 2.
