@@ -24,7 +24,7 @@ volatile long random_time; //random value, can have a negative value so not unsi
 #define OUTSTRECHED_ARM_SLOWING true //set to true to enable BEMF sensing noticing that the pendulum is too fast to temporarily suspend pushes
 
 volatile int MAX_PUSHES = 3; //number of times the pendulum will push untill is chooses a new random push time
-volatile int CHANCE_NO_PUSH = 10; //5% chance of not pushing this time, b/c randomness.  Set to -1 to turn off.
+volatile int CHANCE_NO_PUSH = 10; //10% chance of not pushing this time, b/c randomness.  Set to -1 to turn off.
 
 //Other Stuff
 

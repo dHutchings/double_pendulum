@@ -53,7 +53,11 @@ void push()
 
   last_bemf = measure_BEMF(); //do this first, so I know how fast we're going, before A) I decide to skip this push or B) Flyback is picked up by the negative peak detector and I get a phony value
 
+  #if SCALE_RANDOMNESS
+  if( (random(0,100) < CHANCE_NO_PUSH) && (NUM_PUSHES_BETWEEN_RESTARTS > RESTART_EXTA_PURHSES_COUNT))  //sometimes, don't push.  BUT, don't not push untill I have fully started starting up and have gotten through all the larger pushes.
+  #else
   if(random(0,100) < CHANCE_NO_PUSH)  //sometimes, don't push.
+  #endif
   {
     NUM_PUSHES_TO_SKIP += 1;
   }
