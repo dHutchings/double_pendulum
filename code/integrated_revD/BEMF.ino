@@ -14,28 +14,37 @@ void setup_BEMF_sensing()
 
 }
 
+//returns BEMF in volts
+//as if it were measured from an oscilliscope
+//Which means that the closer to 0 it is, the faster I am going.
+
+//ALSO does the control on BEMF voltage (should this be done elsewhere for code clarity...?)
 float measure_BEMF()
 {
-  int val = analogRead(a_peak); 
-  BEMF_History.add(float(val));
+  float bemf_measurement = analogRead(a_peak) *5.0/1023.0 ; //put it into volts
+  BEMF_History.add(bemf_measurement); 
 
+  
   #if SPEED_DEBUG_PRINTS
   Serial.print("Speed:");
-  Serial.print(val);
+  Serial.print(bemf_measurement);
   Serial.print(",Avg:");
   Serial.print(BEMF_History.getFastAverage());
   Serial.print(",Diff:");
   Serial.println(BEMF_History.getMaxInBuffer() - BEMF_History.getMinInBuffer());
   #endif
+  
 
   //if there isn't a lot of variation in my hisotyr
   //and if I am going fast.
-  if( (BEMF_History.getMaxInBuffer() - BEMF_History.getMinInBuffer()) < 70 && BEMF_History.getFastAverage() < 150)
+  if( (BEMF_History.getMaxInBuffer() - BEMF_History.getMinInBuffer()) < 0.342 && BEMF_History.getFastAverage() < 0.732)
   {
+    
     #if SPEED_DEBUG_PRINTS
     Serial.println("Detected Swinging In perpetual loop, straight arm");
     #endif
-
+    
+    
     #if OUTSTRECHED_ARM_SLOWING
     if(NUM_PUSHES_TO_SKIP == 0)
     {
@@ -58,11 +67,7 @@ float measure_BEMF()
   
 
 
-  return float(val);
-
-  //float v_peak = float(val)*float(5000)/float(1024); //I like millivolts, not volts.
-  //return v_peak;
-  //return 2000 - v_peak; //Probably, in final controls mode, I would like the sign reversed so larger is faster.  But right now, return the number I can confirm with o-scope
+  return bemf_measurement;
 }
 
 //This is all we need to reset the BEMF measurement circuit, but, it is incumbent on whoever calls this function to make sure it's a good time to reset it!
