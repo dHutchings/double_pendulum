@@ -60,13 +60,25 @@ void push()
   
   if(NUM_PUSHES_TO_SKIP == 0)
   {
+    long estimated_time_to_center_pulse = peak_time_us_after_INT(last_bemf); 
+    final_time = push_time_us + random_time;
+
+    //Center the pulse in time at the expected BEMF POSITIVE peak based on the negative BEMF measurement and the idea that the BEMF pulse should be relatively symmetric..
+    
+    precise_idle( (estimated_time_to_center_pulse) - (final_time/2) - 2100); //wait untill it's the exact right time to turn on the pulse.
+
+    //the 21 is DEFINATELY a hack - it's probably the system overhead from the code running + the interrupt waking things up.
+    //but per an o-scope that's the time I need to shift the calculated curve by to get it to the right place (peak BEMF in the middle).
+    //I'm not able to nail the timing 100% consistently, but, the overall concept of "push at a more optimum time" really does seem to work.
+    //Clearly, BEMF sensing + interrupt timing + wake up timing isn't as good as a hall sensor to trigger the switch.
+
+      
     //delayMicroseconds(1); //allow to cross zero.
     //this delay, is really should be on the order of MS, if we even use it!
     //This new (lower current, but slower) op-amps slew rate is so dang long that using the op-amp as a comparator is easy, but, may be bad.  We may want to go faster.
     //left in for future-proofing, but i may not need this.  uC requires significant time to wake from powerOff state, and I can change timing by also affecting the voltage threshold value.
 
     drive_MOS(HIGH); //Drive_mosfet HIGH turns the coil on & lets the 555 timer know... we don't care about sign flips here
-    final_time = push_time_us + random_time;
   
     precise_idle(final_time); //Cuts overall 5V time average from 1.83 ma to 1.572 ma just by precise_idleing here, which cuts in 1/2 the current draw for this very small time.
     //just goes to show how much current the uC draws when fully up.
@@ -99,17 +111,20 @@ void push()
         final_time += long(RESTART_EXTRA_PUSH_AMOUNT*NUM_PUSHES_BETWEEN_RESTARTS/RESTART_EXTA_PURHSES_COUNT);        
         final_time -= long(random_time/2); //I also want less random time ( <2 is a divide by 2 operation)
       }
-
-      
-      #if GENERAL_DEBUG_PRINTS
-      Serial.print("Med: ");
-      Serial.print(push_time_us);
-      Serial.print("\tRand: ");
-      Serial.print(random_time);
-      Serial.print("\t Push Time: ");
-      Serial.println(final_time);
-      #endif
     }
+
+    #if GENERAL_DEBUG_PRINTS
+    Serial.print("Center: ");
+    Serial.print(estimated_time_to_center_pulse);
+    Serial.print(",\tDelay: ");
+    Serial.print(estimated_time_to_center_pulse - final_time/2);
+    Serial.print(",\tMed: ");
+    Serial.print(push_time_us);
+    Serial.print(",\tRand: ");
+    Serial.print(random_time);
+    Serial.print(",\tPush Time: ");
+    Serial.println(final_time);
+    #endif
     
   }
   else
@@ -119,7 +134,7 @@ void push()
     NUM_PUSHES_TO_SKIP -= 1;
   }
 
-  #if DEBUG_PRINTS
+  #if DEBUG_PRINTS 
   precise_idle(15000); //have to do this to let the prints through, the power standby will kill the print
   #else
   LowPower.powerStandby(SLEEP_15MS,ADC_OFF,BOD_ON); //low-power sleep, we need to sleep.  Reduces power from 3ma-ish to 1.99-ish on average (over continual running), really goes to show how much power the uC draws when its fully booted up.

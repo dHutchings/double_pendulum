@@ -78,3 +78,16 @@ void clear_BEMF_sensing()
   delayMicroseconds(5);
   pinMode(a_peak_rst,INPUT); //turn the DIO back into an input, so its floating and the PEAK_RST line is now controlled by the op=amps.
 }
+
+long peak_time_us_after_INT(float BEMF)
+{
+  if(BEMF < 0)
+  {
+    return 0;
+  }
+  else
+  {
+    return long( (3178.44 * BEMF) + 2233.518) + 2*440; //See the spreadsheet "BEMF / zero crossing delay times" as well as issue tracker #22 to see where this comes from.  
+    //Estimates that time the BEMF negative WAS (and thus, where I should center my POSTIVE pulse for optimum pushing.)
+  }
+}

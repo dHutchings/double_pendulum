@@ -70,7 +70,6 @@ void loop() {
     case PUSH:
       //detachInterrupt before doing the starting, so we don't have the secondary flyback pulses interrupt our handing of this.
       detachInterrupt(digitalPinToInterrupt(interrupt_in));
-      precise_idle( (5000-500) - final_time/2 ); //wait the EXACT right time to put the center of the pulse @ the center of the pulse.  The average pulse's max is 4000uS before the turn-on time, and we think it takes 500uS or so to handle various software overhead when it comes to actually push - we need to delay the difference.
 
       
       push();
