@@ -42,7 +42,7 @@ volatile int NUM_PUSHES_TO_SKIP = 0;
 #define MOD_DEBUG_PRINTS false //wakeup-mode prints.  These things fill the screen
 #define COUNT_PRINTS false //set to true to show count of the various pushes / restarts
 
-#define DEBUG_PRINTS true //must be set to the OR of any of the above prints.  If at any one (at least) of the above is true, this must be true too.  ORs aren't working for whatever reason.
+#define DEBUG_PRINTS false //must be set to the OR of any of the above prints.  If at any one (at least) of the above is true, this must be true too.  ORs aren't working for whatever reason.
 
 /* DEBUG Modes */
 #define NO_PUSH false //set to true for absolutely no pushing or driving on the COIL wire.
