@@ -72,25 +72,56 @@ def load_sanitize_csv(csv_path):
     return d
 
 
+def format_seconds_to_hours(seconds, pos):
+    hours = int(seconds // 3600)
+    minutes = int((seconds % 3600) // 60)
+    # You can customize the format string as needed
+    return f"{hours:d}:{minutes:02d}"
 
-def rev_D3():
-    files = ["Rev_D3_Amazon_AA.csv","Rev_D3_Energizer_Max_partial.csv"]
-    plt.figure()
+def rev_C():
+    files = ["Rev_C_Duracell.csv","Rev_C_Energizer_Max_partial.csv"]
 
-    for idx,f in enumerate(files):
+    fig, axes = plt.subplots(len(files), 1, sharex=True, figsize=(8, 6))
+
+    d_for_offset = load_sanitize_csv("Rev_C_Duracell.csv")
+
+    for f,ax in zip(files,axes):
         d = load_sanitize_csv(f)
 
-        plt.subplot(len(files),1,idx+1)
+        if f != "Rev_C_Duracell.csv":
+            #offset the time index of this dataset so it aligns with the voltage curve of Rev_C_Duracell.
 
-        def format_seconds_to_hours(seconds, pos):
-            hours = int(seconds // 3600)
-            minutes = int((seconds % 3600) // 60)
-            # You can customize the format string as needed
-            return f"{hours:d}:{minutes:02d}"
+            idx = np.where(d_for_offset['Sample V DC'] < d['Sample V DC'][0])[0] #Find the index in the duracell data where it first dips below the data in my file.
+            t_offset = d_for_offset['Test Duration'][idx[0]]
 
-        plt.plot(d['Test Duration'],d['Sample V DC'])
-        plt.gca().xaxis.set_major_formatter(format_seconds_to_hours)
-        plt.title(f)
+            d["Test Duration"] = d["Test Duration"] + t_offset
+            #np.
+
+
+
+
+        ax.plot(d['Test Duration'],d['Sample V DC'])
+        ax.xaxis.set_major_formatter(format_seconds_to_hours)
+        ax.set_title(f)
+
+    plt.gca().set_xlabel("Time (hours:min), conclusion: Duracel better than Energizer Max")
+
+    plt.show(block=True)
+
+def rev_D3():
+    files = ["Rev_D3_Amazon_AA.csv","Rev_D3_Energizer_Max_partial.csv","Rev_D3_Duracell_first_mechanical.csv","Rev_D3_Duracell_add_spacer_untuned.csv"]
+
+    fig, axes = plt.subplots(len(files), 1, sharex=True, figsize=(8, 6))
+
+    for f,ax in zip(files,axes):
+        d = load_sanitize_csv(f)
+
+
+
+
+        ax.plot(d['Test Duration'],d['Sample V DC'])
+        ax.xaxis.set_major_formatter(format_seconds_to_hours)
+        ax.set_title(f)
 
 
 
