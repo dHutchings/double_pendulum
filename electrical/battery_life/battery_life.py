@@ -6,6 +6,55 @@ from tabulate import tabulate
 import os
 import argparse
 
+import matplotlib.dates as mdates
+
+def get_xaxis_formatters():
+
+    locator = mdates.AutoDateLocator()
+    formatter = mdates.AutoDateFormatter(locator)
+
+
+    def total_hours(x, pos=None):  #x is a number in total days!
+        x *= 24 #multiply into hours.
+
+        hours = int(x)
+        min = int( (x - hours)*60)
+        if(min < 10):
+            label = str(hours) + ":0" + str(min)
+        else:
+            label = str(hours) + ":" + str(min)
+        return label
+
+    def total_hours_minutes(x, pos=None):
+        x *= 24 #multiply into hours.
+
+        hours = int(x)
+        hours_label = str(hours)
+        min = int( (x - hours)*60)
+        sec = int( (x-hours)*60 - min)*60
+
+        if min < 10:
+            min_label = "0" + str(min)
+        else:
+            min_label = str(min)
+
+        if sec < 10:
+            sec_label = "0" + str(sec)
+        else:
+            sec_label = str(sec)
+
+        return hours_label + ":" + min_label + ":" + sec_label
+
+    formatter.scaled.pop(365)
+    formatter.scaled[1] = "%d-%H" #if I'm showing days, do days (which will effectively be total days) / hours.
+    formatter.scaled[1/24] = total_hours #if I'm showing hours, do hours:minutes
+    formatter.scaled[1/24/60*15] = total_hours_minutes #if I'm showing 15 minutes, do hours:minutes:Min:Sec
+    formatter.scaled[1/24/60] = "%M:%S" #zoom in and give me seconds.  This will mean
+    formatter.scaled.pop(1/24/60/60) #don't go that far in
+    formatter.scaled.pop(1/24/60/60/1000000) #don't go that far in
+    formatter.scaled.pop(0.0006944444444444445 ) #I tried to overwrite this, but rounding issues got in the way.  Just manually do it.
+
+    return locator,formatter
 
 def load_sanitize_csv(csv_path):
     #the Fluke 289s default CSV is very info-dense.
@@ -58,14 +107,14 @@ def load_sanitize_csv(csv_path):
     for header in time_headers:
         d[header] = pd.to_datetime(d[header])
 
-    d['Measurment Duration'] = pd.to_timedelta(d['Duration']).dt.total_seconds()
+    d['Measurment Duration'] = pd.to_timedelta(d['Duration']).dt.total_seconds()/(24*60*60)  #matplitlib dates API likes days, unfortunately.
 
     d.drop('Duration',axis=1)
 
 
     #the duration into the test that the measurement was taken.    
     d['Test Duration'] = d['Start Time'] - d['Start Time'][0]
-    d['Test Duration'] = d['Test Duration'].dt.total_seconds()
+    d['Test Duration'] = d['Test Duration'].dt.total_seconds()/(24*60*60) #matplitlib dates API likes days, unfortunately.
 
 
 
@@ -82,11 +131,14 @@ def rev_C():
     files = ["Rev_C_Duracell.csv","Rev_C_Energizer_Max_partial.csv"]
 
     fig, axes = plt.subplots(len(files), 1, sharex=True, figsize=(8, 6))
+    locator,formatter = get_xaxis_formatters()
 
     d_for_offset = load_sanitize_csv("Rev_C_Duracell.csv")
 
     for f,ax in zip(files,axes):
         d = load_sanitize_csv(f)
+
+
 
         if f != "Rev_C_Duracell.csv":
             #offset the time index of this dataset so it aligns with the voltage curve of Rev_C_Duracell.
@@ -95,14 +147,17 @@ def rev_C():
             t_offset = d_for_offset['Test Duration'][idx[0]]
 
             d["Test Duration"] = d["Test Duration"] + t_offset
-            #np.
-
 
 
 
         ax.plot(d['Test Duration'],d['Sample V DC'])
         ax.xaxis.set_major_formatter(format_seconds_to_hours)
         ax.set_title(f)
+
+    #can only reformat axes AFTER i do the offset, hence, why it's down here.
+    for ax in axes:
+        ax.xaxis.set_major_locator(locator)
+        ax.xaxis.set_major_formatter(formatter)
 
     plt.gca().set_xlabel("Time (hours:min), conclusion: Duracel better than Energizer Max")
 
@@ -113,14 +168,19 @@ def rev_D3():
 
     fig, axes = plt.subplots(len(files), 1, sharex=True, figsize=(8, 6))
 
+    locator,formatter = get_xaxis_formatters()
+
     for f,ax in zip(files,axes):
         d = load_sanitize_csv(f)
 
 
 
+        ax.xaxis.set_major_locator(locator)
+        ax.xaxis.set_major_formatter(formatter)
+
+
 
         ax.plot(d['Test Duration'],d['Sample V DC'])
-        ax.xaxis.set_major_formatter(format_seconds_to_hours)
         ax.set_title(f)
 
 
