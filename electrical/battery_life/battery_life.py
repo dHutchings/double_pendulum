@@ -148,11 +148,23 @@ def rev_C():
 
             d["Test Duration"] = d["Test Duration"] + t_offset
 
+        #an ok test - inferring from battery voltage - whether I'm resetting or not.
+        #not perfect, but, it works well enough.  Given that the fluke 289 only measures battery voltage, it's a good guess.
+        d["Reset"] = np.logical_and( (d['Max V DC'] - d["Min V DC"] )> 1 , (d['Max V DC'] - d["Average V DC"] ) > 0.25)
 
 
-        ax.plot(d['Test Duration'],d['Sample V DC'])
+
+
+        for data in ["Sample V DC","Average V DC","Min V DC","Max V DC"]:
+            ax.plot(d['Test Duration'],d[data],label=data[:-5])
+
+
+        #ax.plot(d['Test Duration'],d['Reset'],label="Reset",marker="*")
+
+        #ax.plot(d['Test Duration'],d['Sample V DC'])
         ax.xaxis.set_major_formatter(format_seconds_to_hours)
         ax.set_title(f)
+        ax.legend()
 
     #can only reformat axes AFTER i do the offset, hence, why it's down here.
     for ax in axes:
@@ -163,8 +175,9 @@ def rev_C():
 
     plt.show(block=True)
 
+
 def rev_D3():
-    files = ["Rev_D3_Amazon_AA.csv","Rev_D3_Energizer_Max_partial.csv","Rev_D3_Duracell_first_mechanical.csv","Rev_D3_Duracell_add_spacer_untuned.csv"]
+    files = ["Rev_D3_Amazon_AA.csv","Rev_D3_Energizer_Max_partial.csv","Rev_D3_Duracell_first_mechanical.csv","Rev_D3_Duracell_add_spacer_untuned.csv","Rev_D3_Duracell_add_spacer_change_tuning.csv","Rev_D3_Energizer_Max_add_spacer_change_tunings.csv","Rev_D3_HDX_add_spacer_change_tunings.csv"]
 
     fig, axes = plt.subplots(len(files), 1, sharex=True, figsize=(8, 6))
 
@@ -173,15 +186,23 @@ def rev_D3():
     for f,ax in zip(files,axes):
         d = load_sanitize_csv(f)
 
+        #an ok test - inferring from battery voltage - whether I'm resetting or not.
+        #not perfect, but, it works well enough.  Given that the fluke 289 only measures battery voltage, it's a good guess.
+        d["Reset"] = np.logical_and( (d['Max V DC'] - d["Min V DC"] )> 1 , (d['Max V DC'] - d["Average V DC"] ) > 0.25)
+
 
 
         ax.xaxis.set_major_locator(locator)
         ax.xaxis.set_major_formatter(formatter)
 
 
+        for data in ["Sample V DC","Average V DC","Min V DC","Max V DC"]:
+            ax.plot(d['Test Duration'],d[data],label=data[:-5])
 
-        ax.plot(d['Test Duration'],d['Sample V DC'])
+        ax.plot(d['Test Duration'],d['Reset'],label="Reset",marker="*")
         ax.set_title(f)
+
+        ax.legend()
 
 
 
