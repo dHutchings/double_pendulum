@@ -177,7 +177,7 @@ def rev_C():
 
 
 def rev_D3():
-    files = ["Rev_D3_Amazon_AA.csv","Rev_D3_Energizer_Max_partial.csv","Rev_D3_Duracell_first_mechanical.csv","Rev_D3_Duracell_add_spacer_untuned.csv","Rev_D3_Duracell_add_spacer_change_tuning.csv","Rev_D3_Energizer_Max_add_spacer_change_tunings.csv","Rev_D3_HDX_add_spacer_change_tunings.csv"]
+    files = ["Rev_D3_Amazon_AA.csv","Rev_D3_Energizer_Max_partial.csv"]#,"Rev_D3_Duracell_first_mechanical.csv","Rev_D3_Duracell_add_spacer_untuned.csv","Rev_D3_Duracell_add_spacer_change_tuning.csv","Rev_D3_Energizer_Max_add_spacer_change_tunings.csv","Rev_D3_HDX_add_spacer_change_tunings.csv"]
 
     fig, axes = plt.subplots(len(files), 1, sharex=True, figsize=(8, 6))
 
@@ -186,9 +186,6 @@ def rev_D3():
     for f,ax in zip(files,axes):
         d = load_sanitize_csv(f)
 
-        #an ok test - inferring from battery voltage - whether I'm resetting or not.
-        #not perfect, but, it works well enough.  Given that the fluke 289 only measures battery voltage, it's a good guess.
-        d["Reset"] = np.logical_and( (d['Max V DC'] - d["Min V DC"] )> 1 , (d['Max V DC'] - d["Average V DC"] ) > 0.25)
 
 
 
@@ -199,7 +196,10 @@ def rev_D3():
         for data in ["Sample V DC","Average V DC","Min V DC","Max V DC"]:
             ax.plot(d['Test Duration'],d[data],label=data[:-5])
 
-        ax.plot(d['Test Duration'],d['Reset'],label="Reset",marker="*")
+
+        d = detect_restarts(d)
+        if 'Reset' in d.columns:
+            ax.plot(d['Test Duration'],d['Reset'],label="Reset",marker="*")
         ax.set_title(f)
 
         ax.legend()
@@ -208,6 +208,47 @@ def rev_D3():
 
 
     plt.show(block=True)
+
+def detect_restarts(d):
+    #an ok test - inferring from battery voltage - whether I'm resetting or not.
+    #not perfect, but, it works well enough.  Given that the fluke 289 only measures battery voltage, it's a good guess.
+    d["Reset"] = np.logical_and( (d['Max V DC'] - d["Min V DC"] )> 1 , (d['Max V DC'] - d["Average V DC"] ) > 0.25)
+
+    d["Ongoing Reset"] = False #new column
+
+    def foo(row):
+        #print(row)
+
+        #Very fortunately, the CSV includes a "reading" column from the Fluke.
+        #which is passed through.
+        #that gives me an sample index to search for.
+        #it starts the count at 1.
+
+        idx = int(row['Reading']) - 1
+        
+        time = row['Test Duration'] #the time of this measurement
+
+        indexes = (d['Test Duration'] > time) & (d['Test Duration'] < (time + 60/(24*60*60)) )#search for the next 60 seconds of data.  Remember that under the hood we are living in day territory here
+        #this is a Giant array of true / false values, the length of which is identical to our original data array.
+
+        if indexes.sum() == 0:
+            df.at[idx,'Ongoing Reset'] = False
+        else:
+            df.at[idx,'Ongoing Reset'] = np.any(d["Reset"])
+
+
+
+        #if ALL the 
+
+        print(idx,indexes.sum())
+        #print(d.iloc[idx,:])
+        print("-------")
+
+    d.apply(foo,axis=1)
+
+    return d
+
+
 
 if __name__=="__main__":
     #https://stackoverflow.com/questions/3061/calling-a-function-of-a-module-by-using-its-name-a-string
