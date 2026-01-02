@@ -233,11 +233,15 @@ def rev_D3():
 
         
         d = detect_restarts(d)
+
         if 'Reset' in d.columns:
             plt_ax.plot(d['Test Duration'],d['Reset'],label="Reset",marker="*")
+        '''
         if 'Ongoing Reset' in d.columns:
             plt_ax.plot(d['Test Duration'],d['Ongoing Reset'],label="Ongoing Reset",marker="*")
+            #plt_ax.plot(d['Test Duration'],np.diff(d['Ongoing Reset'],append=0)-1,label="Diff Ongoing Reset",marker="*")
             #plt_ax.plot(d['Test Duration'],np.diff(d['Ongoing Reset'],prepend=0),label="Ongoing Reset DIFF",marker="*")
+        '''
 
 
         plt_ax.set_title(f)
@@ -246,10 +250,13 @@ def rev_D3():
         d.attrs.pop("Battery Dead Index")
         d.attrs["Battery Dead Time (hrs)"] = d.attrs["Battery Dead Time (days)"]*24
         d.attrs.pop("Battery Dead Time (days)")
+        d.attrs.pop("RestartTimes")
+        d.attrs.pop("RestartAttempts")
+        d.attrs.pop("RunTimes")
 
         #break out some list comphrenension.
         #to trim to two decimals in case of floats.
-        table_ax.table(cellText=[ [x] if x==int(x) else [f"{x:.2f}"] for x in d.attrs.values() ],rowLabels = [x for x in d.attrs.keys() ],loc='center',bbox=[0.5, 0.15, 0.5, 0.7])
+        table_ax.table(cellText=[ [x] if x==int(x) else [f"{x:.2f}"] for x in d.attrs.values() ],rowLabels = [x for x in d.attrs.keys() ],loc='center',bbox=[0.5, 0.05, 0.5, 0.9])
 
 
         if f == files[-1]: #the last test I want to see
@@ -339,26 +346,57 @@ def detect_restarts(d):
 
     d = d.apply(detect_successful_restart,axis=1)
 
-    #ok, now what?
-    #now, I need to:
-    #A) for each continious restart, how long is it?
 
 
-    start_continious_idxs = np.argwhere( np.diff(d['Ongoing Reset'],prepend=0) == 1)  #this is - wierdly - the start
+    start_continious_idxs = np.argwhere( np.diff(d['Ongoing Reset'],prepend=0) == 1)  #this is - wierdly - the start.
+    end_continious_idxs = np.argwhere(np.diff(d['Ongoing Reset'],append=0) == -1) #indexes of the last reset pulse in ongoing reset.
     d.attrs["NumSuccessfulRestarts"] = len(start_continious_idxs)
     d.attrs["NumAttemptsPerRestart"] =  d.attrs["NumRestartAttempts"] / d.attrs["NumSuccessfulRestarts"]
-    for continious_restart_idx in start_continious_idxs: #For the start of each continious restart
-        continious_restart_idx = continious_restart_idx[0] #have to pull it out of the numpy array
-        #print(continious_restart_idx, d.loc[continious_restart_idx,"Test Duration"]*24)
+    d.attrs["RestartTimes"] = []
+    d.attrs["RestartAttempts"] = []
+    
+    for continious_restart_start_idx,continious_restart_end_idx in zip( start_continious_idxs,end_continious_idxs ): #For the start of each continious restart
+        continious_restart_start_idx = continious_restart_start_idx[0] #have to pull it out of the numpy array
+        continious_restart_end_idx = continious_restart_end_idx[0]
 
-    #C) what is the average time between succesful restarts?  How long can the pendulum run?
-    #D) 
+        reset_seconds = (d.loc[continious_restart_end_idx,"Test Duration"] - d.loc[continious_restart_start_idx,"Test Duration"])*(24*60*60) #again, converting from days back to seconds.
+        if reset_seconds == 0:
+            reset_seconds = 3 #per knowing the robot code, a single run of start_pendulum() takes 3 seconds.  THe multimeter likely can't figure that out, so if it sees only one measurement, we know it's actually 3 seconds.
 
-    d["Ongoing Reset"] = d["Ongoing Reset"]+1
+        d.attrs["RestartTimes"].append(reset_seconds)
+
+        #How many times did I actually fire the RESET pulse here?
+        count_restarts = np.sum( d.loc[continious_restart_start_idx:continious_restart_end_idx,'Reset']) #sum up the individual start pulses
+        d.attrs["RestartAttempts"].append(count_restarts)
 
 
-    print(d.attrs)
-    print()
+
+    #analysis of the whole dataset for some statistics.
+
+    d.attrs['AvgRestartTime (sec)'] = np.mean( d.attrs["RestartTimes"])
+    d.attrs['SDRestartTime (sec)'] = np.std( d.attrs["RestartTimes"])
+
+    d.attrs['AvgRestartAttempts'] = np.mean( d.attrs["RestartAttempts"])
+    d.attrs['SDRestartAttempts'] = np.std( d.attrs["RestartAttempts"])
+
+
+    d.attrs["RunTimes"] = []
+    #C) How long can the pendulum run?
+    for continious_restart_start_idx,continious_restart_end_idx in zip( start_continious_idxs[1:],end_continious_idxs[:-1] ): #the time between each successful start and the new restart (which is when the pendulum must have stopped.)
+        continious_restart_start_idx = continious_restart_start_idx[0] #have to pull it out of the numpy array
+        continious_restart_end_idx = continious_restart_end_idx[0]
+
+        run_time = (d.loc[continious_restart_start_idx,"Test Duration"] - d.loc[continious_restart_end_idx,"Test Duration"])*(24*60) #again, convert to minutes this time.
+        d.attrs["RunTimes"].append(run_time)
+
+
+
+
+    d.attrs["AvgRunTime (min)"] = np.mean(d.attrs["RunTimes"])
+    d.attrs["SDRunTime (min)"] = np.std(d.attrs["RunTimes"])
+    
+    d["Ongoing Reset"] = d["Ongoing Reset"]+1 #offset to make plots look nicer, so it's 1 or 2.
+
     return d
 
 
