@@ -105,7 +105,11 @@ def load_sanitize_csv(csv_path):
 
     time_headers = ["Start Time","Max Time","Min Time","Stop Time"]
     for header in time_headers:
-        d[header] = pd.to_datetime(d[header])
+        #12/16/2025 12:14:15.3
+        fmt = "%m/%d/%Y %H:%M:%S.%f" #promise datetime that we have this format.  It speeds up analysis - python doen't have to infer.
+        #It's minorly wrpmg (we had to promise zero-padded days and months, wheras the data isn't zero-padded) but, it seems to work.
+        #%f can support UP to microsecond precision, but, per https://stackoverflow.com/questions/50236669/converting-string-with-decimals-into-datetime, it zero-pads on the right.
+        d[header] = pd.to_datetime(d[header],format=fmt) #https://pandas.pydata.org/pandas-docs/version/1.0.3/reference/api/pandas.to_datetime.html
 
     d['Measurment Duration'] = pd.to_timedelta(d['Duration']).dt.total_seconds()/(24*60*60)  #matplitlib dates API likes days, unfortunately.
 
@@ -177,75 +181,184 @@ def rev_C():
 
 
 def rev_D3():
-    files = ["Rev_D3_Amazon_AA.csv","Rev_D3_Energizer_Max_partial.csv"]#,"Rev_D3_Duracell_first_mechanical.csv","Rev_D3_Duracell_add_spacer_untuned.csv","Rev_D3_Duracell_add_spacer_change_tuning.csv","Rev_D3_Energizer_Max_add_spacer_change_tunings.csv","Rev_D3_HDX_add_spacer_change_tunings.csv"]
+    files = ["Rev_D3_Amazon_AA.csv","Rev_D3_Energizer_Max_partial.csv","Rev_D3_Duracell_first_mechanical.csv","Rev_D3_Duracell_add_spacer_untuned.csv","Rev_D3_Duracell_add_spacer_change_tuning.csv","Rev_D3_Energizer_Max_add_spacer_change_tunings.csv","Rev_D3_HDX_add_spacer_change_tunings.csv"]
 
-    fig, axes = plt.subplots(len(files), 1, sharex=True, figsize=(8, 6))
+    fig, axes = plt.subplots(len(files)+1, 2, sharex=True, figsize=(8, 6),gridspec_kw={'height_ratios': [ *[3]*len(files), 1],'width_ratios':[5,1]},layout='constrained')
+
+    #for every axis in the bottom row
+    for ax in axes[-1,:]:
+        ax.axis("off") #turn axis off for cleaner look.   We will put the legend here.
+    for ax in axes[:,-1]: #for the last column (table column)
+        ax.axis("off") #turn axis off for cleaner look.   We will put the legend here.
 
     locator,formatter = get_xaxis_formatters()
 
-    for f,ax in zip(files,axes):
+    for idx,f in enumerate(files):
+        
         d = load_sanitize_csv(f)
 
+        plt_ax = axes[idx,0] #this is the main axis I want everything plotted on.
+        table_ax = axes[idx,1] #the smaller axis off to the right: that's where the table goes
+        print(f)
+
+        #truncate the test anywhere where the average battery voltage is < 5 Volts
+        #the boost converter probably (??) browns out.  Nothing good happens beyond that point.
 
 
 
-        ax.xaxis.set_major_locator(locator)
-        ax.xaxis.set_major_formatter(formatter)
+        #d = d.iloc[:(end_idx+10)]
+
+        d['Smoothed Average'] = simple_moving_average(d['Average V DC'],10)
+
+        end_idx = d['Smoothed Average'] <= 6.5
+        end_idx = end_idx.to_numpy()
+        end_idx = end_idx[10:] #skip the first 10 data points. - sometimes for the first data point or two the multimeter has a low average
+        end_idx = np.argwhere(end_idx == 1)[0][0]
+        d.attrs["Battery Dead Index"] = end_idx+10
+        d.attrs["Battery Dead Time (days)"] = d.loc[end_idx+10,'Test Duration']
+
+
+
+
+
+        plt_ax.xaxis.set_major_locator(locator)
+        plt_ax.xaxis.set_major_formatter(formatter)
 
 
         for data in ["Sample V DC","Average V DC","Min V DC","Max V DC"]:
-            ax.plot(d['Test Duration'],d[data],label=data[:-5])
+            plt_ax.plot(d['Test Duration'],d[data],label=data[:-5])
+        #Only plot this is we need to debug the test cutoff conditions.
+        #plt_ax.plot(d['Test Duration'],d["Smoothed Average"],label="Smoothed Average") #
+        plt_ax.axvline(x=d.attrs["Battery Dead Time (days)"],label="Battery Dead",color='red',alpha=0.5)
 
-
+        
         d = detect_restarts(d)
         if 'Reset' in d.columns:
-            ax.plot(d['Test Duration'],d['Reset'],label="Reset",marker="*")
-        ax.set_title(f)
+            plt_ax.plot(d['Test Duration'],d['Reset'],label="Reset",marker="*")
+        if 'Ongoing Reset' in d.columns:
+            plt_ax.plot(d['Test Duration'],d['Ongoing Reset'],label="Ongoing Reset",marker="*")
+            #plt_ax.plot(d['Test Duration'],np.diff(d['Ongoing Reset'],prepend=0),label="Ongoing Reset DIFF",marker="*")
 
-        ax.legend()
+
+        plt_ax.set_title(f)
+
+        #I don't want to see some things on the metadata table.  Far easier to just remove it.
+        d.attrs.pop("Battery Dead Index")
+        d.attrs["Battery Dead Time (hrs)"] = d.attrs["Battery Dead Time (days)"]*24
+        d.attrs.pop("Battery Dead Time (days)")
+
+        #break out some list comphrenension.
+        #to trim to two decimals in case of floats.
+        table_ax.table(cellText=[ [x] if x==int(x) else [f"{x:.2f}"] for x in d.attrs.values() ],rowLabels = [x for x in d.attrs.keys() ],loc='center',bbox=[0.5, 0.15, 0.5, 0.7])
+
+
+        if f == files[-1]: #the last test I want to see
+            plt_ax.xaxis.set_tick_params(labelbottom=True) #turn on the x=ticks again, by default they are off in sharex
+
+
+    ax = axes[-1,0]
+    #Pl;op the first plots legend on the last whitespace plot
+    #assume all plots have the same legend
+    handles, labels = axes[0,0].get_legend_handles_labels()
+    by_label = dict(zip(labels, handles))
+    ax.legend(by_label.values(), by_label.keys(),loc='upper center',ncol=3) #make the legend really wide
 
 
 
 
     plt.show(block=True)
+    
+#straight from google AI overview
+def simple_moving_average(data, window_size):
+    # Create a kernel (weights) where each element is 1/window_size
+    weights = np.ones(window_size) / window_size
+    # Convolve the data with the weights
+    # 'valid' mode returns only the parts where the kernel fully overlaps the data
+    sma = np.convolve(data, weights, mode='same')
+    return sma
+
+#calculate if I am in an ongoing continious chained reset situation, determine which restart is finally the last one / the 'successful one.'
+#due to new tunings often the pendulum needs to attempt to restart more than once in close succession to successfully start for real.
+#we call a sequence of restart attempts a "Continious Restart" because the pendulum is continually restarting untill its successful.
+def detect_successful_restart(row):
+    #Operates on only one row of data at a time.
+    #it IS possible to pass in the full dataframe as an optional argument, but accessing each item out of there... what's the point?
+    #instead, using the previous for-loop, do all the pre-processing that is needed.
+    #so that this function can detect continious restarts by examining only the data in this line, nothing more.
+    #much faster.
+
+    idx = int(row['Reading']) - 1
+    if row["Reset"]: #I am currently resetting
+        row['Ongoing Reset'] = True
+    elif row['Time from Previous Reset'] <= (60/(24*60*60)): #I Reset less than 1 minute ago, so i'm still in the energy-pump process.
+
+        #the time difference between my previous reset and my next reset is less than 1 minute
+        if (row['Time to Next Reset'] + row['Time from Previous Reset']) <= 60/(24*60*60):
+            row['Ongoing Reset'] = True
+        else:
+            row['Ongoing Reset'] = False
+    else:
+        row['Ongoing Reset'] = False
+
+
+    return row #must return the edited row
+
+
 
 def detect_restarts(d):
     #an ok test - inferring from battery voltage - whether I'm resetting or not.
     #not perfect, but, it works well enough.  Given that the fluke 289 only measures battery voltage, it's a good guess.
-    d["Reset"] = np.logical_and( (d['Max V DC'] - d["Min V DC"] )> 1 , (d['Max V DC'] - d["Average V DC"] ) > 0.25)
+    #d["Reset"] = np.logical_and( (d['Max V DC'] - d["Min V DC"] )> 1 , (d['Max V DC'] - d["Average V DC"] ) > 0.25)
+
+    d["Reset"] = np.logical_and( np.logical_and( (d['Max V DC'] - d["Min V DC"] )> 1 , np.logical_or( (d['Max V DC'] - d["Average V DC"] ) > 0.25,(d['Average V DC'] - d["Min V DC"] ) > 0.25)), d['Reading'] <= d.attrs["Battery Dead Index"])
 
     d["Ongoing Reset"] = False #new column
 
-    def foo(row):
-        #print(row)
+    d["Reading of Next Reset"] = np.nan #new column.
+    d["Time to Next Reset"] = np.nan #new column.
+    reset_idxs = np.argwhere(d["Reset"].to_numpy())
+    d.attrs["NumRestartAttempts"] = len(reset_idxs)
 
-        #Very fortunately, the CSV includes a "reading" column from the Fluke.
-        #which is passed through.
-        #that gives me an sample index to search for.
-        #it starts the count at 1.
+    #iterate through all reset indexes
+    #for every datapoint calculate time between the previous and next reset.
+    idx = 0
+    prev_reset = np.nan
 
-        idx = int(row['Reading']) - 1
-        
-        time = row['Test Duration'] #the time of this measurement
+    for reset in reset_idxs:
+        reset = reset[0] #have to pull it out of the numpy array
 
-        indexes = (d['Test Duration'] > time) & (d['Test Duration'] < (time + 60/(24*60*60)) )#search for the next 60 seconds of data.  Remember that under the hood we are living in day territory here
-        #this is a Giant array of true / false values, the length of which is identical to our original data array.
+        d.loc[idx:reset,"Reading of Next Reset"] = reset 
+        d.loc[idx:reset,"Time to Next Reset"] = d.loc[reset,"Test Duration"] -  d.loc[idx:reset,'Test Duration'] 
+        if not np.isnan(prev_reset):
+            d.loc[idx:reset,"Time from Previous Reset"] =  d.loc[idx:reset,'Test Duration'] - d.loc[prev_reset,"Test Duration"]
 
-        if indexes.sum() == 0:
-            df.at[idx,'Ongoing Reset'] = False
-        else:
-            df.at[idx,'Ongoing Reset'] = np.any(d["Reset"])
-
+        idx = reset
+        prev_reset = reset
 
 
-        #if ALL the 
 
-        print(idx,indexes.sum())
-        #print(d.iloc[idx,:])
-        print("-------")
+    d = d.apply(detect_successful_restart,axis=1)
 
-    d.apply(foo,axis=1)
+    #ok, now what?
+    #now, I need to:
+    #A) for each continious restart, how long is it?
 
+
+    start_continious_idxs = np.argwhere( np.diff(d['Ongoing Reset'],prepend=0) == 1)  #this is - wierdly - the start
+    d.attrs["NumSuccessfulRestarts"] = len(start_continious_idxs)
+    d.attrs["NumAttemptsPerRestart"] =  d.attrs["NumRestartAttempts"] / d.attrs["NumSuccessfulRestarts"]
+    for continious_restart_idx in start_continious_idxs: #For the start of each continious restart
+        continious_restart_idx = continious_restart_idx[0] #have to pull it out of the numpy array
+        #print(continious_restart_idx, d.loc[continious_restart_idx,"Test Duration"]*24)
+
+    #C) what is the average time between succesful restarts?  How long can the pendulum run?
+    #D) 
+
+    d["Ongoing Reset"] = d["Ongoing Reset"]+1
+
+
+    print(d.attrs)
+    print()
     return d
 
 
