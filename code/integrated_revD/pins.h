@@ -4,12 +4,12 @@
 //PinDefs.
 
 //the most important pins, related to sensing zero crossing + pushing
-int interrupt_in = 3;  //pin 3, which can trigger an interrupt for waking up from power down.
+int bemf_wake = 3;  //pin 3, which can trigger an interrupt for waking up from power down.
 int drive_mosfet = 8;  //pin 8... for turning the MOSFET on / pushing the magnet through the level shifter.
 
 //pins for automatic missing pulse restarting.
 int auto_timer_restart = 2; //pin 2... hooked up to the 555 timer - used for measuring when the 555 timer says its time to restart
-int timer_rst = 4; //pin 4... hooked up to the 555 timer - used for clearing the timer.
+int timer_clr = 4; //pin 4... hooked up to the 555 timer - used for clearing the timer.
 
 //pins for measuring USB power capability
 int cc1 = A0;

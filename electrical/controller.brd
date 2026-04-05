@@ -1813,18 +1813,6 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <wire x1="60.23" y1="7.423" x2="60.10648125" y2="7.54651875" width="0.254" layer="1"/>
 <wire x1="60.10648125" y1="7.54651875" x2="60.10648125" y2="7.5644" width="0.254" layer="1"/>
 </signal>
-<signal name="WAKE">
-<contactref element="IC1" pad="7"/>
-<contactref element="UC1" pad="3"/>
-<wire x1="52.01" y1="6.985" x2="53.9082625" y2="6.985" width="0.254" layer="1"/>
-<wire x1="61.087" y1="1.905" x2="58.293" y2="4.699" width="0.254" layer="1"/>
-<wire x1="58.293" y1="4.699" x2="56.1942625" y2="4.699" width="0.254" layer="1"/>
-<wire x1="56.1942625" y1="4.699" x2="53.9082625" y2="6.985" width="0.254" layer="1"/>
-<contactref element="J4" pad="3"/>
-<wire x1="61.087" y1="1.905" x2="59.7408" y2="3.2512" width="0.254" layer="16"/>
-<wire x1="33.7058" y1="3.2512" x2="31.877" y2="5.08" width="0.254" layer="16"/>
-<wire x1="59.7408" y1="3.2512" x2="33.7058" y2="3.2512" width="0.254" layer="16"/>
-</signal>
 <signal name="DRIVE">
 <contactref element="UC1" pad="8"/>
 <contactref element="IC5" pad="3"/>
@@ -2215,6 +2203,18 @@ The &lt;a href=&quot;http://www.4pcb.com/&quot;&gt;Advanced Circuits'&lt;/a&gt; 
 <contactref element="R6" pad="P6"/>
 <contactref element="R6" pad="P5"/>
 <wire x1="62.897" y1="9.798" x2="62.897" y2="10.598" width="0.254" layer="1"/>
+</signal>
+<signal name="BEMF_WAKE">
+<contactref element="UC1" pad="3"/>
+<contactref element="IC1" pad="7"/>
+<wire x1="52.01" y1="6.985" x2="53.9082625" y2="6.985" width="0.254" layer="1"/>
+<wire x1="61.087" y1="1.905" x2="58.293" y2="4.699" width="0.254" layer="1"/>
+<wire x1="58.293" y1="4.699" x2="56.1942625" y2="4.699" width="0.254" layer="1"/>
+<wire x1="56.1942625" y1="4.699" x2="53.9082625" y2="6.985" width="0.254" layer="1"/>
+<contactref element="J4" pad="3"/>
+<wire x1="61.087" y1="1.905" x2="59.7408" y2="3.2512" width="0.254" layer="16"/>
+<wire x1="59.7408" y1="3.2512" x2="33.7058" y2="3.2512" width="0.254" layer="16"/>
+<wire x1="33.7058" y1="3.2512" x2="31.877" y2="5.08" width="0" layer="19" extent="16-16"/>
 </signal>
 </signals>
 <mfgpreviewcolors>

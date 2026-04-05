@@ -69,7 +69,7 @@ void loop() {
     
     case PUSH:
       //detachInterrupt before doing the starting, so we don't have the secondary flyback pulses interrupt our handing of this.
-      detachInterrupt(digitalPinToInterrupt(interrupt_in));
+      detachInterrupt(digitalPinToInterrupt(bemf_wake));
 
       
       push();
@@ -88,7 +88,7 @@ void loop() {
     case AUTO_RESTART:
       //detachInterrupt before doing the starting, so we can start cleanly w/out the startup sequence.
       detachInterrupt(digitalPinToInterrupt(auto_timer_restart)); //i tried falling, but because TIMER_RESTART is bound to Dio 7 right now, Falling doesn't work and I have to rely on LOW.
-      detachInterrupt(digitalPinToInterrupt(interrupt_in));
+      detachInterrupt(digitalPinToInterrupt(bemf_wake));
       
       //Don't need to detach reattach interrupts - all the interrupt does is change a flag now (which I will shortly change, down here)
       start_pendulum();

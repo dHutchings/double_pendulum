@@ -1,5 +1,5 @@
 #include <SPI.h>
-#include <LTC1661.h>
+#include <LTC1661.h> //https://github.com/walle86/LTC1661
 
 #include "constants.h"
 

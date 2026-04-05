@@ -10039,7 +10039,7 @@ to use resistor array for easier soldering</text>
 </instance>
 <instance part="IC1" gate="P" x="53.34" y="88.9" smashed="yes"/>
 <instance part="IC1" gate="B" x="71.12" y="91.44" smashed="yes">
-<attribute name="NAME" x="73.66" y="94.615" size="1.778" layer="95"/>
+<attribute name="NAME" x="68.58" y="97.155" size="1.778" layer="95"/>
 <attribute name="VALUE" x="73.66" y="86.36" size="1.778" layer="96"/>
 </instance>
 <instance part="SUPPLY1" gate="GND" x="25.4" y="124.46" smashed="yes">
@@ -10666,23 +10666,6 @@ to use resistor array for easier soldering</text>
 <label x="5.08" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="WAKE" class="0">
-<segment>
-<pinref part="IC1" gate="B" pin="OUT"/>
-<wire x1="78.74" y1="91.44" x2="86.36" y2="91.44" width="0.1524" layer="91"/>
-<label x="83.82" y="91.44" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="UC1" gate="APM" pin="3"/>
-<wire x1="99.06" y1="25.4" x2="91.44" y2="25.4" width="0.1524" layer="91"/>
-<label x="91.44" y="25.4" size="1.778" layer="95"/>
-</segment>
-<segment>
-<label x="182.88" y="66.04" size="1.778" layer="95"/>
-<pinref part="J4" gate="J1" pin="3"/>
-<wire x1="182.88" y1="66.04" x2="185.42" y2="66.04" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="DRIVE" class="0">
 <segment>
 <pinref part="UC1" gate="APM" pin="8"/>
@@ -11083,6 +11066,23 @@ to use resistor array for easier soldering</text>
 <pinref part="R6" gate="C" pin="2"/>
 <pinref part="R6" gate="D" pin="2"/>
 <wire x1="40.64" y1="38.1" x2="43.18" y2="38.1" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="BEMF_WAKE" class="0">
+<segment>
+<pinref part="UC1" gate="APM" pin="3"/>
+<wire x1="99.06" y1="25.4" x2="81.28" y2="25.4" width="0.1524" layer="91"/>
+<label x="81.28" y="25.4" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="IC1" gate="B" pin="OUT"/>
+<wire x1="78.74" y1="91.44" x2="86.36" y2="91.44" width="0.1524" layer="91"/>
+<label x="76.2" y="93.98" size="1.778" layer="95"/>
+</segment>
+<segment>
+<label x="182.88" y="66.04" size="1.778" layer="95"/>
+<pinref part="J4" gate="J1" pin="3"/>
+<wire x1="182.88" y1="66.04" x2="185.42" y2="66.04" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

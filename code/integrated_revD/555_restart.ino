@@ -1,10 +1,10 @@
 void setup_restart() //this setups the 555-timer based automatic restarting of the pendulum
 {
   pinMode(auto_restart,INPUT);  //timer restart is the timer telling us that it's time to restart the pendulum
-  pinMode(timer_rst,OUTPUT);  //timer reset resets the timer
-  digitalWrite(timer_rst,LOW); //clear the timer.
+  pinMode(timer_clr,OUTPUT);  //timer reset resets the timer
+  digitalWrite(timer_clr,LOW); //clear the timer.
   delay(1);
-  digitalWrite(timer_rst,HIGH); //the normal, "not-pushing state", per 555_test.  remember it used to be inverted.
+  digitalWrite(timer_clr,HIGH); //the normal, "not-pushing state", per 555_test.  remember it used to be inverted.
   setup_restart_interrupt();
 
 }
@@ -25,7 +25,7 @@ void clear_restart_timer() //Deliberately clear the restart timer - use for when
 
 void inform_restart_timer(bool MOS_State)
 {
-  digitalWrite(timer_rst,!MOS_State);
+  digitalWrite(timer_clr,!MOS_State);
 }
 
 void auto_restart()

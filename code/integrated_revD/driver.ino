@@ -18,14 +18,14 @@ void setup_driver()
 void  setup_zero_crossing_sensing()
 {
   
-  pinMode(interrupt_in,INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(interrupt_in),interrupt_wake,CHANGE);
+  pinMode(bemf_wake,INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(bemf_wake),interrupt_wake,CHANGE);
 
 }
 
 void interrupt_wake() //the helper that triggers the wake (either if I'm in deep, or light sleep).  It will figure out what the correct next step is based on the sign of the INT pin
 {
-  if(digitalRead(interrupt_in)) //this is a RISING edge.  That's the first edge I get.  I don't want to do anyting here.
+  if(digitalRead(bemf_wake)) //this is a RISING edge.  That's the first edge I get.  I don't want to do anyting here.
   {
     #if DEBUG
     digitalWrite(LED_BUILTIN_TX, LOW); // Turn TX LED on  
