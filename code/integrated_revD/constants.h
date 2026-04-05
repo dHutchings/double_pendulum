@@ -26,6 +26,11 @@ volatile long random_time; //random value, can have a negative value so not unsi
 volatile int MAX_PUSHES = 3; //number of times the pendulum will push untill is chooses a new random push time
 volatile int CHANCE_NO_PUSH = 10; //10% chance of not pushing this time, b/c randomness.  Set to -1 to turn off.
 
+
+
+#define USE_POST_PUSH_TIMEOUT true //set to true to enable a timeout after restarts or pushes - any BEMF triggers in this timeout are ignored.  Cuts down on spurious / power wasting double pushes
+period_t SLEEP_TIMEOUT = SLEEP_120MS; //a randomly chosen good number
+
 //Other Stuff
 
 volatile float last_bemf; //the value of the most recent BEMF

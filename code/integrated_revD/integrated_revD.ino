@@ -73,6 +73,12 @@ void loop() {
 
       
       push();
+
+      #if USE_POST_PUSH_TIMEOUT
+      LowPower.powerStandby(SLEEP_TIMEOUT,ADC_OFF,BOD_ON);
+      //LowPower.idle(SLEEP_TIMEOUT, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //a timeout to prevent double-pushing
+      #endif
+      
       //attach interrupts again.
       setup_zero_crossing_sensing();
 
@@ -94,6 +100,13 @@ void loop() {
       start_pendulum();
 
 
+    
+      #if USE_POST_PUSH_TIMEOUT
+      //LowPower.idle(SLEEP_TIMEOUT, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //a timeout to prevent double-pushing
+      LowPower.powerStandby(SLEEP_TIMEOUT,ADC_OFF,BOD_ON);
+      #endif
+
+
       //attach interrupts again.
       #if USE_RESTART
       setup_restart_interrupt();
@@ -106,6 +119,11 @@ void loop() {
     case MANUAL_RESTART:
       detachInterrupt(digitalPinToInterrupt(auto_timer_restart));
       start_pendulum();
+
+      #if USE_POST_PUSH_TIMEOUT
+      //LowPower.idle(SLEEP_TIMEOUT, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //a timeout to prevent double-pushing
+      LowPower.powerStandby(SLEEP_TIMEOUT,ADC_OFF,BOD_ON);
+      #endif
       attachInterrupt(digitalPinToInterrupt(auto_timer_restart),auto_restart,LOW); //i tried falling, but because TIMER_RESTART is bound to Dio 7 right now, Falling doesn't work and I have to rely on LOW.
       break;
     case UI:
