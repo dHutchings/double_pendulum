@@ -53,6 +53,20 @@ float measure_BEMF()
       push_time_us = push_time_us - PUSH_SETTING_STEP;
       push_time_us = constrain(push_time_us,MIN_PUSH,MAX_PUSH);
       eeprom_current_speed();
+
+      #if DEBUG //make it really clear when debugging - short blink
+      digitalWrite(LED_BUILTIN_TX, LOW); // Turn TX LED on  
+      digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on  
+
+      delay(50);
+
+      digitalWrite(LED_BUILTIN_TX, HIGH); // Turn TX LED on  
+      digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED on  
+
+      
+      #endif
+
+      
     }
     
     NUM_PUSHES_TO_SKIP = 6; //skip the next 6 pushes to let the pendulum restart.
