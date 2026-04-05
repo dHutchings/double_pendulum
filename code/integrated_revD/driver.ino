@@ -180,12 +180,12 @@ void start_pendulum()
     #if DEBUG
     digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED off  
     #endif
-    delay(300);
+    delay(300 - (i*50)); //300, then 250, then 200, then 150
     drive_MOS(HIGH);
     #if DEBUG
     digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on
     #endif
-    delay(450);
+    delay(350 - (60 *i)); //450, then 400, 350, 300
     drive_MOS(LOW);
     
   }
