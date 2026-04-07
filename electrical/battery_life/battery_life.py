@@ -181,8 +181,10 @@ def rev_C():
 
 
 def rev_D3():
-    files = ["Rev_D3_Amazon_AA.csv","Rev_D3_Energizer_Max_partial.csv","Rev_D3_Duracell_first_mechanical.csv","Rev_D3_Duracell_add_spacer_untuned.csv","Rev_D3_Duracell_add_spacer_change_tuning.csv","Rev_D3_Energizer_Max_add_spacer_change_tunings.csv","Rev_D3_HDX_add_spacer_change_tunings.csv"]
+    #files = ["Rev_D3_Amazon_AA.csv","Rev_D3_Energizer_Max_partial.csv","Rev_D3_Duracell_first_mechanical.csv","Rev_D3_Duracell_add_spacer_untuned.csv","Rev_D3_Duracell_add_spacer_change_tuning.csv","Rev_D3_Energizer_Max_add_spacer_change_tunings.csv","Rev_D3_HDX_add_spacer_change_tunings.csv","Rev_D3_Enegizer_Prevent_Doublepush.csv"]
 
+    #two best performers currently.  Definately need more duracells, since duraells are better than enegizers.
+    files = ["Rev_D3_Duracell_add_spacer_change_tuning.csv","Rev_D3_Energizer_Max_add_spacer_change_tunings.csv","Rev_D3_Enegizer_Prevent_Doublepush.csv"]
     fig, axes = plt.subplots(len(files)+1, 2, sharex=True, figsize=(8, 6),gridspec_kw={'height_ratios': [ *[3]*len(files), 1],'width_ratios':[5,1]},layout='constrained')
 
     #for every axis in the bottom row
