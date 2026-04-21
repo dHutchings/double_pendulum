@@ -8,6 +8,9 @@ import argparse
 
 import matplotlib.dates as mdates
 
+prev_line = None
+
+
 def get_xaxis_formatters():
 
     locator = mdates.AutoDateLocator()
@@ -79,21 +82,35 @@ def load_sanitize_csv(csv_path):
     #now, get rid of the strings and such.  ALso, get rid of the overloads.
 
     def sanitize_line(text):
+        #print("text is",text)
+        if isinstance(text,float):  #for some reason I don't get - probably python versioning or seomthing - sometimes data is an empty / nan float even though it comes from a stirng
+            return np.nan
+
         if text.find("OL") != -1: #there is an OL, overload.  we don't have valid data, it can be a +/- OL.
+
             return np.nan
         elif text.find(' V DC') != -1:
-            text = text.replace(' V DC',"")
-            #sometimes, the text is only whitespace.
-            if text.isspace():
+            text_to_return = text.replace(' V DC',"")
+            #sometimes, the text is only whitespace... or its empty.
+
+            if text_to_return.isspace() or not text_to_return: #if
                 return np.nan
             else:
-                return float(text)
+                return float(text_to_return)
         else:
             return np.nan
 
 
-    
+    #find the index where "logging stopped".  Sometimes, an extra line or two comes in after that - often with the formatting messed up (newlines), causing paring issues
+
+    if "Logging Stopped" in d["Description"].values:
+        idx_to_stop =  (d["Description"] == "Logging Stopped").idxmax()
+        d = d.head(idx_to_stop-1)
+
+
+
     for header in data_headers:
+
 
         d[header] = d[header].apply(sanitize_line)
 
