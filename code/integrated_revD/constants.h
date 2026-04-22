@@ -21,7 +21,8 @@ volatile long random_time; //random value, can have a negative value so not unsi
 #define SCALE_RANDOMNESS true //set to true to enable the amount of randomness to be scaled up and down by how much we are over or underpushing, not just some nominal value.
 //the real random push time will be scaled up or down from this value.  EG the nominal push time is 5500uS.  If it's half of that (2750 uS), the nominal random time max could cause a negative push time.
 
-#define OUTSTRECHED_ARM_SLOWING true //set to true to enable BEMF sensing noticing that the pendulum is too fast to temporarily suspend pushes
+#define OUTSTRECHED_ARM_DETECTION true //set to true to enable BEMF sensing noticing that the pendulum is too fast to temporarily suspend pushes
+#define OUTSTRECHED_ARM_SLOWING false //set to true to enable BEMF sensing noticing that the pendulum is too fast to slow down the push speed
 
 volatile int MAX_PUSHES = 3; //number of times the pendulum will push untill is chooses a new random push time
 volatile int CHANCE_NO_PUSH = 10; //10% chance of not pushing this time, b/c randomness.  Set to -1 to turn off.

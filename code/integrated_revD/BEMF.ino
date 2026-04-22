@@ -45,14 +45,16 @@ float measure_BEMF()
     #endif
     
     
-    #if OUTSTRECHED_ARM_SLOWING
+    #if OUTSTRECHED_ARM_DETECTION
     if(NUM_PUSHES_TO_SKIP == 0)
     {
       //Slow down the pendulum just a bit.
       //but, Just do it the first time.
-      push_time_us = push_time_us - PUSH_SETTING_STEP;
-      push_time_us = constrain(push_time_us,MIN_PUSH,MAX_PUSH);
-      eeprom_current_speed();
+      #if OUTSTRECHED_ARM_SLOWING
+        push_time_us = push_time_us - PUSH_SETTING_STEP;
+        push_time_us = constrain(push_time_us,MIN_PUSH,MAX_PUSH);
+        eeprom_current_speed();
+      #endif
 
       #if DEBUG //make it really clear when debugging - short blink
       digitalWrite(LED_BUILTIN_TX, LOW); // Turn TX LED on  
