@@ -138,11 +138,11 @@ void push()
     NUM_PUSHES_TO_SKIP -= 1;
   }
 
-  #if DEBUG_PRINTS 
-  precise_idle(15000); //have to do this to let the prints through, the power standby will kill the print
-  #else
-  LowPower.powerStandby(SLEEP_15MS,ADC_OFF,BOD_ON); //low-power sleep, we need to sleep.  Reduces power from 3ma-ish to 1.99-ish on average (over continual running), really goes to show how much power the uC draws when its fully booted up.
-  #endif
+
+  //do NOT powerStandby_allowPrints(SLEEP_15MS) here.
+  //Instead, it is more reliable to finish push() quickly.
+  //and then use the extra logic around the REASON_FOR_POWERUP == DEEPSLEEP_WAIT or LIGHTSLEEP_WAIT will take care of that!
+
 
   //this would not work from an interrupt context, but since we call this from a loop it's fine.
   //since we just pushed, we can afford to do the powerDown (lowest power / wrong wake-up time) for just a bit

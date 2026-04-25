@@ -75,8 +75,7 @@ void loop() {
       push();
 
       #if USE_POST_PUSH_TIMEOUT
-      LowPower.powerStandby(SLEEP_TIMEOUT,ADC_OFF,BOD_ON);
-      //LowPower.idle(SLEEP_TIMEOUT, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //a timeout to prevent double-pushing
+        powerStandby_allowPrints(SLEEP_TIMEOUT);
       #endif
       
       //attach interrupts again.
@@ -86,8 +85,9 @@ void loop() {
       Serial.print("Num Pushes: ");
       Serial.print(NUM_PUSHES_BETWEEN_RESTARTS);
       Serial.print("\t Num Restarts: ");
-      Serial.println(NUM_RESTARTS_SINCE_UI_CHANGE);
+      Serial.println(NUM_RESTARTS_SINCE_UI_CHANGE);      
       #endif
+
       
       REASON_FOR_POWERUP = DEEPSLEEP_WAIT;
       break;
@@ -102,10 +102,8 @@ void loop() {
 
     
       #if USE_POST_PUSH_TIMEOUT
-      //LowPower.idle(SLEEP_TIMEOUT, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //a timeout to prevent double-pushing
-      LowPower.powerStandby(SLEEP_TIMEOUT,ADC_OFF,BOD_ON);
+        powerStandby_allowPrints(SLEEP_TIMEOUT);
       #endif
-
 
       //attach interrupts again.
       #if USE_RESTART
@@ -118,13 +116,19 @@ void loop() {
       break;
     case MANUAL_RESTART:
       detachInterrupt(digitalPinToInterrupt(auto_timer_restart));
+      detachInterrupt(digitalPinToInterrupt(bemf_wake));
       start_pendulum();
 
       #if USE_POST_PUSH_TIMEOUT
-      //LowPower.idle(SLEEP_TIMEOUT, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_OFF, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //a timeout to prevent double-pushing
-      LowPower.powerStandby(SLEEP_TIMEOUT,ADC_OFF,BOD_ON);
+      powerStandby_allowPrints(SLEEP_TIMEOUT);
       #endif
-      attachInterrupt(digitalPinToInterrupt(auto_timer_restart),auto_restart,LOW); //i tried falling, but because TIMER_RESTART is bound to Dio 7 right now, Falling doesn't work and I have to rely on LOW.
+
+      //attach interrupts again.
+      #if USE_RESTART
+      setup_restart_interrupt();
+      #endif
+      setup_zero_crossing_sensing();
+
       break;
     case UI:
       NUM_RESTARTS_SINCE_UI_CHANGE = 0; //reset a helpful debug counter.
@@ -142,16 +146,17 @@ void loop() {
     #if (!DEBUG_PRINTS)
     LowPower.powerDown(SLEEP_FOREVER,ADC_OFF,BOD_ON); //70 uA-ish --> See the power tester for more info.
     #else
-    delay(1);//need some timing room for the debug prints to come through
+    delay(1);//need some timing room for the debug prints to come through.  This is far, far, far more reliable for whatever reason than powerStandby_allowPrints(SLEEP_FOREVER);
     #endif
   }
-  else if(REASON_FOR_POWERUP == LIGHTSLEEP_WAIT)
+  else if(REASON_FOR_POWERUP == LIGHTSLEEP_WAIT)  //This specific condition may interf
   {
     #if (!DEBUG_PRINTS)
-    LowPower.powerStandby(SLEEP_FOREVER,ADC_OFF,BOD_ON); //500 uA-ish --> See the power tester for more info.  but only on pins 2&3.  0&1 draw ~.5mA.    
+    //500 uA-ish --> See the power tester for more info.  but only on pins 2&3.  0&1 draw ~.5mA.    
     //powerStandby wakes up much faster than powerDown, likely because powerStandby keeps the crystal oscilator running (https://www.engineersgarage.com/reducing-arduino-power-consumption-sleep-modes/)
+    powerStandby_allowPrints(SLEEP_FOREVER);
     #else
-    delay(1);//need some timing room for the debug prints to come through
+    delay(1);//need some timing room for the debug prints to come through.  This is far, far, far more reliable for whatever reason than powerStandby_allowPrints(SLEEP_FOREVER);
     #endif
   }
   
@@ -162,12 +167,62 @@ void blank_ISR()
   
 }
 
+void powerStandby_allowPrints(period_t timeout) //power standby  - the lowest power saving mode (which breaks prints)- but...
+//pay attention to the #define flags so if prints are needed; use the lesser precise_idle which allows prints through.
+{
+  
+  #if !DEBUG_PRINTS
+  LowPower.powerStandby(timeout,ADC_OFF,BOD_ON); //can only do this if I'm not printing.
+  #else //If I am printing, I have to let the print go through so I have to use a lesser timeout.
+
+  switch(timeout)
+  {
+    case SLEEP_15MS:
+      precise_idle(15000);
+      break;
+    case SLEEP_30MS:
+      precise_idle(30000);
+      break;
+    case SLEEP_60MS:
+      precise_idle(60000);
+      break;
+    case SLEEP_120MS:
+      precise_idle(120000);
+      break;
+    case SLEEP_250MS:
+      precise_idle(250000);
+      break;
+    case SLEEP_500MS:
+      precise_idle(500000);
+      break;
+    case SLEEP_1S:
+      precise_idle(1000000);
+      break;
+    case SLEEP_2S:
+      precise_idle(2000000);
+      break;
+    case SLEEP_4S:
+      precise_idle(4000000);
+      break;
+    case SLEEP_8S:
+      precise_idle(8000000);   
+      break;
+    case SLEEP_FOREVER:
+      precise_idle(1000); //not actually forever, 1ms.  then let the loop keep running   
+      break;
+  }
+  #endif
+}
+
 void precise_idle(long tim) //allow ability to delay up to 8.3 seconds highly precisely while in IDLE (17mA) - a power saving mode, but not the most aggressive.
 {
   if(tim <= 0)
   {
     return;
   }
+  //delayMicroseconds(tim);
+  //return;
+  
   Timer1.initialize(tim);
   Timer1.attachInterrupt(blank_ISR); //have to attach an interrupt to a blank function, otherwise, it wont generate an interrupt that will get us out of idle.
   LowPower.idle(SLEEP_FOREVER, ADC_OFF, TIMER4_OFF, TIMER3_OFF, TIMER1_ON, TIMER0_OFF, SPI_OFF, USART1_OFF, TWI_OFF, USB_OFF); //About 17.1 mA
