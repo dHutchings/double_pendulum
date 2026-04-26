@@ -36,13 +36,16 @@ w = 0.1 #width around the pendulum, for visualization only.
 d_weight = 0.3 #the diameter of the weights at M1 / M2.
 
 # External force
-def external_force(t,y):
+def external_force(t,y,is_pushing):
     '''
     Fx = 2.0 * np.cos(2*t)
     Fy = 0.0
     return Fx, Fy
     '''
-    fx_a,fy_a = attractive_force(t,y)
+    if is_pushing:
+        fx_a,fy_a = repulsive_force(t,y)
+    else:
+        fx_a,fy_a = attractive_force(t,y)
 
     return fx_a,fy_a
 
@@ -71,17 +74,19 @@ def attractive_force(t,y): #does not depend on time, only the pendulum position
 
 
 #need this, because the only way we can make repulsive work is by making the thing stateful.
-
+#for now, let's say it's the opporite of the attractive force
 def repulsive_force(t,y):
+    fx,fy = attractive_force(t,y)
+    return -1*fx, -1*fy
+    
+def crossing_event(t,y,is_pushing): #is_pushing is not needed for this function, but must be taken due to solve_IVP syntax
+    return y[0] #we are finding zero crossings of theta
 
-    pass
-
-
-def deriv(t, y):
+def deriv(t, y, is_pushing): #is repulsing is given in by solve IVP, we are told if the magnet is repulsing or not.
     theta1, omega1, theta2, omega2 = y #y is [theta1 omega1 theta2 omega2 Fx Fy]  #F comes from the external force function def.  we don't keep track of F since this function returns F dot, instead, we're going to have to re-solve after export.
     delta = theta1 - theta2
 
-    Fx, Fy = external_force(t,y) #pass in the whole state vector as well as time
+    Fx, Fy = external_force(t,y,is_pushing) #pass in the whole state vector as well as time
 
     # Generalized force at joint 1
     Q1 = Fx * L1 * np.cos(theta1) + Fy * L1 * np.sin(theta1) - c1 * omega1
@@ -152,23 +157,93 @@ def rectangle_corners(x1, y1, x2, y2):
 def run_sim():
 
     # Initial conditions
-    y0 = [np.pi/2, 0, np.pi/2, 0]
+    #y0 = [np.pi/2, 0, np.pi/2, 0]
 
-    t_span = (0, 30)
-    t_eval = np.linspace(*t_span, 3000)
+    y0 = [np.deg2rad(0.002), 0, 0, 0]
 
-    sol = solve_ivp(deriv, t_span, y0, t_eval=t_eval, max_step=0.01)
 
+    t_sim = 30
+    t_IVP_stopped = 0 
+    timestep = 0.01
+    pushing_time = 0.1
+    starting_push_time = 1.25  #in my current simulation, only push as long as it takes to push the link fully out - don't let it come in or come to rest!
+
+    t_result = None
+    y_result = None
+    pushing_result = None
+
+
+    direction = -1 #we expect the direction to be from positive to negative right now
+    pendulum_pushing = False
+    
+    while t_IVP_stopped < t_sim: 
+
+        if t_IVP_stopped == 0: #I"m starting up!
+            t_eval = np.arange(t_IVP_stopped,t_IVP_stopped+starting_push_time+0.05,timestep) #add 0.05, again, for floating point timestep issues
+            t_final = starting_push_time
+            pendulum_pushing = True
+
+        elif pendulum_pushing:
+            t_eval = np.arange(t_IVP_stopped,t_IVP_stopped+pushing_time+0.05,timestep) #add 0.05, again, for floating point timestep issues
+            t_final = t_IVP_stopped+pushing_time
+        else:
+            t_eval = np.arange(t_IVP_stopped,t_sim+0.05,timestep) #add 0.05, again, for floating point timestep issues
+            t_final = t_sim
+
+        
+
+        crossing_event.terminal=True #solve only till the first zero-crossing
+        crossing_event.direction = direction #we need to detect the stopping in only one direction - if we do either, we will hang forever at the zero crossing.
+        
+        #add 0.1 seconds to the final time, to deal with floating point time resolution issues, to ensure that all desired time points are in bounds.
+        sol = solve_ivp(deriv, (t_IVP_stopped,t_final+0.1), y0, t_eval=t_eval, max_step=0.01,args=(pendulum_pushing,),events=crossing_event) #going in the negative direction due to initial conditions
+
+        t_IVP_stopped = sol.t[-1]
+        #print("t_IVP_stopped:",t_IVP_stopped)
+
+        y0 = sol.y[:,-1] #update the Initial values for the next time through the loop.  Get the final result
+        #print("y0:",y0)
+
+        if t_result is None:
+            t_result = sol.t
+            y_result = sol.y
+            pushing_result = pendulum_pushing*np.ones(sol.t.shape).astype(bool)
+        else:
+            t_result = np.concatenate([t_result,sol.t[1:]]) #throw away the first timestep, since, that's a repeat
+            y_result = np.concatenate([y_result,sol.y[:,1:]],axis=1)
+            pushing_result = np.concatenate([pushing_result,pendulum_pushing*np.ones(sol.t[1:].shape).astype(bool)])
+
+
+        if sol.message == "A termination event occurred.": #then, we just crossed zero    
+            direction = direction*-1 #next time the crossing will be in the other direction.  but, we could also be pushing for a limited time and stopping for other reasons.
+            pendulum_pushing = True #start pushing!
+        elif sol.message == "The solver successfully reached the end of the integration interval.": #we either finished the sim or finished the small push time    
+            pendulum_pushing = False
+
+        #print("_-----------------------")
+
+
+
+    '''
+    t_eval = sol.t #the actual tevals may be slightly different than the nominal ones due to solve IVP details
     theta1 = sol.y[0]
     omega1 = sol.y[1]
     theta2 = sol.y[2]
     omega2 = sol.y[3]
+    '''
+    t_eval = t_result
+    theta1 = y_result[0]
+    omega1 = y_result[1]
+    theta2 = y_result[2]
+    omega2 = y_result[3]
+
 
     #now, I have to re-calculate the force since I wasn't able to export them out of the ODE solver.
     fx = np.zeros(t_eval.shape)
     fy = np.zeros(t_eval.shape)
     for idx,time_val in enumerate(t_eval):
-        fx_calc,fy_calc = external_force(time_val,sol.y[:,idx])
+        is_pushing = pushing_result[idx]
+        fx_calc,fy_calc = external_force(time_val,y_result[:,idx],is_pushing)
         fx[idx] = fx_calc
         fy[idx] = fy_calc
 
@@ -205,7 +280,7 @@ def run_sim():
     # 🎥 Animation
     # -------------------
 
-    fig, (ax,ax2) = plt.subplots(2,1,figsize=(6,8),gridspec_kw={'height_ratios': [3, 1]})
+    fig, (ax,ax2) = plt.subplots(2,1,figsize=(6,10),gridspec_kw={'height_ratios': [3, 1]})
     ax.set_xlim(-2.2, 2.2)
     ax.set_ylim(-2.2, 2.2)
     ax.set_aspect('equal')
@@ -243,6 +318,8 @@ def run_sim():
     ax2.set_xlabel("Time [sec]")
     ax2.set_ylabel("Energy [Joules]")
 
+
+
     trail_x, trail_y = [], []
 
     def update(frame):
@@ -270,6 +347,14 @@ def run_sim():
 
         #visualize where the force vector is pointing.
         force_arrow.set_data(x=x1[frame],y=y1[frame],dx=fx[frame],dy=fy[frame])
+
+        if pushing_result[frame]:
+            force_arrow.set_facecolor((1,0,0))
+            force_arrow.set_edgecolor((1,0,0))
+        else:
+            force_arrow.set_facecolor((0,1,0))
+            force_arrow.set_edgecolor((0,1,0))
+
         #construct the visualization of the force vector
         trace.set_data(trail_x, trail_y)
         time_label.set_text(f"t={t_eval[frame]:2.3f} [sec]")
