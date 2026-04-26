@@ -2,6 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
 from matplotlib.animation import FuncAnimation
+import matplotlib.patches as patches
+import math
+
 import argparse
 
 #chat GPT did this for me ... :(
@@ -29,6 +32,9 @@ m1, m2 = 1.0, 1.0
 L1, L2 = 1.0, 1.0
 c1, c2 = 0.1, 0.1  # damping
 
+w = 0.1 #width around the pendulum, for visualization only.
+d_weight = 0.3 #the diameter of the weights at M1 / M2.
+
 # External force
 def external_force(t,y):
     '''
@@ -41,7 +47,7 @@ def external_force(t,y):
     return fx_a,fy_a
 
 def attractive_force(t,y): #does not depend on time, only the pendulum position
-    theta1,*_  = y #y is [theta1 omega1 theta2 omega2 Fx Fy]  #F comes from the external force function def; we need to save it but the previous F doesn't matter for this F
+    theta1,*_  = y #y is [theta1 omega1 theta2 omega2]  #F comes from the external force function def; we need to save it but the previous F doesn't matter for this F
 
 
     x1 = L1 * np.sin(theta1)
@@ -106,6 +112,43 @@ def deriv(t, y):
 
     return [dtheta1, domega1, dtheta2, domega2]
 
+#from chat GPT
+#given two line endpoints,
+#calcualte the 4 corners of a rectangle around that line of width W
+def rectangle_corners(x1, y1, x2, y2):
+    dx = x2 - x1
+    dy = y2 - y1
+
+    length = math.hypot(dx, dy)
+    if length == 0:
+        raise ValueError("Endpoints must be different")
+
+    # Unit direction vector
+    dir_x = dx / length
+    dir_y = dy / length
+
+    # Unit perpendicular vector
+    perp_x = -dy / length
+    perp_y = dx / length
+
+    half_w = w / 2
+
+    # Offsets
+    offset_dir_x = dir_x * half_w
+    offset_dir_y = dir_y * half_w
+
+    offset_perp_x = perp_x * half_w
+    offset_perp_y = perp_y * half_w
+
+    # Four corners
+    p1 = (x1 - offset_dir_x + offset_perp_x, y1 - offset_dir_y + offset_perp_y)
+    p2 = (x1 - offset_dir_x - offset_perp_x, y1 - offset_dir_y - offset_perp_y)
+    p3 = (x2 + offset_dir_x - offset_perp_x, y2 + offset_dir_y - offset_perp_y)
+    p4 = (x2 + offset_dir_x + offset_perp_x, y2 + offset_dir_y + offset_perp_y)
+
+
+    return [p1, p2, p3, p4]
+
 def run_sim():
 
     # Initial conditions
@@ -117,16 +160,18 @@ def run_sim():
     sol = solve_ivp(deriv, t_span, y0, t_eval=t_eval, max_step=0.01)
 
     theta1 = sol.y[0]
+    omega1 = sol.y[1]
     theta2 = sol.y[2]
+    omega2 = sol.y[3]
 
     #now, I have to re-calculate the force since I wasn't able to export them out of the ODE solver.
-
     fx = np.zeros(t_eval.shape)
     fy = np.zeros(t_eval.shape)
-    for idx,t in enumerate(t_eval):
-        fx_calc,fy_calc = external_force(t,sol.y[:,idx])
+    for idx,time_val in enumerate(t_eval):
+        fx_calc,fy_calc = external_force(time_val,sol.y[:,idx])
         fx[idx] = fx_calc
         fy[idx] = fy_calc
+
 
     # Convert to Cartesian coordinates
     x1 = L1 * np.sin(theta1)
@@ -135,21 +180,68 @@ def run_sim():
     x2 = x1 + L2 * np.sin(theta2)
     y2 = y1 - L2 * np.cos(theta2)
 
+    #also calculate the kinetic & potential energies, because, why not.
+    #easiest to do this once we got the cartesian coors
+    
+    t = np.zeros((len(t_eval),2))
+    v = np.zeros((len(t_eval),3)) #three because of the extra term, see URL below.
+    #y -> [theta1 omega1 theta2 omega2]
+    for idx,time_val in enumerate(t_eval):
+        #offset both of these so that 0 is there lowest possible position.
+        t[idx,0] = m1*g*( y1[idx] +L1)  #mgh.  Not paying attention to linkage for now
+        t[idx,1] = m2*g*( y2[idx] +(L2+L1)) #mgh.  Not paying attention to linkage for now
+
+        #V is complex.  It is both the kinetic energy of linkage 1 around the origin, linkage 2 about linkage 1, but also linkage 2 about the origin.
+        #from https://physics.umd.edu/hep/drew/pendulum2.html
+        #kind of like #1/2 I w^2, where I = m r^2.-->  1/2 m r^2 w^2, where r = linkage length.
+        #but pay attention to more masses moving around
+
+
+        v[idx,0] = 1/2 * (m1+m2) * (L1**2) * (omega1[idx]**2)  
+        v[idx,1] = 1/2 * m2 * (L2**2) * (omega2[idx]**2)
+        v[idx,2] = m2*L1*L2*omega1[idx]*omega2[idx]*np.cos(theta1[idx] - theta2[idx])
+
     # -------------------
     # 🎥 Animation
     # -------------------
 
-    fig, ax = plt.subplots(figsize=(6,6))
+    fig, (ax,ax2) = plt.subplots(2,1,figsize=(6,8),gridspec_kw={'height_ratios': [3, 1]})
     ax.set_xlim(-2.2, 2.2)
     ax.set_ylim(-2.2, 2.2)
     ax.set_aspect('equal')
     ax.grid()
 
-    linkage_lines, = ax.plot([], [], 'o-', lw=2)
-    force_arrow = ax.arrow(0,0,0,0,color="r",width=0.02,alpha=0.6)
-    trace, = ax.plot([], [], '-', lw=1, alpha=0.6)
-    time_label = ax.text(0.0, 2.0gi, "t=0.000 [sec]",ha='center', va='center')
+    linkage_lines, = ax.plot([], [], '-', lw=2)
+    first_weight = patches.Circle((0,-1),radius=d_weight/2)
+    ax.add_artist(first_weight)
+    second_weight = patches.Circle((0,-2),radius=d_weight/2)
+    ax.add_artist(second_weight)
 
+    first_linkage = patches.Polygon(rectangle_corners(0,0,0,-1),closed=True,alpha=0.5)
+    ax.add_artist(first_linkage)
+
+    second_linkage = patches.Polygon(rectangle_corners(0,-1,0,-2),closed=True,alpha=0.5)
+    ax.add_artist(second_linkage)
+
+    force_arrow = ax.arrow(0,0,0,0,color="r",width=0.02,alpha=0.6,zorder=3)
+    trace, = ax.plot([], [], '-', lw=1, alpha=0.6)
+    time_label = ax.text(0.0, 2.0, "t=0.000 [sec]",ha='center', va='center')
+
+    #plot kinetic and potential energies
+    #ax2.plot(t_eval,t[:,0],label="T for L1")
+    #ax2.plot(t_eval,t[:,1],label="T for L2")
+    ax2.plot(t_eval,np.sum(t,axis=1),label="T (both)")
+
+    #ax2.plot(t_eval,v[:,0],label="V for L1")
+    #ax2.plot(t_eval,v[:,1],label="V for L2")
+    ax2.plot(t_eval,np.sum(v,axis=1),label="V (both)")
+
+    ax2.plot(t_eval,np.sum(t,axis=1)+np.sum(v,axis=1),label="E total")
+
+
+    ax2.legend()
+    ax2.set_xlabel("Time [sec]")
+    ax2.set_ylabel("Energy [Joules]")
 
     trail_x, trail_y = [], []
 
@@ -159,6 +251,13 @@ def run_sim():
             [0, x1[frame], x2[frame]], #x data of the three pivots
             [0, y1[frame], y2[frame]] #y data of the three pivots
         )
+
+        first_weight.set_center((x1[frame],y1[frame]))
+        second_weight.set_center((x2[frame],y2[frame]))
+
+        first_linkage.set_xy(rectangle_corners(0,0,x1[frame],y1[frame]))
+        second_linkage.set_xy(rectangle_corners(x1[frame],y1[frame],x2[frame],y2[frame]))
+
 
         # Trail of second mass
         trail_x.append(x2[frame])
@@ -175,7 +274,8 @@ def run_sim():
         trace.set_data(trail_x, trail_y)
         time_label.set_text(f"t={t_eval[frame]:2.3f} [sec]")
 
-        return linkage_lines, force_arrow, trace, time_label
+
+        return linkage_lines, force_arrow, trace, time_label, first_weight, second_weight, first_linkage, second_linkage
 
     ani = FuncAnimation(
         fig,
@@ -185,7 +285,8 @@ def run_sim():
         blit=True
     )
 
-    plt.title("Forced + Damped Double Pendulum Animation")
+    ax.set_title("Forced + Damped Double Pendulum Animation")
+    ax2.set_title("Pendulum Energy over time\n(excluding energy stored in magnetic attration)")
     plt.show()
 
 
