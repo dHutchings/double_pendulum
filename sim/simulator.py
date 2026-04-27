@@ -79,11 +79,47 @@ def repulsive_force(t,y):
     fx,fy = attractive_force(t,y)
     return -1*fx, -1*fy
     
-def crossing_event(t,y,is_pushing): #is_pushing is not needed for this function, but must be taken due to solve_IVP syntax
-    return y[0] #we are finding zero crossings of theta
+def bottom_crossing_event(t,y,is_pushing): #is_pushing is not needed for this function, but must be taken due to solve_IVP syntax
+
+    #gets the integer number of rotations...
+    #num_rots = np.trunc(y[0]/(2*np.pi))
+    #return_val = y[0] - 2*np.pi*num_rots
+
+    '''
+    if y[0] % (2*np.pi) <= np.pi:
+        print(y[0], y[0] % (2*np.pi))
+        return y[0] % (2*np.pi)
+    else:
+        print(y[0],-1*y[0] % (2*np.pi))
+        return -1*y[0] % (2*np.pi)
+    '''
+
+    return_val = 1000*np.rad2deg(y[0]%(np.sign(y[0])*2*np.pi))
+
+    #print("bot.  t=",t,y[0],return_val, end="\t")  #returns only if we are zero crossing any 2pi 
+
+    return return_val
+    #return y[0]
+
+    #return y[0]%(2*np.pi) #we are finding zero crossings of theta, and, since we can do multiple rotations now, I need to %2pi
+    #we have to find both the bottom zero crossing (push), and the TOP (since we switch the direction we expect the next crossing push to be..?)
+
+def top_crossing_event(t,y,is_pushing): #is_pushing is not needed for this function, but must be taken due to solve_IVP syntax
+
+    dist_from_top = y[0]-np.pi
+    num_rots = np.trunc(dist_from_top/(2*np.pi))
+    return_val = (dist_from_top) -  2*np.pi*num_rots
+
+    #print("top",y[0],return_val)  #returns only if we are zero crossing any 2pi 
+
+    return return_val
+
+
+    return  #we are finding zero crossings of theta.
+    #we have to find both the bottom zero crossing (push), and the TOP (since we switch the direction we expect the next crossing push to be..?)
 
 def deriv(t, y, is_pushing): #is repulsing is given in by solve IVP, we are told if the magnet is repulsing or not.
-    theta1, omega1, theta2, omega2 = y #y is [theta1 omega1 theta2 omega2 Fx Fy]  #F comes from the external force function def.  we don't keep track of F since this function returns F dot, instead, we're going to have to re-solve after export.
+    theta1, omega1, theta2, omega2 = y #y is [theta1 omega1 theta2 omega2]  #F comes from the external force function def.  we don't keep track of F since this function returns F dot, instead, we're going to have to re-solve after export.
     delta = theta1 - theta2
 
     Fx, Fy = external_force(t,y,is_pushing) #pass in the whole state vector as well as time
@@ -159,14 +195,16 @@ def run_sim():
     # Initial conditions
     #y0 = [np.pi/2, 0, np.pi/2, 0]
 
-    y0 = [np.deg2rad(0.002), 0, 0, 0]
+    y0 = [np.deg2rad(30), 0, np.deg2rad(0), 0]
 
 
-    t_sim = 30
+    t_sim = 10
     t_IVP_stopped = 0 
-    timestep = 0.01
-    pushing_time = 0.1
-    starting_push_time = 1.25  #in my current simulation, only push as long as it takes to push the link fully out - don't let it come in or come to rest!
+    timestep = 0.001
+    pushing_time = 0.05
+    starting_push_time = 0#1.25  #in my current simulation, only push as long as it takes to push the link fully out - don't let it come in or come to rest!
+
+    t_meta_timestep = 0.05 #how long to run the numerical simulator without enforcing 2pi peroidicity.
 
     t_result = None
     y_result = None
@@ -178,29 +216,68 @@ def run_sim():
     
     while t_IVP_stopped < t_sim: 
 
+        '''
         if t_IVP_stopped == 0: #I"m starting up!
             t_eval = np.arange(t_IVP_stopped,t_IVP_stopped+starting_push_time+0.05,timestep) #add 0.05, again, for floating point timestep issues
             t_final = starting_push_time
             pendulum_pushing = True
+        '''
 
-        elif pendulum_pushing:
-            t_eval = np.arange(t_IVP_stopped,t_IVP_stopped+pushing_time+0.05,timestep) #add 0.05, again, for floating point timestep issues
-            t_final = t_IVP_stopped+pushing_time
+        if pendulum_pushing:
+            t_eval = np.arange(t_IVP_stopped,t_IVP_stopped+pushing_time+1*timestep,timestep) #add one extra timestep so the bounds come out right and
+            t_final = t_IVP_stopped+pushing_time+2*timestep #add some float on the end - for floating point timestep issues on numpy checking if things are in bounds - but keep it only a few timesteps overall
+            #only evaluate for the pushing time
         else:
-            t_eval = np.arange(t_IVP_stopped,t_sim+0.05,timestep) #add 0.05, again, for floating point timestep issues
-            t_final = t_sim
+
+            t_eval = np.arange(t_IVP_stopped,np.min([t_IVP_stopped+t_meta_timestep+1*timestep,t_sim+1*timestep]),timestep) 
+            t_final = np.min([t_IVP_stopped+t_meta_timestep+2*timestep,t_sim+2*timestep]) #again, for floating point timestep issues
+            #only evaluate for some small timestep (so that I can enforce 2pi peroidicity) OR to the end of the simulation, whichever is smaller.
 
         
 
-        crossing_event.terminal=True #solve only till the first zero-crossing
-        crossing_event.direction = direction #we need to detect the stopping in only one direction - if we do either, we will hang forever at the zero crossing.
-        
-        #add 0.1 seconds to the final time, to deal with floating point time resolution issues, to ensure that all desired time points are in bounds.
-        sol = solve_ivp(deriv, (t_IVP_stopped,t_final+0.1), y0, t_eval=t_eval, max_step=0.01,args=(pendulum_pushing,),events=crossing_event) #going in the negative direction due to initial conditions
+        bottom_crossing_event.terminal=True #solve only till the first zero-crossing
+
+
+        top_crossing_event.terminal=True #solve only till the first zero-crossing
+
+        '''
+        print("Bounds:",t_IVP_stopped*1000,"ms",t_final*1000,"ms")
+        print("TEval:",t_eval)
+        print(t_eval >= t_IVP_stopped)
+        print(t_eval <= t_final)
+        print(np.logical_and(t_eval >= t_IVP_stopped,t_eval <= t_final))
+        '''
+
+        if pendulum_pushing:            
+            #add 0.1 seconds to the final time, to deal with floating point time resolution issues, to ensure that all desired time points are in bounds.
+            sol = solve_ivp(deriv, (t_IVP_stopped,t_final), y0, t_eval=t_eval, max_step=0.001,args=(pendulum_pushing,),rtol=1e-10, atol=1e-12) #going in the negative direction due to initial conditions
+
+        else:            
+            #add 0.1 seconds to the final time, to deal with floating point time resolution issues, to ensure that all desired time points are in bounds.
+            #top_crossing_event)
+            sol = solve_ivp(deriv, (t_IVP_stopped,t_final), y0, t_eval=t_eval, max_step=0.001,args=(pendulum_pushing,),events=(bottom_crossing_event, top_crossing_event),rtol=1e-10, atol=1e-12) #going in the negative direction due to initial conditions
+
+
+        #TODO.  So.... me solving to extra timesteps / some extra time past t_final is causing issues with events.
+        #I may be only interested in going to t = 0.1.  But, I gave it some float to t=0.1 + 0.05 due to nondescript "floating point issues"
+        #and if a push event happens in that extra 50 ms - i've got a prolem.
+
+        #i
+
 
         t_IVP_stopped = sol.t[-1]
-        #print("t_IVP_stopped:",t_IVP_stopped)
+        '''
+        print("t_IVP_stopped:",t_IVP_stopped)
 
+        print("End time and state")
+
+        print(sol.t[-1],sol.y[:,-1])
+        print(sol.t_events)
+        '''
+
+        #print(sol.y[0,:])
+
+        #don't you dare do 2pi wrap-around, the solver really doensn't like that...
         y0 = sol.y[:,-1] #update the Initial values for the next time through the loop.  Get the final result
         #print("y0:",y0)
 
@@ -214,11 +291,36 @@ def run_sim():
             pushing_result = np.concatenate([pushing_result,pendulum_pushing*np.ones(sol.t[1:].shape).astype(bool)])
 
 
-        if sol.message == "A termination event occurred.": #then, we just crossed zero    
+        #print(sol)
+        #print(y0[0])
+
+
+        if not pendulum_pushing and (sol.t_events[0].size > 0):
+            #print("Bottom Event")
             direction = direction*-1 #next time the crossing will be in the other direction.  but, we could also be pushing for a limited time and stopping for other reasons.
             pendulum_pushing = True #start pushing!
-        elif sol.message == "The solver successfully reached the end of the integration interval.": #we either finished the sim or finished the small push time    
+            y0[0] = y0[0] % (np.sign(y0[0])*2*np.pi)             #BUT - I need to enforce periodicity here, every chance I can get.  Zero crossing needs it, but, i can't do it natively inside solve IVP
+            y0[2] = y0[2]%(np.sign(y0[2])*2*np.pi)
+
+
+        elif not pendulum_pushing and (sol.t_events[1].size > 0):
+            #print("Top Event")
+            direction = direction*-1 #next time the crossing will be in the other direction.  but, we could also be pushing for a limited time and stopping for other reasons.
+            pendulum_pushing = False #No pushing here
+
+            #print(sol.y)
+            y0[0] = -1*y0[0]             #BUT - I need to enforce periodicity here.  No one elese is gonna do it for me.
+                                         #it's a -1 since we're going from pi to -pi.
+            y0[2] = y0[2]%(np.sign(y0[2])*2*np.pi)
+
+            #print(y0)
+        else:
+            #print("End of push, or end of integration time")
             pendulum_pushing = False
+            y0[0] = y0[0] % (np.sign(y0[0])*2*np.pi)             #BUT - I need to enforce periodicity here, every chance I can get.  Zero crossing needs it, but, i can't do it natively inside solve IVP
+            y0[2] = y0[2]%(np.sign(y0[2])*2*np.pi)
+
+
 
         #print("_-----------------------")
 
@@ -317,6 +419,12 @@ def run_sim():
     ax2.legend()
     ax2.set_xlabel("Time [sec]")
     ax2.set_ylabel("Energy [Joules]")
+
+    ax3.plot(t_eval,theta1,label="Theta1")
+    ax3.plot(t_eval,theta2,label="Theta2")
+    ax3.legend()
+
+    ax4.plot(t_eval,pushing_result)
 
 
 
