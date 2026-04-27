@@ -28,12 +28,12 @@ import argparse
 
 # Parameters
 g = 9.81
-m1, m2 = 1.0, 1.0
-L1, L2 = 1.0, 1.0
-c1, c2 = 0.1, 0.1  # damping
+m1, m2 = 0.010, 0.010 #10 grams, approximately, revisit!  Need to account for the moment of inertia of the links!
+L1, L2 = 2.75*25.4/1000, 2.75*25.4/1000 #2.75 inches
+c1, c2 = 0.0001, 0.0001  # roller bearing coefficient of friction, straigt from google...
 
-w = 0.1 #width around the pendulum, for visualization only.
-d_weight = 0.3 #the diameter of the weights at M1 / M2.
+w = 0.5*25.4/1000 #width around the pendulum, for visualization only..  #Half Inch
+d_weight = 1 * 25.4/1000 #the diameter of the weights at M1 / M2.  One inch (bottom weight)
 
 # External force
 def external_force(t,y,is_pushing):
@@ -57,13 +57,13 @@ def attractive_force(t,y): #does not depend on time, only the pendulum position
     y1 = -L1 * np.cos(theta1)
     linkage_loc = np.array([x1,y1])
 
-    #put a magnet at 0,-1
-    magnet_loc = np.array([0,-1])
+    #put a magnet where in the center, at the top link
+    magnet_loc = np.array([0,-1*L1])
     distance = np.linalg.norm(magnet_loc-linkage_loc)
-    force = 0.2
+    force = 0.00001
 
     magnetic_force = force/(distance**4)
-    magnetic_force=np.clip(magnetic_force,-2,2) #clip it to a maximum value (just like in real life, the pendulum also has z seperation)
+    magnetic_force=np.clip(magnetic_force,-0.09,0.09) #clip it to a maximum value (just like in real life, the pendulum also has z seperation)
     #magnet force decreases 1/4th due to dipole effect (for now)
 
     fx,fy = magnetic_force*(magnet_loc-linkage_loc)/distance #break into the correct directions.  Make sure to normalize it by direction
@@ -322,6 +322,7 @@ def run_sim():
 
 
 
+
         #print("_-----------------------")
 
 
@@ -382,9 +383,9 @@ def run_sim():
     # 🎥 Animation
     # -------------------
 
-    fig, (ax,ax2) = plt.subplots(2,1,figsize=(6,10),gridspec_kw={'height_ratios': [3, 1]})
-    ax.set_xlim(-2.2, 2.2)
-    ax.set_ylim(-2.2, 2.2)
+    fig, (ax,ax2,ax3,ax4) = plt.subplots(4,1,figsize=(6,10),gridspec_kw={'height_ratios': [5, 1, 1, 1]})
+    ax.set_xlim(-1.1 * (L1+L2+d_weight/2),1.1 * (L1+L2+d_weight/2)) #just a little bit more than the link lengths
+    ax.set_ylim(-1.1 * (L1+L2+d_weight/2),1.1 * (L1+L2+d_weight/2))
     ax.set_aspect('equal')
     ax.grid()
 
@@ -400,9 +401,9 @@ def run_sim():
     second_linkage = patches.Polygon(rectangle_corners(0,-1,0,-2),closed=True,alpha=0.5)
     ax.add_artist(second_linkage)
 
-    force_arrow = ax.arrow(0,0,0,0,color="r",width=0.02,alpha=0.6,zorder=3)
+    force_arrow = ax.arrow(0,0,0,0,color="r",width=0.002,alpha=0.6,zorder=3)
     trace, = ax.plot([], [], '-', lw=1, alpha=0.6)
-    time_label = ax.text(0.0, 2.0, "t=0.000 [sec]",ha='center', va='center')
+    time_label = ax.text(0.0, 0.9 * (L1+L2+d_weight/2), "t=0.000 [sec]",ha='center', va='center')
 
     #plot kinetic and potential energies
     #ax2.plot(t_eval,t[:,0],label="T for L1")
