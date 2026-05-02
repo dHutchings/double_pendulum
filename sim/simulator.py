@@ -27,28 +27,9 @@ import argparse
 
 
 # Parameters
-
-# rod masses
-M1, M2 = 0.010, 0.010 #10 grams, approximately, revisit!
-# tip masses
-m1_tip, m2_tip = 0.010, 0.010 #10 grams, approximately, revisit!
-
-# lengths
-L1, L2 = 2.75*25.4/1000, 2.75*25.4/1000 #2.75 inches
-
-# center of mass (uniform rods)
-r1,r2 = L1 / 2, L2 / 2
-
-# moments of inertia about pivot
-I1 = (1/3) * M1 * L1**2
-I2 = (1/3) * M2 * L2**2
-
-# effective inertia (rod + tip mass)
-I1_eff = I1 + m1_tip * L1**2
-I2_eff = I2 + m2_tip * L2**2
-
 g = 9.81
-
+m1, m2 = 0.010, 0.010 #10 grams, approximately, revisit!  Need to account for the moment of inertia of the links!
+L1, L2 = 2.75*25.4/1000, 2.75*25.4/1000 #2.75 inches
 c1, c2 = 0.0001, 0.0001  # roller bearing coefficient of friction, straigt from google...
 
 w = 0.5*25.4/1000 #width around the pendulum, for visualization only..  #Half Inch
@@ -100,12 +81,28 @@ def repulsive_force(t,y):
     
 def bottom_crossing_event(t,y,is_pushing): #is_pushing is not needed for this function, but must be taken due to solve_IVP syntax
 
-    #returns not only if i'm doing 0, but any 2pi.  in practice - since we so often trunctate angular locations - we may not need in pratice.
-    return_val = np.rad2deg(y[0]%(np.sign(y[0])*2*np.pi))
+    #gets the integer number of rotations...
+    #num_rots = np.trunc(y[0]/(2*np.pi))
+    #return_val = y[0] - 2*np.pi*num_rots
 
+    '''
+    if y[0] % (2*np.pi) <= np.pi:
+        print(y[0], y[0] % (2*np.pi))
+        return y[0] % (2*np.pi)
+    else:
+        print(y[0],-1*y[0] % (2*np.pi))
+        return -1*y[0] % (2*np.pi)
+    '''
+
+    return_val = 1000*np.rad2deg(y[0]%(np.sign(y[0])*2*np.pi))
+
+    #print("bot.  t=",t,y[0],return_val, end="\t")  #returns only if we are zero crossing any 2pi 
 
     return return_val
+    #return y[0]
 
+    #return y[0]%(2*np.pi) #we are finding zero crossings of theta, and, since we can do multiple rotations now, I need to %2pi
+    #we have to find both the bottom zero crossing (push), and the TOP (since we switch the direction we expect the next crossing push to be..?)
 
 def top_crossing_event(t,y,is_pushing): #is_pushing is not needed for this function, but must be taken due to solve_IVP syntax
 
@@ -118,51 +115,41 @@ def top_crossing_event(t,y,is_pushing): #is_pushing is not needed for this funct
     return return_val
 
 
-def deriv(t, y, is_pushing): #is repulsing is given in by solve IVP, we are told if the magnet is repulsing or not... chat GPT cleaned this up.
+    return  #we are finding zero crossings of theta.
+    #we have to find both the bottom zero crossing (push), and the TOP (since we switch the direction we expect the next crossing push to be..?)
+
+def deriv(t, y, is_pushing): #is repulsing is given in by solve IVP, we are told if the magnet is repulsing or not.
     theta1, omega1, theta2, omega2 = y #y is [theta1 omega1 theta2 omega2]  #F comes from the external force function def.  we don't keep track of F since this function returns F dot, instead, we're going to have to re-solve after export.
     delta = theta1 - theta2
 
+    Fx, Fy = external_force(t,y,is_pushing) #pass in the whole state vector as well as time
 
-
-    # --- external force ---
-    Fx, Fy = external_force(t, y, is_pushing)
-
-    # generalized forces
+    # Generalized force at joint 1
     Q1 = Fx * L1 * np.cos(theta1) + Fy * L1 * np.sin(theta1) - c1 * omega1
     Q2 = -c2 * omega2
 
-    # --- Mass matrix M ---
-    M11 = I1_eff + I2_eff + M2*(L1**2) + 2*M2*L1*r2*np.cos(delta)
-    M12 = I2_eff + M2*L1*r2*np.cos(delta)
-    M21 = M12
-    M22 = I2_eff
-
-    M = np.array([[M11, M12],
-                  [M21, M22]])
-
-    # --- Coriolis / centrifugal terms C ---
-    C1 = -M2*L1*r2*(2*omega1*omega2 + omega2**2)*np.sin(delta)
-    C2 = M2*L1*r2*omega1**2*np.sin(delta)
-
-    C = np.array([C1, C2])
-
-    # --- Gravity terms G ---
-    G1 = (M1*g*r1 + m1_tip*g*L1 + M2*g*L1) * np.sin(theta1) \
-         + M2*g*r2*np.sin(theta2)
-
-    G2 = M2*g*r2*np.sin(theta2)
-
-    G = np.array([G1, G2])
-
-    # --- Generalized forces ---
-    Q = np.array([Q1, Q2])
-
-    # --- Solve for angular accelerations ---
-    domega = np.linalg.solve(M, Q - C - G)
+    denom = (2*m1 + m2 - m2*np.cos(2*delta))
 
     dtheta1 = omega1
     dtheta2 = omega2
-    domega1, domega2 = domega
+
+    domega1 = (
+        -g*(2*m1 + m2)*np.sin(theta1)
+        - m2*g*np.sin(theta1 - 2*theta2)
+        - 2*np.sin(delta)*m2*(omega2**2 * L2 + omega1**2 * L1 * np.cos(delta))
+    ) / (L1 * denom)
+
+    domega2 = (
+        2*np.sin(delta)*(
+            omega1**2 * L1 * (m1 + m2)
+            + g*(m1 + m2)*np.cos(theta1)
+            + omega2**2 * L2 * m2 * np.cos(delta)
+        )
+    ) / (L2 * denom)
+
+    # Add forces (approximate projection)
+    domega1 += Q1 / ((m1 + m2) * L1**2)
+    domega2 += Q2 / (m2 * L2**2)
 
     return [dtheta1, domega1, dtheta2, domega2]
 
