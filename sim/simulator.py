@@ -229,12 +229,12 @@ def run_sim():
     
     while t_IVP_stopped < t_sim: 
 
-        '''
-        if t_IVP_stopped == 0: #I"m starting up!
-            t_eval = np.arange(t_IVP_stopped,t_IVP_stopped+starting_push_time+0.05,timestep) #add 0.05, again, for floating point timestep issues
-            t_final = starting_push_time
-            pendulum_pushing = True
-        '''
+        #I have to incrimendtally solve untill the next change of conditions.
+        #either till I stop pushing, or
+        #if there is a crossing, OR
+        #(minor point) I next enforce 2pi periodicity, then resume.
+        #then, a new ODE untill conditions change aagain.
+
 
         if pendulum_pushing:
             t_eval = np.arange(t_IVP_stopped,t_IVP_stopped+pushing_time+1*timestep,timestep) #add one extra timestep so the bounds come out right and
@@ -249,46 +249,23 @@ def run_sim():
         
 
         bottom_crossing_event.terminal=True #solve only till the first zero-crossing
-
-
         top_crossing_event.terminal=True #solve only till the first zero-crossing
 
-        '''
-        print("Bounds:",t_IVP_stopped*1000,"ms",t_final*1000,"ms")
-        print("TEval:",t_eval)
-        print(t_eval >= t_IVP_stopped)
-        print(t_eval <= t_final)
-        print(np.logical_and(t_eval >= t_IVP_stopped,t_eval <= t_final))
-        '''
+
 
         if pendulum_pushing:            
-            #add 0.1 seconds to the final time, to deal with floating point time resolution issues, to ensure that all desired time points are in bounds.
-            sol = solve_ivp(deriv, (t_IVP_stopped,t_final), y0, t_eval=t_eval, max_step=0.001,args=(pendulum_pushing,),rtol=1e-10, atol=1e-12) #going in the negative direction due to initial conditions
+            #no event, since the pendulum pushing is a fixed time.
+            sol = solve_ivp(deriv, (t_IVP_stopped,t_final), y0, t_eval=t_eval, max_step=0.001,args=(pendulum_pushing,),rtol=1e-10, atol=1e-12)
 
-        else:            
-            #add 0.1 seconds to the final time, to deal with floating point time resolution issues, to ensure that all desired time points are in bounds.
-            #top_crossing_event)
-            sol = solve_ivp(deriv, (t_IVP_stopped,t_final), y0, t_eval=t_eval, max_step=0.001,args=(pendulum_pushing,),events=(bottom_crossing_event, top_crossing_event),rtol=1e-10, atol=1e-12) #going in the negative direction due to initial conditions
+        else:
+            #events for crossing.  Need both top and bottom crossing events.            
+            sol = solve_ivp(deriv, (t_IVP_stopped,t_final), y0, t_eval=t_eval, max_step=0.001,args=(pendulum_pushing,),events=(bottom_crossing_event, top_crossing_event),rtol=1e-10, atol=1e-12)
 
 
-        #TODO.  So.... me solving to extra timesteps / some extra time past t_final is causing issues with events.
-        #I may be only interested in going to t = 0.1.  But, I gave it some float to t=0.1 + 0.05 due to nondescript "floating point issues"
-        #and if a push event happens in that extra 50 ms - i've got a prolem.
-
-        #i
 
 
         t_IVP_stopped = sol.t[-1]
-        '''
-        print("t_IVP_stopped:",t_IVP_stopped)
 
-        print("End time and state")
-
-        print(sol.t[-1],sol.y[:,-1])
-        print(sol.t_events)
-        '''
-
-        #print(sol.y[0,:])
 
         #don't you dare do 2pi wrap-around, the solver really doensn't like that...
         y0 = sol.y[:,-1] #update the Initial values for the next time through the loop.  Get the final result
@@ -304,13 +281,10 @@ def run_sim():
             pushing_result = np.concatenate([pushing_result,pendulum_pushing*np.ones(sol.t[1:].shape).astype(bool)])
 
 
-        #print(sol)
-        #print(y0[0])
 
 
         if not pendulum_pushing and (sol.t_events[0].size > 0):
             #print("Bottom Event")
-            direction = direction*-1 #next time the crossing will be in the other direction.  but, we could also be pushing for a limited time and stopping for other reasons.
             pendulum_pushing = True #start pushing!
             y0[0] = y0[0] % (np.sign(y0[0])*2*np.pi)             #BUT - I need to enforce periodicity here, every chance I can get.  Zero crossing needs it, but, i can't do it natively inside solve IVP
             y0[2] = y0[2]%(np.sign(y0[2])*2*np.pi)
@@ -318,15 +292,11 @@ def run_sim():
 
         elif not pendulum_pushing and (sol.t_events[1].size > 0):
             #print("Top Event")
-            direction = direction*-1 #next time the crossing will be in the other direction.  but, we could also be pushing for a limited time and stopping for other reasons.
             pendulum_pushing = False #No pushing here
 
-            #print(sol.y)
             y0[0] = -1*y0[0]             #BUT - I need to enforce periodicity here.  No one elese is gonna do it for me.
                                          #it's a -1 since we're going from pi to -pi.
             y0[2] = y0[2]%(np.sign(y0[2])*2*np.pi)
-
-            #print(y0)
         else:
             #print("End of push, or end of integration time")
             pendulum_pushing = False
@@ -340,13 +310,6 @@ def run_sim():
 
 
 
-    '''
-    t_eval = sol.t #the actual tevals may be slightly different than the nominal ones due to solve IVP details
-    theta1 = sol.y[0]
-    omega1 = sol.y[1]
-    theta2 = sol.y[2]
-    omega2 = sol.y[3]
-    '''
     t_eval = t_result
     theta1 = y_result[0]
     omega1 = y_result[1]
@@ -379,8 +342,8 @@ def run_sim():
     #y -> [theta1 omega1 theta2 omega2]
     for idx,time_val in enumerate(t_eval):
         #offset both of these so that 0 is there lowest possible position.
-        t[idx,0] = m1*g*( y1[idx] +L1)  #mgh.  Not paying attention to linkage for now
-        t[idx,1] = m2*g*( y2[idx] +(L2+L1)) #mgh.  Not paying attention to linkage for now
+        t[idx,0] = m1_tip*g*( y1[idx] +L1)  #mgh.  Not paying attention to linkage for now
+        t[idx,1] = m2_tip*g*( y2[idx] +(L2+L1)) #mgh.  Not paying attention to linkage for now
 
         #V is complex.  It is both the kinetic energy of linkage 1 around the origin, linkage 2 about linkage 1, but also linkage 2 about the origin.
         #from https://physics.umd.edu/hep/drew/pendulum2.html
@@ -388,15 +351,20 @@ def run_sim():
         #but pay attention to more masses moving around
 
 
-        v[idx,0] = 1/2 * (m1+m2) * (L1**2) * (omega1[idx]**2)  
-        v[idx,1] = 1/2 * m2 * (L2**2) * (omega2[idx]**2)
-        v[idx,2] = m2*L1*L2*omega1[idx]*omega2[idx]*np.cos(theta1[idx] - theta2[idx])
+        v[idx,0] = 1/2 * (m1_tip+m2_tip) * (L1**2) * (omega1[idx]**2)  
+        v[idx,1] = 1/2 * m2_tip * (L2**2) * (omega2[idx]**2)
+        v[idx,2] = m2_tip*L1*L2*omega1[idx]*omega2[idx]*np.cos(theta1[idx] - theta2[idx])
 
     # -------------------
     # 🎥 Animation
     # -------------------
-
-    fig, (ax,ax2,ax3,ax4) = plt.subplots(4,1,figsize=(6,10),gridspec_kw={'height_ratios': [5, 1, 1, 1]})
+    fig,axd = plt.subplot_mosaic([["A","B"],["A","C"],["A","D"]],figsize=(11,6))
+    ax = axd['A']
+    ax2 = axd["B"]
+    ax3 = axd["C"]
+    ax3.sharex(ax2)
+    ax4 = axd['D']
+    ax4.sharex(ax2)
     ax.set_xlim(-1.1 * (L1+L2+d_weight/2),1.1 * (L1+L2+d_weight/2)) #just a little bit more than the link lengths
     ax.set_ylim(-1.1 * (L1+L2+d_weight/2),1.1 * (L1+L2+d_weight/2))
     ax.set_aspect('equal')
@@ -431,7 +399,6 @@ def run_sim():
 
 
     ax2.legend()
-    ax2.set_xlabel("Time [sec]")
     ax2.set_ylabel("Energy [Joules]")
 
     ax3.plot(t_eval,theta1,label="Theta1")
@@ -439,6 +406,8 @@ def run_sim():
     ax3.legend()
 
     ax4.plot(t_eval,pushing_result)
+    ax4.set_xlabel("Time [sec]")
+
 
 
 
