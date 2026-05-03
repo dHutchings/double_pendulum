@@ -1,7 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
+from scipy.integrate import cumulative_trapezoid
+import scipy
 from matplotlib.animation import FuncAnimation
+from matplotlib.widgets import Button
 import matplotlib.patches as patches
 import math
 
@@ -28,7 +31,7 @@ import argparse
 
 # Parameters
 g = 9.81
-m1, m2 = 0.010, 0.010 #10 grams, approximately, revisit!  Need to account for the moment of inertia of the links!
+m1, m2 = 0.020, 0.020 #10 grams, approximately, revisit!  Need to account for the moment of inertia of the links!
 L1, L2 = 2.75*25.4/1000, 2.75*25.4/1000 #2.75 inches
 c1, c2 = 0.0001, 0.0001  # roller bearing coefficient of friction, straigt from google...
 
@@ -71,7 +74,76 @@ def attractive_force(t,y): #does not depend on time, only the pendulum position
 
     return fx,fy
 
+def angle_between(v1,v2):
+    dot_product = np.dot(v1, v2)
 
+    # 2. Compute magnitudes (norms)
+    norm_v1 = np.linalg.norm(v1)
+    norm_v2 = np.linalg.norm(v2)
+
+    # 3. Calculate cosine of the angle
+    cos_theta = dot_product / (norm_v1 * norm_v2)
+
+    # 4. Get angle in radians (clipped to avoid float errors)
+    angle_rad = np.arccos(np.clip(cos_theta, -1.0, 1.0))
+
+    return angle_rad
+
+
+#Calculate how much energy is stored in magnetic attraction.
+#only need to do this once
+#kinda convoluted, should document
+thetas = np.linspace(0,np.pi,100)
+angles = np.zeros(thetas.shape)
+incrimental_work = np.zeros(thetas.shape)
+forces = np.zeros(thetas.shape)
+
+for idx,th in enumerate(thetas):
+    if th == 0:
+        incrimental_work[idx] = 0
+        forces[idx] = 0
+        continue
+    x = L1 * np.sin(th)
+    y = -L1 * np.cos(th)
+
+    x_last = L1 * np.sin(thetas[idx-1])
+    y_last = -L1 * np.cos(thetas[idx-1])
+
+
+
+    disp_from_magnet = [x,L1+y]
+    disp_from_last = [x-x_last,y-y_last]
+    dist_from_last = L1*(th * thetas[idx-1])#np.linalg.norm(disp_from_last)
+
+    #print(th,[x,y],disp_from_magnet)
+
+    fx,fy = attractive_force(0,(th,))
+
+
+    angle = angle_between([x,y],[fx,fy])
+    angles[idx] = angle
+    forces[idx] = np.linalg.norm([fx,fy]) * np.sin(angle)
+    if idx != 0:
+        incrimental_work[idx] = dist_from_last*forces[idx]
+
+total_work = cumulative_trapezoid(incrimental_work,thetas,initial=0)
+
+'''
+fig = plt.figure()
+#plt.plot(thetas,angles)
+plt.plot(thetas,forces)
+plt.plot(thetas,incrimental_work)
+plt.plot(thetas,total_work)
+plt.show()
+'''
+
+#create handy 1-d interp for the future
+magnetic_energy = scipy.interpolate.interp1d(thetas,total_work)
+
+#Reset logic
+def reset_animation(event):
+    # This resets the frame counter to zero
+    ani.frame_seq = ani.new_frame_seq()
 
 #need this, because the only way we can make repulsive work is by making the thing stateful.
 #for now, let's say it's the opporite of the attractive force
@@ -94,7 +166,7 @@ def bottom_crossing_event(t,y,is_pushing): #is_pushing is not needed for this fu
         return -1*y[0] % (2*np.pi)
     '''
 
-    return_val = 1000*np.rad2deg(y[0]%(np.sign(y[0])*2*np.pi))
+    return_val = np.rad2deg(y[0]%(np.sign(y[0])*2*np.pi))
 
     #print("bot.  t=",t,y[0],return_val, end="\t")  #returns only if we are zero crossing any 2pi 
 
@@ -117,6 +189,7 @@ def top_crossing_event(t,y,is_pushing): #is_pushing is not needed for this funct
 
     return  #we are finding zero crossings of theta.
     #we have to find both the bottom zero crossing (push), and the TOP (since we switch the direction we expect the next crossing push to be..?)
+
 
 def deriv(t, y, is_pushing): #is repulsing is given in by solve IVP, we are told if the magnet is repulsing or not.
     theta1, omega1, theta2, omega2 = y #y is [theta1 omega1 theta2 omega2]  #F comes from the external force function def.  we don't keep track of F since this function returns F dot, instead, we're going to have to re-solve after export.
@@ -195,14 +268,14 @@ def run_sim():
     # Initial conditions
     #y0 = [np.pi/2, 0, np.pi/2, 0]
 
-    y0 = [np.deg2rad(30), 0, np.deg2rad(0), 0]
+    y0 = [np.deg2rad(0.1), 0, np.deg2rad(0), 0]
 
 
-    t_sim = 10
+    t_sim = 15
     t_IVP_stopped = 0 
-    timestep = 0.001
-    pushing_time = 0.05
-    starting_push_time = 0#1.25  #in my current simulation, only push as long as it takes to push the link fully out - don't let it come in or come to rest!
+    timestep = 0.01
+    pushing_time = 0.09
+    starting_push_time = 0.35  #in my current simulation, only push as long as it takes to push the link fully out - don't let it come in or come to rest!
 
     t_meta_timestep = 0.05 #how long to run the numerical simulator without enforcing 2pi peroidicity.
 
@@ -213,6 +286,7 @@ def run_sim():
 
     direction = -1 #we expect the direction to be from positive to negative right now
     pendulum_pushing = False
+    pushing_start = True #we start pushing
     
     while t_IVP_stopped < t_sim: 
 
@@ -222,8 +296,13 @@ def run_sim():
         #(minor point) I next enforce 2pi periodicity, then resume.
         #then, a new ODE untill conditions change aagain.
 
+        if pushing_start:
 
-        if pendulum_pushing:
+            t_eval = np.arange(t_IVP_stopped,t_IVP_stopped+starting_push_time+1*timestep,timestep) #add one extra timestep so the bounds come out right and
+            t_final = t_IVP_stopped+starting_push_time+2*timestep #add some float on the end - for floating point timestep issues on numpy checking if things are in bounds - but keep it only a few timesteps overall
+
+
+        elif pendulum_pushing:
             t_eval = np.arange(t_IVP_stopped,t_IVP_stopped+pushing_time+1*timestep,timestep) #add one extra timestep so the bounds come out right and
             t_final = t_IVP_stopped+pushing_time+2*timestep #add some float on the end - for floating point timestep issues on numpy checking if things are in bounds - but keep it only a few timesteps overall
             #only evaluate for the pushing time
@@ -239,10 +318,10 @@ def run_sim():
         top_crossing_event.terminal=True #solve only till the first zero-crossing
 
 
-
-        if pendulum_pushing:            
+        if pendulum_pushing or pushing_start:
             #no event, since the pendulum pushing is a fixed time.
-            sol = solve_ivp(deriv, (t_IVP_stopped,t_final), y0, t_eval=t_eval, max_step=0.001,args=(pendulum_pushing,),rtol=1e-10, atol=1e-12)
+            sol = solve_ivp(deriv, (t_IVP_stopped,t_final), y0, t_eval=t_eval, max_step=0.001,args=(pendulum_pushing or pushing_start,),rtol=1e-10, atol=1e-12)
+
 
         else:
             #events for crossing.  Need both top and bottom crossing events.            
@@ -257,27 +336,29 @@ def run_sim():
         #don't you dare do 2pi wrap-around, the solver really doensn't like that...
         y0 = sol.y[:,-1] #update the Initial values for the next time through the loop.  Get the final result
         #print("y0:",y0)
+        #print(sol.t)
+        #print("----")
 
         if t_result is None:
             t_result = sol.t
             y_result = sol.y
-            pushing_result = pendulum_pushing*np.ones(sol.t.shape).astype(bool)
+            pushing_result = (pendulum_pushing or pushing_start)*np.ones(sol.t.shape).astype(bool)
         else:
             t_result = np.concatenate([t_result,sol.t[1:]]) #throw away the first timestep, since, that's a repeat
             y_result = np.concatenate([y_result,sol.y[:,1:]],axis=1)
-            pushing_result = np.concatenate([pushing_result,pendulum_pushing*np.ones(sol.t[1:].shape).astype(bool)])
+            pushing_result = np.concatenate([pushing_result,(pendulum_pushing or pushing_start)*np.ones(sol.t[1:].shape).astype(bool)])
 
 
 
 
-        if not pendulum_pushing and (sol.t_events[0].size > 0):
+        if not (pendulum_pushing or pushing_start) and (sol.t_events[0].size > 0):
             #print("Bottom Event")
             pendulum_pushing = True #start pushing!
             y0[0] = y0[0] % (np.sign(y0[0])*2*np.pi)             #BUT - I need to enforce periodicity here, every chance I can get.  Zero crossing needs it, but, i can't do it natively inside solve IVP
             y0[2] = y0[2]%(np.sign(y0[2])*2*np.pi)
 
 
-        elif not pendulum_pushing and (sol.t_events[1].size > 0):
+        elif not (pendulum_pushing or pushing_start) and (sol.t_events[1].size > 0):
             #print("Top Event")
             pendulum_pushing = False #No pushing here
 
@@ -289,6 +370,10 @@ def run_sim():
             pendulum_pushing = False
             y0[0] = y0[0] % (np.sign(y0[0])*2*np.pi)             #BUT - I need to enforce periodicity here, every chance I can get.  Zero crossing needs it, but, i can't do it natively inside solve IVP
             y0[2] = y0[2]%(np.sign(y0[2])*2*np.pi)
+
+        if pushing_start == True:
+            pushing_start = False #I only push one at the start!
+
 
 
 
@@ -326,11 +411,12 @@ def run_sim():
     
     t = np.zeros((len(t_eval),2))
     v = np.zeros((len(t_eval),3)) #three because of the extra term, see URL below.
+    b = np.zeros(len(t_eval)) #Only one magnetic storage element
     #y -> [theta1 omega1 theta2 omega2]
     for idx,time_val in enumerate(t_eval):
         #offset both of these so that 0 is there lowest possible position.
-        t[idx,0] = m1_tip*g*( y1[idx] +L1)  #mgh.  Not paying attention to linkage for now
-        t[idx,1] = m2_tip*g*( y2[idx] +(L2+L1)) #mgh.  Not paying attention to linkage for now
+        t[idx,0] = m1*g*( y1[idx] +L1)  #mgh.  Not paying attention to linkage for now
+        t[idx,1] = m2*g*( y2[idx] +(L2+L1)) #mgh.  Not paying attention to linkage for now
 
         #V is complex.  It is both the kinetic energy of linkage 1 around the origin, linkage 2 about linkage 1, but also linkage 2 about the origin.
         #from https://physics.umd.edu/hep/drew/pendulum2.html
@@ -338,9 +424,11 @@ def run_sim():
         #but pay attention to more masses moving around
 
 
-        v[idx,0] = 1/2 * (m1_tip+m2_tip) * (L1**2) * (omega1[idx]**2)  
-        v[idx,1] = 1/2 * m2_tip * (L2**2) * (omega2[idx]**2)
-        v[idx,2] = m2_tip*L1*L2*omega1[idx]*omega2[idx]*np.cos(theta1[idx] - theta2[idx])
+        v[idx,0] = 1/2 * (m1+m2) * (L1**2) * (omega1[idx]**2)  
+        v[idx,1] = 1/2 * m2 * (L2**2) * (omega2[idx]**2)
+        v[idx,2] = m2*L1*L2*omega1[idx]*omega2[idx]*np.cos(theta1[idx] - theta2[idx])
+
+        b[idx] = magnetic_energy(np.abs(theta1[idx]))
 
     # -------------------
     # 🎥 Animation
@@ -382,7 +470,8 @@ def run_sim():
     #ax2.plot(t_eval,v[:,1],label="V for L2")
     ax2.plot(t_eval,np.sum(v,axis=1),label="V (both)")
 
-    ax2.plot(t_eval,np.sum(t,axis=1)+np.sum(v,axis=1),label="E total")
+    ax2.plot(t_eval,b,label="B (stored)")
+    ax2.plot(t_eval,np.sum(t,axis=1)+np.sum(v,axis=1)+b,label="E total")
 
 
     ax2.legend()
