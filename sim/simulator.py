@@ -119,6 +119,9 @@ for idx,th in enumerate(thetas):
 
     fx,fy = attractive_force(0,(th,))
 
+    if fx==0 and fy==0:
+        continue #the zeros will fill in
+
 
     angle = angle_between([x,y],[fx,fy])
     angles[idx] = angle
@@ -363,6 +366,11 @@ def run_sim():
             pendulum_pushing = False #No pushing here
 
             y0[0] = -1*y0[0]             #BUT - I need to enforce periodicity here.  No one elese is gonna do it for me.
+            y0[0] = -1*y0[0]            #BUT - I need to enforce periodicity here.  No one elese is gonna do it for me.
+                                        #encforcing this periodicity seems to violate conservation of energy (in small ways)!
+                                        #TODO: investigate.  Set c=0 to make it easier to find
+
+
                                          #it's a -1 since we're going from pi to -pi.
             y0[2] = y0[2]%(np.sign(y0[2])*2*np.pi)
         else:
@@ -428,7 +436,7 @@ def run_sim():
         v[idx,1] = 1/2 * m2 * (L2**2) * (omega2[idx]**2)
         v[idx,2] = m2*L1*L2*omega1[idx]*omega2[idx]*np.cos(theta1[idx] - theta2[idx])
 
-        b[idx] = magnetic_energy(np.abs(theta1[idx]))
+        b[idx] = magnetic_energy(np.abs(theta1[idx]%np.pi)) #Mode with pi for rollover protection.  Fortuantely, same energy to the left as the right
 
     # -------------------
     # 🎥 Animation
@@ -471,7 +479,7 @@ def run_sim():
     ax2.plot(t_eval,np.sum(v,axis=1),label="V (both)")
 
     ax2.plot(t_eval,b,label="B (stored)")
-    ax2.plot(t_eval,np.sum(t,axis=1)+np.sum(v,axis=1)+b,label="E total")
+    ax2.plot(t_eval,np.sum(t,axis=1)+np.sum(v,axis=1),label="E total") #+B?
 
 
     ax2.legend()
