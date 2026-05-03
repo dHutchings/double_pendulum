@@ -93,7 +93,7 @@ def angle_between(v1,v2):
 #Calculate how much energy is stored in magnetic attraction.
 #only need to do this once
 #kinda convoluted, should document
-thetas = np.linspace(0,np.pi,100)
+thetas = np.linspace(0,np.pi,1000)
 angles = np.zeros(thetas.shape)
 incrimental_work = np.zeros(thetas.shape)
 forces = np.zeros(thetas.shape)
@@ -113,7 +113,7 @@ for idx,th in enumerate(thetas):
 
     disp_from_magnet = [x,L1+y]
     disp_from_last = [x-x_last,y-y_last]
-    dist_from_last = L1*(th * thetas[idx-1])#np.linalg.norm(disp_from_last)
+    dist_from_last = L1*(np.abs(th - thetas[idx-1]))#np.linalg.norm(disp_from_last)
 
     #print(th,[x,y],disp_from_magnet)
 
@@ -134,10 +134,11 @@ total_work = cumulative_trapezoid(incrimental_work,thetas,initial=0)
 '''
 fig = plt.figure()
 #plt.plot(thetas,angles)
-plt.plot(thetas,forces)
-plt.plot(thetas,incrimental_work)
-plt.plot(thetas,total_work)
-plt.show()
+plt.plot(thetas,forces,"*-",label="forces")
+plt.plot(thetas,incrimental_work,"*-",label="incrimental_work")
+plt.plot(thetas,total_work,"*-",label="total_work")
+plt.legend()
+plt.show(block=False)
 '''
 
 #create handy 1-d interp for the future
@@ -274,20 +275,19 @@ def run_sim():
     y0 = [np.deg2rad(0.1), 0, np.deg2rad(0), 0]
 
 
-    t_sim = 15
+    t_sim = 5
     t_IVP_stopped = 0 
-    timestep = 0.01
-    pushing_time = 0.09
+    timestep = 0.001
+    pushing_time = 0.04
     starting_push_time = 0.35  #in my current simulation, only push as long as it takes to push the link fully out - don't let it come in or come to rest!
 
-    t_meta_timestep = 0.05 #how long to run the numerical simulator without enforcing 2pi peroidicity.
+    t_meta_timestep = 0.050 #how long to run the numerical simulator without enforcing 2pi peroidicity.
 
     t_result = None
     y_result = None
     pushing_result = None
 
 
-    direction = -1 #we expect the direction to be from positive to negative right now
     pendulum_pushing = False
     pushing_start = True #we start pushing
     
@@ -436,7 +436,9 @@ def run_sim():
         v[idx,1] = 1/2 * m2 * (L2**2) * (omega2[idx]**2)
         v[idx,2] = m2*L1*L2*omega1[idx]*omega2[idx]*np.cos(theta1[idx] - theta2[idx])
 
-        b[idx] = magnetic_energy(np.abs(theta1[idx]%np.pi)) #Mode with pi for rollover protection.  Fortuantely, same energy to the left as the right
+
+        b[idx] = magnetic_energy(np.abs(theta1[idx])%np.pi) #Mode with pi for rollover protection.  Fortuantely, same energy to the left as the right
+        #print(time_val,"\t",theta1[idx],b[idx])
 
     # -------------------
     # 🎥 Animation
@@ -479,7 +481,7 @@ def run_sim():
     ax2.plot(t_eval,np.sum(v,axis=1),label="V (both)")
 
     ax2.plot(t_eval,b,label="B (stored)")
-    ax2.plot(t_eval,np.sum(t,axis=1)+np.sum(v,axis=1),label="E total") #+B?
+    ax2.plot(t_eval,np.sum(t,axis=1)+np.sum(v,axis=1)+b,label="E total")
 
 
     ax2.legend()
