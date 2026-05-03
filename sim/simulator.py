@@ -440,6 +440,7 @@ def run_sim():
 
         return linkage_lines, force_arrow, trace, time_label, first_weight, second_weight, first_linkage, second_linkage
 
+    global ani
     ani = FuncAnimation(
         fig,
         update,
@@ -447,6 +448,12 @@ def run_sim():
         interval=20,
         blit=True
     )
+
+    axreset = fig.add_axes([0.2, 0.05, 0.2, 0.05])
+
+    btn_reset = Button(axreset,'Reset Animation')
+    btn_reset.on_clicked(reset_animation)
+
 
     ax.set_title("Forced + Damped Double Pendulum Animation")
     ax2.set_title("Pendulum Energy over time\n(excluding energy stored in magnetic attration)")
