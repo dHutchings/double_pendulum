@@ -82,35 +82,7 @@ void push()
     //This new (lower current, but slower) op-amps slew rate is so dang long that using the op-amp as a comparator is easy, but, may be bad.  We may want to go faster.
     //left in for future-proofing, but i may not need this.  uC requires significant time to wake from powerOff state, and I can change timing by also affecting the voltage threshold value.
 
-    drive_MOS(HIGH); //Drive_mosfet HIGH turns the coil on & lets the 555 timer know... we don't care about sign flips here
-  
-    precise_idle(final_time); //Cuts overall 5V time average from 1.83 ma to 1.572 ma just by precise_idleing here, which cuts in 1/2 the current draw for this very small time.
-    //just goes to show how much current the uC draws when fully up.
-    //unfortunately, since this time is < 18 ms, I don't think there's a way to save even more power here...
-    drive_MOS(LOW);
-  
-    prev_pushes ++;
-
-    //According to the datasheet (Page 55), the bandgap reference takes 40 to 70uS to start up, and draws 10uA.
-    //I havent had any success with saving power via BOD, (fuses?) - while the library's API suggests I can disable BOD
-    //on my board its only possible via fuse settings.
-    //according to datsheet, BOD on will also put on the Bandgap reference.
-       
-    if(prev_pushes > MAX_PUSHES)
-    {
-      prev_pushes = 0;
-
-      #if SCALE_RANDOMNESS
-      random_time = long(float(random(-RANDOM_AMOUNT,RANDOM_AMOUNT)) * float(push_time_us) / float(NOMINAL_PUSH)); 
-      #else
-      random_time = random(-RANDOM_AMOUNT,RANDOM_AMOUNT); 
-      #endif
-      //scale random time by the nominal max push time
-      final_time = push_time_us + random_time;
-    }
-
-    //If I started recently, push harder.
-    
+    //If I started recently, push harder.    
     if( NUM_PUSHES_BETWEEN_RESTARTS <= RESTART_EXTA_PURHSES_COUNT)
     {
       /*
@@ -134,6 +106,37 @@ void push()
       */
 
     }
+
+    drive_MOS(HIGH); //Drive_mosfet HIGH turns the coil on & lets the 555 timer know... we don't care about sign flips here
+  
+    precise_idle(final_time); //Cuts overall 5V time average from 1.83 ma to 1.572 ma just by precise_idleing here, which cuts in 1/2 the current draw for this very small time.
+    //just goes to show how much current the uC draws when fully up.
+    //unfortunately, since this time is < 18 ms, I don't think there's a way to save even more power here...
+    drive_MOS(LOW);
+  
+    prev_pushes ++;
+
+    //According to the datasheet (Page 55), the bandgap reference takes 40 to 70uS to start up, and draws 10uA.
+    //I havent had any success with saving power via BOD, (fuses?) - while the library's API suggests I can disable BOD
+    //on my board its only possible via fuse settings.
+    //according to datsheet, BOD on will also put on the Bandgap reference.
+
+
+    //calculate the NEXT random value.
+    if(prev_pushes > MAX_PUSHES)
+    {
+      prev_pushes = 0;
+
+      #if SCALE_RANDOMNESS
+      random_time = long(float(random(-RANDOM_AMOUNT,RANDOM_AMOUNT)) * float(push_time_us) / float(NOMINAL_PUSH)); 
+      #else
+      random_time = random(-RANDOM_AMOUNT,RANDOM_AMOUNT); 
+      #endif
+      //scale random time by the nominal max push time
+      final_time = push_time_us + random_time;
+    }
+
+
 
     #if GENERAL_DEBUG_PRINTS
     Serial.print("Center: ");
