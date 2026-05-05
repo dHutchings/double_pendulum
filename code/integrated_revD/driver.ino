@@ -182,7 +182,14 @@ void push()
 
 void start_pendulum()
 {  
-  for(int i = 0; i<4; i++)
+  #if DEBUG
+  digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on, on is push
+  #endif
+  drive_MOS(HIGH);
+  delay(150);
+
+  /*
+  for(int i = 0; i<1; i++)
   {
     //For reasons I super dont understand, on rev D3 hardware...
     //Precise_idle inside start_pendulu
@@ -190,23 +197,32 @@ void start_pendulum()
     //will break the pendulu.  DEBUG set to true will work.
     //I have no idea, none at all,
     //but delay(400) as opposed to precise_idle(400000) isn't that big of a difference in power saving; we hardly ever reset; anyway.
-   
+
+    #if DEBUG
+    digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED ooff, off is not push
+    #endif
+    drive_MOS(LOW);
+    delay(180); //450, then 400, 350, 300
+
 
     //Do it very specifically in this order.
     //so that we aren't delaying with the MOSFET low at the end of this loop
     //waisting time while we should really reattach the interrupt.
     #if DEBUG
-    digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED off  
+    digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on, on is push
     #endif
-    delay(300 - (i*50)); //300, then 250, then 200, then 150
     drive_MOS(HIGH);
-    #if DEBUG
-    digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on
-    #endif
-    delay(350 - (60 *i)); //450, then 400, 350, 300
-    drive_MOS(LOW);
+    delay(200); //300, then 250, then 200, then 150
+
     
   }
+  */
+
+  #if DEBUG
+  digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED ooff, off is not push
+  #endif
+  drive_MOS(LOW);
+
   
   NUM_PUSHES_BETWEEN_RESTARTS = 0;
   NUM_RESTARTS_SINCE_UI_CHANGE += 1;
