@@ -106,15 +106,33 @@ void push()
       random_time = random(-RANDOM_AMOUNT,RANDOM_AMOUNT); 
       #endif
       //scale random time by the nominal max push time
-        final_time = push_time_us + random_time;
+      final_time = push_time_us + random_time;
+    }
 
-      //If I started recently, push harder.
-      
-      if( NUM_PUSHES_BETWEEN_RESTARTS <= RESTART_EXTA_PURHSES_COUNT)
-      {
-        final_time += long(RESTART_EXTRA_PUSH_AMOUNT*NUM_PUSHES_BETWEEN_RESTARTS/RESTART_EXTA_PURHSES_COUNT);        
-        final_time -= long(random_time/2); //I also want less random time ( <2 is a divide by 2 operation)
-      }
+    //If I started recently, push harder.
+    
+    if( NUM_PUSHES_BETWEEN_RESTARTS <= RESTART_EXTA_PURHSES_COUNT)
+    {
+      /*
+      Serial.print(final_time);
+      Serial.print("\t");
+
+      Serial.print("Extra %:\t");
+      Serial.print(float(RESTART_EXTA_PURHSES_COUNT-NUM_PUSHES_BETWEEN_RESTARTS)/float(RESTART_EXTA_PURHSES_COUNT));
+      Serial.print("\t");
+      */
+      final_time += long(RESTART_EXTRA_PUSH_AMOUNT*float(RESTART_EXTA_PURHSES_COUNT-NUM_PUSHES_BETWEEN_RESTARTS)/float(RESTART_EXTA_PURHSES_COUNT));        
+      /*
+      Serial.print(final_time);
+      Serial.print("\t");
+      */
+      final_time -= long(random_time/2); //I also want less random time ( <2 is a divide by 2 operation)
+      /*
+      Serial.print(final_time);
+      Serial.print("\t");
+      Serial.println();
+      */
+
     }
 
     #if GENERAL_DEBUG_PRINTS
