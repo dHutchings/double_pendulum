@@ -59,6 +59,22 @@ def get_xaxis_formatters():
 
     return locator,formatter
 
+def unify_datafiles(many_dfs):
+
+    d = pd.concat(many_dfs, ignore_index=True)
+
+
+    #sort by the start time of each individual measurement
+    d = d.sort_values(by='Start Time')
+
+    #Recalculate test duration by start time
+    d['Test Duration'] = d['Start Time'] - d['Start Time'][0]
+    d['Test Duration'] = d['Test Duration'].dt.total_seconds()/(24*60*60) #matplitlib dates API likes days, unfortunately.
+
+
+    return d
+
+
 def load_sanitize_csv(csv_path):
     #the Fluke 289s default CSV is very info-dense.
     #and wierdly formatted.
@@ -196,6 +212,111 @@ def rev_C():
 
     plt.show(block=True)
 
+def rev_D4():
+    #two best performers currently.  Definately need more duracells, since duraells are better than enegizers.
+    #need to unify the Add cap change since I had to restart the muiltimeter three times.
+    files = ["Rev_D4_Duracel_Add_Cap.csv",["Rev_D4_Duracel_Add_Cap_Change_Reset_A.csv","Rev_D4_Duracel_Add_Cap_Change_Reset_B.csv","Rev_D4_Duracel_Add_Cap_Change_Reset_C.csv"]]
+
+    fig, axes = plt.subplots(len(files)+1, 2, sharex=True, figsize=(8, 6),gridspec_kw={'height_ratios': [ *[3]*len(files), 1],'width_ratios':[5,1]},layout='constrained')
+
+    #for every axis in the bottom row
+    for ax in axes[-1,:]:
+        ax.axis("off") #turn axis off for cleaner look.   We will put the legend here.
+    for ax in axes[:,-1]: #for the last column (table column)
+        ax.axis("off") #turn axis off for cleaner look.   We will put the legend here.
+
+    locator,formatter = get_xaxis_formatters()
+
+    for idx,f in enumerate(files):
+
+        if isinstance(f,list):
+            ds = []
+            for sub_file in f:
+                ds.append(load_sanitize_csv(sub_file))
+
+            d = unify_datafiles(ds)
+        
+        else:
+            d = load_sanitize_csv(f)
+
+        plt_ax = axes[idx,0] #this is the main axis I want everything plotted on.
+        table_ax = axes[idx,1] #the smaller axis off to the right: that's where the table goes
+        print(f)
+
+        #truncate the test anywhere where the average battery voltage is < 5 Volts
+        #the boost converter probably (??) browns out.  Nothing good happens beyond that point.
+
+
+
+        #d = d.iloc[:(end_idx+10)]
+
+        d['Smoothed Average'] = simple_moving_average(d['Average V DC'],10)
+
+        end_idx = d['Smoothed Average'] <= 6.5
+        end_idx = end_idx.to_numpy()
+        end_idx = end_idx[10:] #skip the first 10 data points. - sometimes for the first data point or two the multimeter has a low average
+        end_idx = np.argwhere(end_idx == 1)[0][0]
+        d.attrs["Battery Dead Index"] = end_idx+10
+        d.attrs["Battery Dead Time (days)"] = d.loc[end_idx+10,'Test Duration']
+
+
+
+
+
+        plt_ax.xaxis.set_major_locator(locator)
+        plt_ax.xaxis.set_major_formatter(formatter)
+
+
+        for data in ["Sample V DC","Average V DC","Min V DC","Max V DC"]:
+            plt_ax.plot(d['Test Duration'],d[data],label=data[:-5])
+        #Only plot this is we need to debug the test cutoff conditions.
+        #plt_ax.plot(d['Test Duration'],d["Smoothed Average"],label="Smoothed Average") #
+        plt_ax.axvline(x=d.attrs["Battery Dead Time (days)"],label="Battery Dead",color='red',alpha=0.5)
+
+        
+        d = detect_restarts(d)
+
+        if 'Reset' in d.columns:
+            plt_ax.plot(d['Test Duration'],d['Reset'],label="Reset",marker="*")
+        '''
+        if 'Ongoing Reset' in d.columns:
+            plt_ax.plot(d['Test Duration'],d['Ongoing Reset'],label="Ongoing Reset",marker="*")
+            #plt_ax.plot(d['Test Duration'],np.diff(d['Ongoing Reset'],append=0)-1,label="Diff Ongoing Reset",marker="*")
+            #plt_ax.plot(d['Test Duration'],np.diff(d['Ongoing Reset'],prepend=0),label="Ongoing Reset DIFF",marker="*")
+        '''
+
+
+        plt_ax.set_title(f)
+
+        #I don't want to see some things on the metadata table.  Far easier to just remove it.
+        d.attrs.pop("Battery Dead Index")
+        d.attrs["Battery Dead Time (hrs)"] = d.attrs["Battery Dead Time (days)"]*24
+        d.attrs.pop("Battery Dead Time (days)")
+        d.attrs.pop("RestartTimes")
+        d.attrs.pop("RestartAttempts")
+        d.attrs.pop("RunTimes")
+
+        #break out some list comphrenension.
+        #to trim to two decimals in case of floats.
+        table_ax.table(cellText=[ [x] if x==int(x) else [f"{x:.2f}"] for x in d.attrs.values() ],rowLabels = [x for x in d.attrs.keys() ],loc='center',bbox=[0.5, 0.05, 0.5, 0.9])
+
+
+        if f == files[-1]: #the last test I want to see
+            plt_ax.xaxis.set_tick_params(labelbottom=True) #turn on the x=ticks again, by default they are off in sharex
+
+
+    ax = axes[-1,0]
+    #Pl;op the first plots legend on the last whitespace plot
+    #assume all plots have the same legend
+    handles, labels = axes[0,0].get_legend_handles_labels()
+    by_label = dict(zip(labels, handles))
+    ax.legend(by_label.values(), by_label.keys(),loc='upper center',ncol=3) #make the legend really wide
+
+
+
+
+    plt.show(block=True)
+    
 
 def rev_D3():
     #files = ["Rev_D3_Amazon_AA.csv","Rev_D3_Energizer_Max_partial.csv","Rev_D3_Duracell_first_mechanical.csv","Rev_D3_Duracell_add_spacer_untuned.csv","Rev_D3_Duracell_add_spacer_change_tuning.csv","Rev_D3_Energizer_Max_add_spacer_change_tunings.csv","Rev_D3_HDX_add_spacer_change_tunings.csv","Rev_D3_Enegizer_Prevent_Doublepush.csv"]
