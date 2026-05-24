@@ -215,7 +215,7 @@ def rev_C():
 def rev_D4():
     #two best performers currently.  Definately need more duracells, since duraells are better than enegizers.
     #need to unify the Add cap change since I had to restart the muiltimeter three times.
-    files = ["Rev_D4_Duracel_Add_Cap.csv",["Rev_D4_Duracel_Add_Cap_Change_Reset_A.csv","Rev_D4_Duracel_Add_Cap_Change_Reset_B.csv","Rev_D4_Duracel_Add_Cap_Change_Reset_C.csv"]]
+    files = ["Rev_D4_Duracel_Add_Cap.csv",["Rev_D4_Duracel_Add_Cap_Change_Reset_A.csv","Rev_D4_Duracel_Add_Cap_Change_Reset_B.csv","Rev_D4_Duracel_Add_Cap_Change_Reset_C.csv"],"Motor 20.csv",["Motor 21.csv","Motor 22.csv"]]
 
     fig, axes = plt.subplots(len(files)+1, 2, sharex=True, figsize=(8, 6),gridspec_kw={'height_ratios': [ *[3]*len(files), 1],'width_ratios':[5,1]},layout='constrained')
 
