@@ -48,8 +48,13 @@ def get_xaxis_formatters():
 
         return hours_label + ":" + min_label + ":" + sec_label
 
+    def total_days(x, pos=None):
+        days = int(x)
+        days_label = f'{days:.0f}'
+        return days_label
+
     formatter.scaled.pop(365)
-    formatter.scaled[1] = "%d-%H" #if I'm showing days, do days (which will effectively be total days) / hours.
+    formatter.scaled[1] = total_days #if I'm showing days, do days (which will effectively be total days) / hours.
     formatter.scaled[1/24] = total_hours #if I'm showing hours, do hours:minutes
     formatter.scaled[1/24/60*15] = total_hours_minutes #if I'm showing 15 minutes, do hours:minutes:Min:Sec
     formatter.scaled[1/24/60] = "%M:%S" #zoom in and give me seconds.  This will mean
@@ -215,7 +220,7 @@ def rev_C():
 def rev_D4():
     #two best performers currently.  Definately need more duracells, since duraells are better than enegizers.
     #need to unify the Add cap change since I had to restart the muiltimeter three times.
-    files = ["Rev_D4_Duracel_Add_Cap.csv",["Rev_D4_Duracel_Add_Cap_Change_Reset_A.csv","Rev_D4_Duracel_Add_Cap_Change_Reset_B.csv","Rev_D4_Duracel_Add_Cap_Change_Reset_C.csv"],"Motor 20.csv",["Motor 21.csv","Motor 22.csv"]]
+    files = ["Rev_D4_Duracel_Add_2200uf_Cap.csv",["Rev_D4_Duracel_Add_2200uf_Cap_Change_Reset_A.csv","Rev_D4_Duracel_Add_2200uf_Cap_Change_Reset_B.csv","Rev_D4_Duracel_Add_2200uf_Cap_Change_Reset_C.csv"],"Motor 20.csv",["Motor 21.csv","Motor 22.csv"],"Rev_D4_Duracel_Add_220uf_Cap_Change_Reset.csv"]
 
     fig, axes = plt.subplots(len(files)+1, 2, sharex=True, figsize=(8, 6),gridspec_kw={'height_ratios': [ *[3]*len(files), 1],'width_ratios':[5,1]},layout='constrained')
 
