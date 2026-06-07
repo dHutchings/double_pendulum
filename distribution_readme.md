@@ -16,3 +16,16 @@
 11. Dr. Frank Ling (X)
 12. Carl Page (X)
 13. David Araujo ()
+
+Intented:
+14. Prof. Alice Agogino
+15. Prof. Mark Mueller
+16. Prof. Negar Mehr
+17. UC Berkeley Hesse Hall Machine Shop
+18. Dr. Deniz Dogruer
+19. Dr. Alan Zhang
+20. Katie Calvert
+21. Kingston Chua
+22. Ryan Ho.
+23. Douglas Hutchings (rev E / D prototype)
+24. Devin / Brian / Lee?  Tiffany / BG?
