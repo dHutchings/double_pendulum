@@ -32,6 +32,9 @@ void interrupt_wake() //the helper that triggers the wake (either if I'm in deep
     digitalWrite(LED_BUILTIN_TX, LOW); // Turn TX LED on  
     #endif
 
+   //go to light sleep wait.  The time it takes to wake up from deepsleep is long and may be unpredictable.  Lightsleep allows precise, fast wakeups/
+   //thus, wakitng from deep -> wake up -> go to light by triggering on edge rising first gets the badly timed things out of hte way.
+   //then, when the pulse comes back across zero, we can trigger much more quickly and rlieably on it.
    REASON_FOR_POWERUP = LIGHTSLEEP_WAIT;
   }
   else
@@ -72,16 +75,12 @@ void push()
     
     precise_idle( (estimated_time_to_center_pulse) - (final_time/2) - 2100); //wait untill it's the exact right time to turn on the pulse.
 
-    //the 21 is DEFINATELY a hack - it's probably the system overhead from the code running + the interrupt waking things up.
+    //the 2100 is DEFINATELY a hack - it's probably the system overhead from the code running + the interrupt waking things up.
     //but per an o-scope that's the time I need to shift the calculated curve by to get it to the right place (peak BEMF in the middle).
     //I'm not able to nail the timing 100% consistently, but, the overall concept of "push at a more optimum time" really does seem to work.
     //Clearly, BEMF sensing + interrupt timing + wake up timing isn't as good as a hall sensor to trigger the switch.
 
       
-    //delayMicroseconds(1); //allow to cross zero.
-    //this delay, is really should be on the order of MS, if we even use it!
-    //This new (lower current, but slower) op-amps slew rate is so dang long that using the op-amp as a comparator is easy, but, may be bad.  We may want to go faster.
-    //left in for future-proofing, but i may not need this.  uC requires significant time to wake from powerOff state, and I can change timing by also affecting the voltage threshold value.
 
     //If I started recently, push harder.    
     if( NUM_PUSHES_BETWEEN_RESTARTS <= RESTART_EXTA_PURHSES_COUNT)
@@ -192,35 +191,16 @@ void start_pendulum()
   drive_MOS(HIGH);
   delay(150);
 
-  /*
-  for(int i = 0; i<1; i++)
-  {
+  //newer versions of the hardware - with quick-slewing op-amps && BEMF cetnering -- generally only need one push to get going; they can react quickly enough.
+  //don't need legacy 'multiple pushes' to get going.
+
+  //legacy comment:
     //For reasons I super dont understand, on rev D3 hardware...
     //Precise_idle inside start_pendulu
     //with DEBUG set to false.
     //will break the pendulu.  DEBUG set to true will work.
     //I have no idea, none at all,
-    //but delay(400) as opposed to precise_idle(400000) isn't that big of a difference in power saving; we hardly ever reset; anyway.
 
-    #if DEBUG
-    digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED ooff, off is not push
-    #endif
-    drive_MOS(LOW);
-    delay(180); //450, then 400, 350, 300
-
-
-    //Do it very specifically in this order.
-    //so that we aren't delaying with the MOSFET low at the end of this loop
-    //waisting time while we should really reattach the interrupt.
-    #if DEBUG
-    digitalWrite(LED_BUILTIN_RX, LOW); // Turn RX LED on, on is push
-    #endif
-    drive_MOS(HIGH);
-    delay(200); //300, then 250, then 200, then 150
-
-    
-  }
-  */
 
   #if DEBUG
   digitalWrite(LED_BUILTIN_RX, HIGH); // Turn RX LED ooff, off is not push

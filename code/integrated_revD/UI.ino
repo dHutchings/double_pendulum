@@ -42,11 +42,18 @@ void speed_up()
   wdt_disable(); //need to disable the Watchdog timer due to insane timing bug.
 
   //We have a powerStandby after pushing the MOSFET.  Seee #define USE_POST_PUSH_TIMEOUT
-  //fine.  BUT, it usespowerStandby (one of the lighter sleeps) - as opposed to precise_idle or LowPower.Powerdown - for toming reasons.  This sleep mode delberately enables the WDT enabled, then un-sets it when it wakes back up.
-  //if this interrupt were to fire wduring that USE_POST_PUSH_TIMEOUT, we'd have a problem
-  //IF this interrupt were to fire during the USE_POST_PUSH_TIMEOUT, the process of the powerStandby un-setting the WDT never happens
-  //and thus the WDT will fire, resetting the chip.
-  //therefore, we need to un-set it ourselves manually
+  //fine.  BUT, it usespowerStandby (one of the lighter sleeps) WITH a timeout.
+  
+  //Any timeout on the LowPower library is triggerd via the watchdog timer.  Sleep forever won't use it.
+  //This sleep period delberately enables the WDT enabled.
+
+  //Normally, the WDT will call an ISR.  The raising of the ISR will then wake the chip back up.  The chip wakes up, then ISR runs and un-sets the WDT.
+  //However, if this interrupt were to fire wduring that USE_POST_PUSH_TIMEOUT, we'd have a problem
+  
+  //This interrupt could take too long to finish (button debouncing) ... thus preventing any other ISR *aka the watchdog ISR) to fire.
+  //if the watchdog fires twice (it fires every SLEEP_TIMEOUT time) without disarming itself through the ISR, it will trigger a chip reset.
+  
+  //therefore, we need to un-set the WDT ourselves manually to return to a 'clean' state
   
   REASON_FOR_POWERUP = UI;
 

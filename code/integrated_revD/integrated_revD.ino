@@ -226,8 +226,7 @@ void precise_idle(long tim) //allow ability to delay up to 8.3 seconds highly pr
   {
     return;
   }
-  //delayMicroseconds(tim);
-  //return;
+
   
   Timer1.initialize(tim);
   Timer1.attachInterrupt(blank_ISR); //have to attach an interrupt to a blank function, otherwise, it wont generate an interrupt that will get us out of idle.
