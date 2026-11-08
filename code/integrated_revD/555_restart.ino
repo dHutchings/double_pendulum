@@ -1,6 +1,6 @@
 void setup_restart() //this setups the 555-timer based automatic restarting of the pendulum
 {
-  pinMode(auto_restart,INPUT);  //timer restart is the timer telling us that it's time to restart the pendulum
+  pinMode(auto_timer_restart,INPUT);  //timer restart is the timer telling us that it's time to restart the pendulum
   pinMode(timer_clr,OUTPUT);  //timer reset resets the timer
   digitalWrite(timer_clr,LOW); //clear the timer.
   delay(1);

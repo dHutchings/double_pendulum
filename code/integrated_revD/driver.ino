@@ -7,10 +7,11 @@ long final_time; //how long I plan to push on the next push.  Leave it here so o
 
 void setup_driver()
 {
-  #if !NO_PUSH //if we aren't pushing, don't even bother setting it as an output.  
+  //set as output, and turn pin off
+  //even if we don't push, we have to set it as an output so it doesn't float.
   pinMode(drive_mosfet,OUTPUT);
-  #endif
   drive_MOS(LOW);
+
   delay(100); //just in case transients from MOSFET.
 
 }

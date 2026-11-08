@@ -3,6 +3,7 @@
 
 #include "pins.h"
 #include "constants.h"
+#include <avr/wdt.h>
 
 
 extern long final_time;
@@ -16,7 +17,7 @@ enum POWERUP_REASONS {
   LIGHTSLEEP_WAIT, //This uses the powerStandby mode
 };
 
-int REASON_FOR_POWERUP = DEEPSLEEP_WAIT; //a nice, neutral, way to start
+volatile int REASON_FOR_POWERUP = DEEPSLEEP_WAIT; //a nice, neutral, way to start
 
 void setup() {
 
@@ -128,6 +129,7 @@ void loop() {
       setup_restart_interrupt();
       #endif
       setup_zero_crossing_sensing();
+      REASON_FOR_POWERUP = DEEPSLEEP_WAIT;
 
       break;
     case UI:
@@ -139,6 +141,7 @@ void loop() {
     case LIGHTSLEEP_WAIT:
       break;    
   }
+
 
   //depending on the sleep mode, do different things here.
   if(REASON_FOR_POWERUP == DEEPSLEEP_WAIT)
@@ -212,6 +215,9 @@ void powerStandby_allowPrints(period_t timeout) //power standby  - the lowest po
       break;
   }
   #endif
+  wdt_disable(); //need to disable the Watchdog timer due to insane timing bug, see UI for more.
+
+
 }
 
 void precise_idle(long tim) //allow ability to delay up to 8.3 seconds highly precisely while in IDLE (17mA) - a power saving mode, but not the most aggressive.

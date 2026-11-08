@@ -9,7 +9,7 @@ void load_from_eeprom()
   #endif
   
   long push_time_in_eeprom;
-  EEPROM.get(0,push_time_in_eeprom);
+  EEPROM.get(addr,push_time_in_eeprom);
   if(push_time_in_eeprom < MIN_PUSH || push_time_in_eeprom > MAX_PUSH)
   {
     reset_eeprom();
@@ -37,11 +37,6 @@ void load_from_eeprom()
 void reset_eeprom()
 {
   EEPROM.put(addr, NOMINAL_PUSH);
-}
-
-void setup_eeprom()
-{
-  EEPROM.get(0,push_time_us);
 }
 
 void eeprom_current_speed()

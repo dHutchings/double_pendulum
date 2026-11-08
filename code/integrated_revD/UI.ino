@@ -14,19 +14,40 @@ void setup_ui()
   //How to Turn off built-in RX / TX LEDs, to save power.
   //only relevant if there is USB serial traffic to begin with, which only shows up in debugging implimentations.
 
-  pinMode(LED_BUILTIN_RX, OUTPUT); // TX LED
-  pinMode(LED_BUILTIN_TX, OUTPUT); // TX LED
-  digitalWrite(LED_BUILTIN_RX, LOW); // Turn TX LED on  
-  digitalWrite(LED_BUILTIN_TX, LOW); // Turn TX LED on
+  pinMode(LED_BUILTIN_RX, OUTPUT); // RX LED - on right of pendulum as installed
+  pinMode(LED_BUILTIN_TX, OUTPUT); // TX LED - on left of pendulum as installed
+  digitalWrite(LED_BUILTIN_RX, HIGH); //turn off
+  digitalWrite(LED_BUILTIN_TX, HIGH);
+    
 
-  delay(500);
-  digitalWrite(LED_BUILTIN_RX, HIGH); // Turn TX LED off  
-  digitalWrite(LED_BUILTIN_TX, HIGH); // Turn TX LED off
+
+  for(int i = 600; i >= 150; i -= 150)
+  {
+    digitalWrite(LED_BUILTIN_RX, LOW); // Turn TX LED on  
+    digitalWrite(LED_BUILTIN_TX, LOW); // Turn TX LED on
+  
+    delay(i);
+    digitalWrite(LED_BUILTIN_RX, HIGH); // Turn TX LED off  
+    digitalWrite(LED_BUILTIN_TX, HIGH); // Turn TX LED off
+    delay(i);
+  }
+
+
+  
 
 }
 
 void speed_up()
 {
+  wdt_disable(); //need to disable the Watchdog timer due to insane timing bug.
+
+  //We have a powerStandby after pushing the MOSFET.  Seee #define USE_POST_PUSH_TIMEOUT
+  //fine.  BUT, it usespowerStandby (one of the lighter sleeps) - as opposed to precise_idle or LowPower.Powerdown - for toming reasons.  This sleep mode delberately enables the WDT enabled, then un-sets it when it wakes back up.
+  //if this interrupt were to fire wduring that USE_POST_PUSH_TIMEOUT, we'd have a problem
+  //IF this interrupt were to fire during the USE_POST_PUSH_TIMEOUT, the process of the powerStandby un-setting the WDT never happens
+  //and thus the WDT will fire, resetting the chip.
+  //therefore, we need to un-set it ourselves manually
+  
   REASON_FOR_POWERUP = UI;
 
   push_time_us = push_time_us + PUSH_SETTING_STEP;
@@ -51,6 +72,8 @@ void speed_up()
 
 void slow_down()
 {
+  wdt_disable();
+  
   REASON_FOR_POWERUP = UI;
 
   push_time_us = push_time_us - PUSH_SETTING_STEP;
@@ -77,6 +100,7 @@ void slow_down()
 
 void start_sequence()
 {
+  wdt_disable();
   REASON_FOR_POWERUP = MANUAL_RESTART;
 
   while(digitalRead(start) == LOW)

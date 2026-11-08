@@ -10,13 +10,14 @@ void setup_BEMF_sensing()
   //per the datasheet, 7.8.6. we need to explicitly disable the digital input buffer since we're using it as an analog port.
   //This change makes little difference at rest .. but it's thing to do according to the datasheet.
 
-  BEMF_History.fillValue(1024,10);
+  BEMF_History.fillValue(5.0,10); // 5.0V is the slowest possible BEMF that this board could easure.  - in reality it'll be a lot lower, since the zero-point is ~2 V (set in resistors in the sensing network).
 
 }
 
 //returns BEMF in volts
 //as if it were measured from an oscilliscope
 //Which means that the closer to 0 it is, the faster I am going.
+//Higher values ==> Slower.  Lower values ==> faster
 
 //ALSO does the control on BEMF voltage (should this be done elsewhere for code clarity...?)
 float measure_BEMF()
